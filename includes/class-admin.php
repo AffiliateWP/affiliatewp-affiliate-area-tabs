@@ -77,11 +77,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
         <script type="text/javascript">
         jQuery(document).ready(function($) {
 
-            $('.affwp_remove_tab').on('click', function(e) {
-                e.preventDefault();
-                $(this).parent().parent().remove();
-            });
-
+            // add new tab
             $('#affwp_new_tab').on('click', function(e) {
 
                 e.preventDefault();
@@ -89,7 +85,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 var row = $('#affiliatewp-tabs tbody tr:last');
                 console.log( row );
 
-                clone = row.clone();
+                clone = row.clone( true );
 
                 var count = $('#affiliatewp-tabs tbody tr').length;
                 console.log( count );
@@ -107,6 +103,13 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 clone.insertAfter( row );
 
             });
+
+            // remove tab
+            $('.affwp_remove_tab').on('click', function(e) {
+                e.preventDefault();
+                $(this).parent().parent().remove();
+            });
+
         });
         </script>
         <style type="text/css">
