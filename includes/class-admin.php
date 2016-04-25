@@ -52,13 +52,14 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
      */
     public function sanitize_tabs( $input ) {
 
-        if ( empty( $input ) ) {
-            // clear out array if there are no tabs set
-            $input['affiliate_area_tabs'] = array();
-        } else {
-            foreach ( $input['affiliate_area_tabs'] as $key => $tab ) {
+        foreach ( $input['affiliate_area_tabs'] as $key => $tab ) {
+
+            if ( empty( $tab['title'] ) ) {
+                unset( $input['affiliate_area_tabs'][ $key ] );
+            } else {
                 $input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
             }
+
         }
 
         return $input;
@@ -70,9 +71,9 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
      */
     public function tabs_table() {
 
-        $tabs = affiliatewp_affiliate_area_tabs()->get_tabs();
-
+        $tabs  = affiliatewp_affiliate_area_tabs()->get_tabs();
         $count = count( $tabs );
+
         ?>
         <script type="text/javascript">
         jQuery(document).ready(function($) {
@@ -85,11 +86,14 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 var row = $('#affiliatewp-tabs tbody tr:last');
                 console.log( row );
 
-                clone = row.clone( true );
-
                 var count = $('#affiliatewp-tabs tbody tr').length;
+
                 console.log( count );
 
+                // clone the row and its child's data and events
+                clone = row.clone( true );
+
+                // empty values
                 clone.find( 'td input, td select' ).val( '' );
 
                 clone.find( 'input, select' ).each(function() {
@@ -100,6 +104,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                     $( this ).attr( 'name', name ).attr( 'id', name );
                 });
 
+                // insert new clone after existing row
                 clone.insertAfter( row );
 
             });
@@ -107,7 +112,17 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
             // remove tab
             $('.affwp_remove_tab').on('click', function(e) {
                 e.preventDefault();
-                $(this).parent().parent().remove();
+
+                var count = $('#affiliatewp-tabs tbody tr').length;
+
+                // instead of removing the last row, clear out the values
+                if ( count !== 1 ) {
+                    $(this).parent().parent().remove();
+                } else {
+                    $(this).closest('tr').find( 'td input, td select' ).val( '' );
+                    console.log( $(this) );
+                }
+
             });
 
         });
@@ -134,7 +149,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                             $pages = affwp_get_pages();
 
                             ?>
-                            <tr class="<?php echo 'count-' . $count; ?>">
+                            <tr>
                                 <td>
                                     <select name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
                                         <?php foreach( $pages as $id => $title ) : ?>
@@ -156,7 +171,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                     <?php endif; ?>
 
                     <?php if ( empty( $tabs ) ) :
-
+                        $count = 0;
                         $pages = affwp_get_pages();
 
                         ?>
