@@ -237,10 +237,35 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Make a slug
+		 * Make slug
+		 * http://stackoverflow.com/questions/2955251/php-function-to-make-slug-url-string
 		 */
 		public function make_slug( $title = '' ) {
-			return strtolower( trim( preg_replace( '/[^A-Za-z0-9-]+/', '-', $title ) ) );
+
+			// replace non letter or digits by -
+			 $title = preg_replace( '~[^\pL\d]+~u', '-', $title );
+
+			 // transliterate
+			 $title = iconv( 'utf-8', 'us-ascii//TRANSLIT', $title );
+
+			 // remove unwanted characters
+			 $title = preg_replace( '~[^-\w]+~', '', $title );
+
+			 // trim
+			 $title = trim( $title, '-' );
+
+			 // remove duplicate -
+			 $title = preg_replace( '~-+~', '-', $title );
+
+			 // lowercase
+			 $title = strtolower( $title );
+
+			 if ( empty( $title ) ) {
+			   return 'n-a';
+			 }
+
+			 return $title;
+
 		}
 
 		/**
