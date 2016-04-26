@@ -1,17 +1,29 @@
 === AffiliateWP - Affiliate Area Tabs ===
 Contributors: sumobi, mordauk
-Tags: AffiliateWP, affiliate, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing
+Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing, affiliate marketing
 Requires at least: 3.9
 Tested up to: 4.5
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Add more tabs to the Affiliate Area
+Add custom tabs to AffiliateWP's Affiliate Area
 
 == Description ==
 
-Affiliate Area Tabs allows you to add more tabs to the Affiliate Area. Each tab is linked to a page in the WordPress admin.
+> This plugin requires [AffiliateWP](https://affiliatewp.com/ "AffiliateWP") in order to function.
+
+Affiliate Area Tabs allows you to add custom tabs to AffiliateWP's Affiliate Area. Each tab is linked to a WordPress page making it exceptionally easy to add and manage the tab's content.
+
+Here are just some of the things you could do:
+
+1. Add a "Request Payout" tab and then insert a form. Your affiliates can now request that they be paid at any time.
+2. Add a "Contact" tab and insert a contact form. Your affiliates can now contact you from the Affiliate Area
+3. Add a "FAQs" tab and insert some common questions and answers for your affiliates
+4. Add an "Important Dates" tab and list some special dates and promotions for your affiliates to remember
+5. Add a "URLs" tab and list some special URLs (landing pages or product pages) for your affiliates. You can even show their own referral URL using AffiliateWP's [affiliate_referral_url] shortcode.
+6. Add a "Leaderboard" tab and insert an affiliate leaderboard, using the [AffiliateWP Leaderboard](https://wordpress.org/plugins/affiliatewp-leaderboard/ "AffiliateWP Leaderboard") plugin
+7. Add a "News" tab and share important news with your affiliates (or link to other blog posts)
 
 **What is AffiliateWP?**
 
@@ -29,7 +41,6 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 == Upgrade Notice ==
 
 == Changelog ==
-
 
 = 1.0.0 =
 * Initial release
