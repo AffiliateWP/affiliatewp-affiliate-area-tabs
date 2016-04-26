@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: AffiliateWP - Affiliate Area Tabs\n"
-"POT-Creation-Date: 2016-04-25 22:45+1200\n"
+"POT-Creation-Date: 2016-04-26 12:09+1200\n"
 "PO-Revision-Date: 2015-04-04 11:12-0600\n"
 "Last-Translator: Andrew Munro, Sumobi <andrew@sumobi.com>\n"
 "Language-Team: AffiliateWP <support@affiliatewp.com>\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: ../affiliatewp-affiliate-area-tabs.php:316
+#: ../affiliatewp-affiliate-area-tabs.php:340
 msgid "Get more add-ons for AffiliateWP"
 msgstr ""
 
-#: ../affiliatewp-affiliate-area-tabs.php:316
+#: ../affiliatewp-affiliate-area-tabs.php:340
 msgid "More add-ons"
 msgstr ""
 
@@ -48,14 +48,14 @@ msgstr ""
 msgid "Affiliate Area Tabs"
 msgstr ""
 
-#: ../includes/class-admin.php:119
+#: ../includes/class-admin.php:144
 msgid "Tab Page"
 msgstr ""
 
-#: ../includes/class-admin.php:120
+#: ../includes/class-admin.php:145
 msgid "Tab Title"
 msgstr ""
 
-#: ../includes/class-admin.php:181
+#: ../includes/class-admin.php:206
 msgid "Add New Tab"
 msgstr ""
