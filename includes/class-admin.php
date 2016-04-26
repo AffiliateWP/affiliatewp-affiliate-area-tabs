@@ -78,17 +78,23 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
         <script type="text/javascript">
         jQuery(document).ready(function($) {
 
+            // Prevent enter key from creating new row
+            $('#affiliatewp-tabs').on('keyup keypress', function(e) {
+                var keyCode = e.keyCode || e.which;
+                if (keyCode === 13) {
+                    e.preventDefault();
+                    return false;
+                }
+            });
+
             // add new tab
             $('#affwp_new_tab').on('click', function(e) {
 
                 e.preventDefault();
 
                 var row = $('#affiliatewp-tabs tbody tr:last');
-                console.log( row );
 
                 var count = $('#affiliatewp-tabs tbody tr').length;
-
-                console.log( count );
 
                 // clone the row and its child's data and events
                 clone = row.clone( true );
@@ -120,7 +126,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                     $(this).parent().parent().remove();
                 } else {
                     $(this).closest('tr').find( 'td input, td select' ).val( '' );
-                    console.log( $(this) );
                 }
 
             });
