@@ -35,8 +35,15 @@ Here are just some of the things you could do:
 1. Upload to your site
 1. Navigate to `wp-admin/plugins.php` on your site (your WP Admin plugin page)
 1. Activate this plugin
+1. Go to Affiliates &rarr; Settings &rarr; Affiliate Area Tabs to configure the tabs
+1. View the new tabs by visiting the Affiliate Area page on the front-end of your website. This is the page defined as the "Affiliate Area" at Affiliates &rarr; Settings &rarr; General
 
 OR you can just install it with WordPress by going to Plugins >> Add New >> and type this plugin's name
+
+== Screenshots ==
+
+1. Adding new tabs from the admin
+2. Viewing the custom tabs on the front-end website
 
 == Upgrade Notice ==
 

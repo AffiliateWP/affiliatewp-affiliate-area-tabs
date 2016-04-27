@@ -2,7 +2,7 @@
 /**
  * Plugin Name: AffiliateWP - Affiliate Area Tabs
  * Plugin URI: http://affiliatewp.com/
- * Description: Add new tabs to the Affiliate Area
+ * Description: Add custom tabs to the Affiliate Area
  * Author: Pippin Williamson and Andrew Munro
  * Author URI: http://affiliatewp.com
  * Version: 1.0.0
@@ -281,9 +281,15 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			<?php foreach ( $tabs as $tab ) :
 
 				$post = get_post( $tab['id'] );
+
 				$tab_slug = $this->make_slug( $tab['title'] );
 
-				if ( isset( $_GET['tab'] ) && $_GET['tab'] !== $tab_slug )  {
+				if ( isset( $_GET['tab'] ) && $_GET['tab'] !== $tab_slug ) {
+					continue;
+				}
+
+				// a tab's content cannot be the content of the page you're currently viewing
+				if ( get_the_ID() === $post->ID ) {
 					continue;
 				}
 
@@ -313,6 +319,13 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 				<?php foreach ( $tabs as $tab ) :
 					$tab_slug = $this->make_slug( $tab['title'] );
+
+					$post = get_post( $tab['id'] );
+
+					// a tab's content cannot be the content of the page you're currently viewing
+					if ( get_the_ID() === $post->ID ) {
+						continue;
+					}
 
 					?>
 					<li class="affwp-affiliate-dashboard-tab<?php echo $active_tab == $tab_slug ? ' active' : ''; ?>">
