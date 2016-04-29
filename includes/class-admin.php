@@ -119,7 +119,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
             $('.affwp_remove_tab').on('click', function(e) {
                 e.preventDefault();
 
-                var count = $('#affiliatewp-tabs tbody tr').length;
+                var count = $('#affiliatewp-tabs tbody tr').not( '#affiliatewp-tabs tbody tr:first-child').length;
 
                 // instead of removing the last row, clear out the values
                 if ( count !== 1 ) {
@@ -141,22 +141,38 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
             <table id="affiliatewp-tabs" class="form-table wp-list-table widefat posts">
                 <thead>
                     <tr>
-                        <th style="width:15%;"><?php _e( 'Tab Page', 'affiliatewp-affiliate-area-tabs' ); ?></th>
+                        <th style="width:30%;"><?php _e( 'Tab Content', 'affiliatewp-affiliate-area-tabs' ); ?></th>
                         <th><?php _e( 'Tab Title', 'affiliatewp-affiliate-area-tabs' ); ?></th>
                         <th style="width:5%;"></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php if ( $tabs ) : ?>
 
-                        <?php foreach( $tabs as $key => $tab ) :
+					<tr>
+						<td><p class="description"><?php _e( 'Select which page will be used for the tab\'s content.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
+						<td><p class="description"><?php _e( 'Enter a title for the tab.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
+						<td></td>
+					</tr>
 
-                            $pages = affwp_get_pages();
+                    <?php if ( $tabs ) :
+
+						$pages = affwp_get_pages();
+
+						// remove the affiliate area from the pages array so it can never be selected
+						if ( $pages ) {
+							foreach ( $pages as $key => $page ) {
+								if ( $key === affiliate_wp()->settings->get( 'affiliates_page' ) ) {
+									unset( $pages[$key] );
+								}
+							}
+						}
+
+						foreach( $tabs as $key => $tab ) :
 
                             ?>
                             <tr>
                                 <td>
-                                    <select name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
+                                    <select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
                                         <?php foreach( $pages as $id => $title ) : ?>
                                             <option value="<?php echo $id; ?>"<?php selected( $tab['id'], $id ); ?>><?php echo $title; ?></option>
                                         <?php endforeach; ?>
@@ -182,7 +198,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                         ?>
                         <tr>
                             <td>
-                                <select name="affwp_settings[affiliate_area_tabs][<?php echo $count; ?>][id]">
+                                <select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $count; ?>][id]">
                                     <?php foreach( $pages as $id => $title ) : ?>
                                         <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
                                     <?php endforeach; ?>

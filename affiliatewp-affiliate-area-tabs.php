@@ -58,7 +58,6 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * time. Also prevents needing to define globals all over the place.
 		 *
 		 * @since 1.0
-		 * @static
 		 * @static var array $instance
 		 * @return The one true AffiliateWP_Affiliate_Area_Tabs
 		 */
@@ -83,7 +82,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * The whole idea of the singleton design pattern is that there is a single
 		 * object therefore, we don't want the object to be cloned.
 		 *
-		 * @since 1.0
+		 * @since 1.0.0
 		 * @access protected
 		 * @return void
 		 */
@@ -95,7 +94,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		/**
 		 * Disable unserializing of the class
 		 *
-		 * @since 1.0
+		 * @since 1.0.0
 		 * @access protected
 		 * @return void
 		 */
@@ -107,7 +106,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		/**
 		 * Constructor Function
 		 *
-		 * @since 1.0
+		 * @since 1.0.0
 		 * @access private
 		 */
 		private function __construct() {
@@ -117,7 +116,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		/**
 		 * Reset the instance of the class
 		 *
-		 * @since 1.0
+		 * @since 1.0.0
 		 * @access public
 		 * @static
 		 */
@@ -129,7 +128,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * Setup plugin constants
 		 *
 		 * @access private
-		 * @since 1.0
+		 * @since 1.0.0
 		 * @return void
 		 */
 		private function setup_constants() {
@@ -158,7 +157,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * Loads the plugin language files
 		 *
 		 * @access public
-		 * @since 1.0
+		 * @since 1.0.0
 		 * @return void
 		 */
 		public function load_textdomain() {
@@ -201,13 +200,10 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			}
 		}
 
-
-
 		/**
 		 * Setup the default hooks and actions
 		 *
-		 * @since 1.0
-		 *
+		 * @since 1.0.0
 		 * @return void
 		 */
 		private function hooks() {
@@ -218,12 +214,47 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			// add new tab to affiliate area
 			add_action( 'affwp_affiliate_dashboard_tabs', array( $this, 'add_tab' ), 10, 2 );
 
+			// add the tab's content
 			add_action( 'affwp_affiliate_dashboard_bottom', array( $this, 'tab_content' ) );
+
+			// redirect if non-affiliate tries to access a tab's page
+			add_action( 'template_redirect', array( $this, 'redirect' ) );
+
+		}
+
+		/**
+		 * Prevent non-affiliates from accessing any page that is added as a tab
+		 *
+		 * @since 1.0.1
+		 * @return array $page_ids
+		 */
+		public function protected_page_ids() {
+			$page_ids = wp_list_pluck( $this->get_tabs(), 'id' );
+			return $page_ids;
+		}
+
+		/**
+		 * Redirect to affiliate login page if content is accessed
+		 *
+		 * @since 1.0.1
+		 * @return void
+		 */
+		public function redirect() {
+
+			$redirect = affiliate_wp()->settings->get( 'affiliates_page' ) ? get_permalink( affiliate_wp()->settings->get( 'affiliates_page' ) ) : site_url();
+			$redirect = apply_filters( 'affiliatewp-affiliate-area-tabs', $redirect );
+
+			if ( in_array( get_the_ID(), $this->protected_page_ids() ) && ( ! affwp_is_affiliate() ) ) {
+				wp_redirect( $redirect );
+				exit;
+			}
 
 		}
 
 		/**
 		 * Get tabs
+		 *
+		 * @since 1.0.0
 		 */
 		public function get_tabs() {
 
@@ -239,6 +270,8 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		/**
 		 * Make slug
 		 * http://stackoverflow.com/questions/2955251/php-function-to-make-slug-url-string
+		 *
+		 * @since 1.0.0
 		 */
 		public function make_slug( $title = '' ) {
 
@@ -270,6 +303,8 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 		/**
 		 * Tab content
+		 *
+		 * @since 1.0.0
 		 */
 		public function tab_content( $affiliate_id ) {
 
@@ -307,8 +342,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		/**
 		 * Add tab
 		 *
-		 * @since 1.0
-		 *
+		 * @since 1.0.0
 		 * @return void
 		 */
 		public function add_tab( $affiliate_id, $active_tab ) {

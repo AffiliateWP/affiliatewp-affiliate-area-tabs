@@ -24,6 +24,7 @@ Here are just some of the things you could do:
 5. Add a "URLs" tab and list some special URLs (landing pages or product pages) for your affiliates. You can even show their own referral URL using AffiliateWP's [affiliate_referral_url] shortcode.
 6. Add a "Leaderboard" tab and insert an affiliate leaderboard, using the [AffiliateWP Leaderboard](https://wordpress.org/plugins/affiliatewp-leaderboard/ "AffiliateWP Leaderboard") plugin
 7. Add a "News" tab and share important news with your affiliates (or link to other blog posts)
+8. Add an “Affiliate Brand Assets” or “Downloadables” tab, and add documents or images from your WordPress Media Library that don’t suit the existing Creatives tab.
 
 **What is AffiliateWP?**
 
@@ -45,12 +46,15 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 1. Adding new tabs from the admin
 2. Viewing the custom tabs on the front-end website
 
-== Upgrade Notice ==
-
 == Changelog ==
 
 = 1.0.1 =
-* Fix: Nesting PHP error that could occur if a tab's content is set to the same page as the one being displayed on the front-end. 
+* Fix: Nesting PHP error that could occur if a tab's content is set to the same page as the one being displayed on the front-end.
+* Fix: Prevent non-affiliates from accessing a page that is set as a tab
+* Tweak: Renamed "Tab Page" to "Tab Content"
+* Tweak: Removed the Affiliate Area page (if set from Affiliates &rarr; Settings &rarr; General ) from the select menu since this should never be selected
+* Tweak: Added descriptions to each field to better explain the UI
+* Tweak: widened the column that contains the select menu
 
 = 1.0.0 =
 * Initial release
