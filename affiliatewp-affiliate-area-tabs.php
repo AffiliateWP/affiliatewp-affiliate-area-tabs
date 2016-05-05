@@ -5,7 +5,7 @@
  * Description: Add custom tabs to the Affiliate Area
  * Author: Pippin Williamson and Andrew Munro
  * Author URI: http://affiliatewp.com
- * Version: 1.0.1
+ * Version: 1.0.2
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
  *
@@ -49,7 +49,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.0
 		 */
-		private $version = '1.0.1';
+		private $version = '1.0.2';
 
 		/**
 		 * Main AffiliateWP_Affiliate_Area_Tabs Instance
@@ -315,11 +315,12 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 			<?php foreach ( $tabs as $tab ) :
 
-				$post = get_post( $tab['id'] );
+				$post        = get_post( $tab['id'] );
+				$tab_slug    = $this->make_slug( $tab['title'] );
+				$current_tab = isset( $_GET['tab'] ) && $_GET['tab'] ? $_GET['tab'] : '';
 
-				$tab_slug = $this->make_slug( $tab['title'] );
-
-				if ( isset( $_GET['tab'] ) && $_GET['tab'] !== $tab_slug ) {
+				// current tab doesn't match slug
+				if ( $current_tab !== $tab_slug ) {
 					continue;
 				}
 
