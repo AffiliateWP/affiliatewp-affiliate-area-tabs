@@ -36,6 +36,31 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			'affwp_settings_affiliate_area_tabs'
 		);
 
+		if ( affiliatewp_affiliate_area_tabs()->has_1_8() ) {
+			// add_settings_field( $id, $title, $callback, $page, $section, $args );
+			add_settings_field(
+				'affwp_settings[affiliate_area_hide_tabs]', // (string) (required) String for use in the 'id' attribute of tags.
+				__( 'Disable Tabs', 'affiliatewp-affiliate-area-tabs' ), // (string) (required) Title of the field.
+				array( $this, 'callback_tabs' ), // (string) (required) Function that fills the field with the desired inputs as part of the larger form. Passed a single argument, the $args array. Name and id of the input should match the $id given to this function. The function should echo its output.
+				'affwp_settings_affiliate_area_tabs', // (string) (required) The menu page on which to display this field. Should match $menu_slug from add_theme_page() or from do_settings_sections().
+				'affwp_settings_affiliate_area_tabs', // (string) (optional) The section of the settings page in which to show the box (default or a section you added with add_settings_section(), look at the page in the source to see what the existing ones are.)
+				array( // (array) (optional) Additional arguments that are passed to the $callback function. The 'label_for' key/value pair can be used to format the field title like so: <label for="value">$title</label>.
+					'name'        => 'affiliate_area_hide_tabs',
+					'id'          => 'affiliate-area-hide-tabs',
+					'description' => __( 'Select tabs to disable. These tabs will no longer appear in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ),
+					'tabs'        => array(
+						'urls'      => __( 'Affiliate URLs', 'affiliatewp-affiliate-area-tabs' ),
+						'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
+						'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
+						'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
+						'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
+						'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
+						'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' ),
+					)
+				)
+			);
+		}
+
 		add_settings_field(
 			'affwp_settings[affiliate_area_tabs]',
 			__( 'Affiliate Area Tabs', 'affiliatewp-affiliate-area-tabs' ),
@@ -52,6 +77,19 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
      */
     public function sanitize_tabs( $input ) {
 
+		$hide_tabs_array = ! empty( $input['affiliate_area_hide_tabs'] ) ? $input['affiliate_area_hide_tabs'] : '';
+
+		if ( $hide_tabs_array ) {
+			foreach ( $hide_tabs_array as $key => $tab ) {
+				$input['affiliate_area_hide_tabs'][$key] = isset( $input['affiliate_area_hide_tabs'][$key] ) && true == $input['affiliate_area_hide_tabs'][$key] ? true : false;
+			}
+		}
+
+		// clear out array if no tabs are selected for removal
+		if ( ! $hide_tabs_array ) {
+			$input['affiliate_area_hide_tabs'] = array();
+		}
+
         foreach ( $input['affiliate_area_tabs'] as $key => $tab ) {
 
             if ( empty( $tab['title'] ) ) {
@@ -64,6 +102,32 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
         return $input;
     }
+
+
+
+	/**
+     * Hide existing AffiliateWP tabs
+	 *
+     * @since 1.1
+     */
+	public function callback_tabs( $args ) {
+
+		$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
+		$tabs    = $args['tabs'];
+
+		foreach ( $tabs as $tab => $label ) :
+
+		$checked = isset( $options[$tab] ) ? $options[$tab] : '';
+	?>
+		<label for="<?php echo $args['id']; ?>-<?php echo $tab; ?>">
+			<input type="checkbox" id="<?php echo $args['id']; ?>-<?php echo $tab; ?>" name="affwp_settings[<?php echo $args['name']; ?>][<?php echo $tab; ?>]" value="<?php echo $tab; ?>" <?php checked( $checked, true ); ?> />
+			<?php echo $label; ?>
+		</label>
+		<br />
+	<?php endforeach; ?>
+	<p class="description"><?php echo $args['description']; ?></p>
+		<?php
+	}
 
     /**
      * Render the table

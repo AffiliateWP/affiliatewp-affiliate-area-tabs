@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: AffiliateWP - Affiliate Area Tabs\n"
-"POT-Creation-Date: 2016-04-29 12:54+1200\n"
+"POT-Creation-Date: 2016-05-06 15:01+1200\n"
 "PO-Revision-Date: 2015-04-04 11:12-0600\n"
 "Last-Translator: Andrew Munro, Sumobi <andrew@sumobi.com>\n"
 "Language-Team: AffiliateWP <support@affiliatewp.com>\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: ../affiliatewp-affiliate-area-tabs.php:387
+#: ../affiliatewp-affiliate-area-tabs.php:437
 msgid "Get more add-ons for AffiliateWP"
 msgstr ""
 
-#: ../affiliatewp-affiliate-area-tabs.php:387
+#: ../affiliatewp-affiliate-area-tabs.php:437
 msgid "More add-ons"
 msgstr ""
 
@@ -44,26 +44,62 @@ msgstr ""
 msgid "requires %s. Please install it to continue."
 msgstr ""
 
-#: ../includes/class-admin.php:19 ../includes/class-admin.php:41
+#: ../includes/class-admin.php:19 ../includes/class-admin.php:66
 msgid "Affiliate Area Tabs"
 msgstr ""
 
-#: ../includes/class-admin.php:144
+#: ../includes/class-admin.php:43
+msgid "Disable Tabs"
+msgstr ""
+
+#: ../includes/class-admin.php:50
+msgid "Select tabs to disable. These tabs will no longer appear in the Affiliate Area."
+msgstr ""
+
+#: ../includes/class-admin.php:52
+msgid "Affiliate URLs"
+msgstr ""
+
+#: ../includes/class-admin.php:53
+msgid "Statistics"
+msgstr ""
+
+#: ../includes/class-admin.php:54
+msgid "Graphs"
+msgstr ""
+
+#: ../includes/class-admin.php:55
+msgid "Referrals"
+msgstr ""
+
+#: ../includes/class-admin.php:56
+msgid "Visits"
+msgstr ""
+
+#: ../includes/class-admin.php:57
+msgid "Creatives"
+msgstr ""
+
+#: ../includes/class-admin.php:58
+msgid "Settings"
+msgstr ""
+
+#: ../includes/class-admin.php:208
 msgid "Tab Content"
 msgstr ""
 
-#: ../includes/class-admin.php:145
+#: ../includes/class-admin.php:209
 msgid "Tab Title"
 msgstr ""
 
-#: ../includes/class-admin.php:152
+#: ../includes/class-admin.php:216
 msgid "Select which page will be used for the tab's content."
 msgstr ""
 
-#: ../includes/class-admin.php:153
+#: ../includes/class-admin.php:217
 msgid "Enter a title for the tab."
 msgstr ""
 
-#: ../includes/class-admin.php:222
+#: ../includes/class-admin.php:286
 msgid "Add New Tab"
 msgstr ""

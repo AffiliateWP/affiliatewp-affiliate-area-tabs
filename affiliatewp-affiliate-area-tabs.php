@@ -5,7 +5,7 @@
  * Description: Add custom tabs to the Affiliate Area
  * Author: Pippin Williamson and Andrew Munro
  * Author URI: http://affiliatewp.com
- * Version: 1.0.2
+ * Version: 1.1
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
  *
@@ -49,7 +49,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.0
 		 */
-		private $version = '1.0.2';
+		private $version = '1.1';
 
 		/**
 		 * Main AffiliateWP_Affiliate_Area_Tabs Instance
@@ -220,6 +220,46 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			// redirect if non-affiliate tries to access a tab's page
 			add_action( 'template_redirect', array( $this, 'redirect' ) );
 
+			if ( $this->has_1_8() ) {
+				add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
+			}
+
+		}
+
+		/**
+		 * Hide existing tabs from the Affiliate Area
+		 *
+		 * @since 1.1
+		 * @return boolean
+		 */
+		public function hide_existing_tabs( $show, $tab ) {
+
+			$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
+
+			if ( array_key_exists( $tab, $options ) ) {
+				$show = false;
+			}
+
+			return $show;
+
+		}
+
+		/**
+		 * Determine if the user is on version 1.8 of AffiliateWP
+		 *
+		 * @since 1.1
+		 * @return boolean
+		 */
+		public function has_1_8() {
+
+			$version = get_option( 'affwp_version' );
+			$return  = true;
+
+			if ( version_compare( $version, '1.8', '<' ) ) {
+				$return = false;
+			}
+
+			return $return;
 		}
 
 		/**
@@ -229,6 +269,11 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * @return array $page_ids
 		 */
 		public function protected_page_ids() {
+
+			if ( ! $this->get_tabs() ) {
+				return;
+			}
+
 			$page_ids = wp_list_pluck( $this->get_tabs(), 'id' );
 			return $page_ids;
 		}
@@ -240,6 +285,10 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * @return void
 		 */
 		public function redirect() {
+
+			if ( ! $this->protected_page_ids() ) {
+				return;
+			}
 
 			$redirect = affiliate_wp()->settings->get( 'affiliates_page' ) ? get_permalink( affiliate_wp()->settings->get( 'affiliates_page' ) ) : site_url();
 			$redirect = apply_filters( 'affiliatewp-affiliate-area-tabs', $redirect );

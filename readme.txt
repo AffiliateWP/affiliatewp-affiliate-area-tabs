@@ -2,8 +2,8 @@
 Contributors: sumobi, mordauk
 Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing, affiliate marketing
 Requires at least: 3.9
-Tested up to: 4.5
-Stable tag: 1.0.2
+Tested up to: 4.5.1
+Stable tag: 1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -13,7 +13,7 @@ Add custom tabs to AffiliateWP's Affiliate Area
 
 > This plugin requires [AffiliateWP](https://affiliatewp.com/ "AffiliateWP") in order to function.
 
-Affiliate Area Tabs allows you to add custom tabs to AffiliateWP's Affiliate Area. Each tab is linked to a WordPress page making it exceptionally easy to add and manage the tab's content.
+Affiliate Area Tabs allows you to add custom tabs to AffiliateWP's Affiliate Area. Each tab is linked to a WordPress page making it exceptionally easy to add and manage the tab's content. Pages assigned to a tab are only viewable to affiliates. Since version 1.8 of AffiliateWP it's possible to remove any of the existing tabs in the Affiliate Area (Affiliate URLs, Statistics etc).
 
 Here are just some of the things you could do:
 
@@ -36,7 +36,7 @@ Here are just some of the things you could do:
 1. Upload to your site
 1. Navigate to `wp-admin/plugins.php` on your site (your WP Admin plugin page)
 1. Activate this plugin
-1. Go to Affiliates &rarr; Settings &rarr; Affiliate Area Tabs to configure the tabs
+1. Go to Affiliates &rarr; Settings &rarr; Affiliate Area Tabs to configure the tabs (or removing the existing ones)
 1. View the new tabs by visiting the Affiliate Area page on the front-end of your website. This is the page defined as the "Affiliate Area" at Affiliates &rarr; Settings &rarr; General
 
 OR you can just install it with WordPress by going to Plugins >> Add New >> and type this plugin's name
@@ -47,6 +47,10 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 2. Viewing the custom tabs on the front-end website
 
 == Changelog ==
+
+= 1.1 =
+* New: Existing Affiliate Area tabs can now be removed! Requires AffiliateWP v1.8 or newer.
+* Fix: 2x PHP notices when no custom tabs were set.
 
 = 1.0.2 =
 * Fix: Custom tab content shown at bottom of Affiliate URLs tab
