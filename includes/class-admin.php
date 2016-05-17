@@ -205,7 +205,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
             <table id="affiliatewp-tabs" class="form-table wp-list-table widefat posts">
                 <thead>
                     <tr>
-                        <th style="width:30%;"><?php _e( 'Tab Content', 'affiliatewp-affiliate-area-tabs' ); ?></th>
+                        <th style="width:50%;"><?php _e( 'Tab Content', 'affiliatewp-affiliate-area-tabs' ); ?></th>
                         <th><?php _e( 'Tab Title', 'affiliatewp-affiliate-area-tabs' ); ?></th>
                         <th style="width:5%;"></th>
                     </tr>
@@ -213,7 +213,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 <tbody>
 
 					<tr>
-						<td><p class="description"><?php _e( 'Select which page will be used for the tab\'s content. Any non-affiliate trying to access this page will be redirected to the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
+						<td><p class="description"><?php _e( 'Select which page will be used for the tab\'s content. This page will be blocked for non-affiliates.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
 						<td><p class="description"><?php _e( 'Enter a title for the tab.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
 						<td></td>
 					</tr>
