@@ -256,10 +256,9 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function has_1_8() {
 
-			$version = get_option( 'affwp_version' );
-			$return  = true;
+			$return = true;
 
-			if ( version_compare( $version, '1.8', '<' ) ) {
+			if ( version_compare( AFFILIATEWP_VERSION, '1.8', '<' ) ) {
 				$return = false;
 			}
 
