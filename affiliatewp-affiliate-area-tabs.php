@@ -236,6 +236,10 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 			$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
 
+			if ( ! $options ) {
+				return $show;
+			}
+
 			if ( array_key_exists( $tab, $options ) ) {
 				$show = false;
 			}
