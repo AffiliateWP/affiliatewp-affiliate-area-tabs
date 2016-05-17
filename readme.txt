@@ -51,6 +51,7 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 = 1.1.1 =
 * Fix: array_key_exists() PHP Warning
 * Tweak: Now uses AffiliateWP's version constant to check for the existence of v1.8 or newer
+* Tweak: Added a note to the admin screen about how tab pages are shown to non-affiliates.
 
 = 1.1 =
 * New: Existing Affiliate Area tabs can now be removed! Requires AffiliateWP v1.8 or newer.
