@@ -213,7 +213,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 <tbody>
 
 					<tr>
-						<td><p class="description"><?php _e( 'Select which page will be used for the tab\'s content.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
+						<td><p class="description"><?php _e( 'Select which page will be used for the tab\'s content. Any non-affiliate trying to access this page will be redirected to the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
 						<td><p class="description"><?php _e( 'Enter a title for the tab.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
 						<td></td>
 					</tr>
