@@ -207,7 +207,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                     }
 
                 // All tab checkboxes are unchecked
-                if ( affwp_tabs.cb_chk.length === null || '' || undefined ) {
+                if ( affwp_tabs.cb_chk.length === null || '' || undefined || 0 ) {
                         affwp_tabs.maybe_invalid = true;
                     }
 
@@ -217,6 +217,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 // If all tabs are removed, and there's only one tab
                 } else if ( affwp_tabs.count <= 1 && affwp_tabs.maybe_invalid ) {
                     affwp_tabs.error();
+                    $( '#submit' ).attr( 'disabled', 'disabled' );
                 } else {
                     $(this).closest('tr').find( 'td input, td select' ).val( '' );
                 }
