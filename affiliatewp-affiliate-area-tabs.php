@@ -378,32 +378,58 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function tab_content( $affiliate_id ) {
 
-			// get tabs
-			$tabs = $this->get_tabs();
+			$tab_slugs = array_values( $this->get_tab_slugs() );
 
-			if ( $tabs ) : ?>
+			if ( $tab_slugs ) : ?>
 
-			<?php foreach ( $tabs as $tab ) :
+				<?php foreach ( $tab_slugs as $slug ) :
 
-				$post        = get_post( $tab['id'] );
-				$tab_slug    = $this->make_slug( $tab['title'] );
-				$current_tab = isset( $_GET['tab'] ) && $_GET['tab'] ? $_GET['tab'] : '';
+					$page        = get_page_by_path( $slug, OBJECT, 'page' );
+					$current_tab = isset( $_GET['tab'] ) && $_GET['tab'] ? $_GET['tab'] : '';
 
-				// current tab doesn't match slug
-				if ( $current_tab !== $tab_slug ) {
-					continue;
-				}
+					$active_tab_page = get_page_by_path( affwp_get_active_affiliate_area_tab(), OBJECT, 'page' );
+					$active_tab_page_id = $active_tab_page ? $active_tab_page->ID : '';
 
-				// a tab's content cannot be the content of the page you're currently viewing
-				if ( get_the_ID() === $post->ID ) {
-					continue;
-				}
+					/**
+					 * Showing a tab which has the [affiliate_area] shortcode inside will cause a nesting fatal error
+					 * Instead of erroring out, let's just show a blank tab
+					 */
+					if ( has_shortcode( $page->post_content, 'affiliate_area' ) ) {
+						continue;
+					}
 
-				?>
-				<div id="affwp-affiliate-dashboard-tab-<?php echo $tab_slug; ?>" class="affwp-tab-content">
-					<?php echo apply_filters( 'the_content', $post->post_content ); ?>
-				</div>
-			<?php endforeach; ?>
+					/**
+					 * If we're on the Affiliate Area page (without query string) and the current slug matches the first slug in the array, show the content
+					 */
+					if ( ( ! $current_tab ) && ( $tab_slugs[0] === $slug ) ) :
+
+							/**
+							 * If the active tab does not exist in the tab slugs array, then one of the other default tabs is active, skip
+							 */
+							if ( ! in_array( affwp_get_active_affiliate_area_tab(), $tab_slugs ) ) {
+								continue;
+							}
+
+						?>
+						<div id="affwp-affiliate-dashboard-tab-<?php echo $slug; ?>" class="affwp-tab-content">
+							<?php echo apply_filters( 'the_content', $page->post_content ); ?>
+						</div>
+					<?php else :
+
+						// current tab doesn't match slug
+						if ( $current_tab !== $slug ) {
+							continue;
+						}
+
+						?>
+
+					<div id="affwp-affiliate-dashboard-tab-<?php echo $slug; ?>" class="affwp-tab-content">
+						<?php echo apply_filters( 'the_content', $page->post_content ); ?>
+					</div>
+
+					<?php endif; ?>
+
+				<?php endforeach; ?>
 
 			<?php endif; ?>
 
