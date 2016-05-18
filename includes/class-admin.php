@@ -179,22 +179,44 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
             });
 
+
             // remove tab
             $('.affwp_remove_tab').on('click', function(e) {
                 e.preventDefault();
+                var affwp_tabs = {
+                        maybe_invalid : false,
+                        count   : $( '#affiliatewp-tabs tbody tr').not( '#affiliatewp-tabs tbody tr:first-child' ).length,
+                        cboxes  : $( '.form-table tbody tr input[type="checkbox"]' ),
+                        cb_chk  : $( '.form-table tbody tr input[type="checkbox"]:checked' ),
+                        notice  : 'You must have at least one active Affiliate Area tab.',
+                        error   : function () {
+                            // Add translatable string
+                            wp.a11y.speak( affwp_tabs.notice, 'assertive' );
+                            // Initiate alert
+                            alert( affwp_tabs.notice );
+                            console.error( affwp_tabs.notice );
+                        }
+                    }
 
-                var count = $('#affiliatewp-tabs tbody tr').not( '#affiliatewp-tabs tbody tr:first-child').length;
+                console.debug('Checked: ' + affwp_tabs.cb_chk.length );
+                console.debug('All: ' + affwp_tabs.cboxes.length );
 
-                var affwp_tabs_notice = 'You must have at least one active Affiliate Area tab.';
+                // All tab checkboxes are checked
+                if ( affwp_tabs.cb_chk.length === affwp_tabs.cboxes.length ) {
+                        affwp_tabs.maybe_invalid = true;
+                    }
 
-                // instead of removing the last row, clear out the values
-                if ( count !== 1 ) {
+                // All tab checkboxes are unchecked
+                if ( affwp_tabs.cb_chk.length === null || '' || undefined ) {
+                        affwp_tabs.maybe_invalid = true;
+                    }
+
+                // Instead of removing the last row, clear out the values
+                if ( affwp_tabs.count !== 1 ) {
                     $(this).parent().parent().remove();
-                } else if ( count <= 1 ) {
-
-                    // Add translatable string
-                    wp.a11y.speak( affwp_tabs_notice, 'assertive' );
-                    alert( affwp_tabs_notice );
+                // If all tabs are removed, and there's only one tab
+                } else if ( affwp_tabs.count <= 1 && affwp_tabs.maybe_invalid ) {
+                    affwp_tabs.error();
                 } else {
                     $(this).closest('tr').find( 'td input, td select' ).val( '' );
                 }
