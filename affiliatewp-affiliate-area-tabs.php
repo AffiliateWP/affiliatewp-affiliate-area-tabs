@@ -313,7 +313,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function get_tabs() {
 
-			$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs' );
+			$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
 
 			if ( ! empty( $tabs ) ) {
 				$tabs = array_values( $tabs );
