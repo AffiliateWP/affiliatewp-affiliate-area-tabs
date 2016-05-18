@@ -222,6 +222,9 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 			if ( $this->has_1_8() ) {
 				add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
+				add_filter( 'affwp_affiliate_area_tabs', function( $tabs ) {
+					return array_merge( $tabs, $this->get_tab_slugs() );
+				} );
 			}
 
 		}
@@ -310,13 +313,28 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function get_tabs() {
 
-			$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs' );
+			$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
 
 			if ( ! empty( $tabs ) ) {
 				$tabs = array_values( $tabs );
 			}
 
 			return $tabs;
+		}
+
+		/**
+		 * Retrieves tabs as a list of slugs.
+		 *
+		 * @since 1.1.1
+		 * @access public
+		 *
+		 * @return array List of tab slugs.
+		 */
+		public function get_tab_slugs() {
+			$tabs  = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
+			$slugs = array_map( array( $this, 'make_slug' ), wp_list_pluck( $tabs, 'title' ) );
+
+			return $slugs;
 		}
 
 		/**
