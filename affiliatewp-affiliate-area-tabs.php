@@ -5,7 +5,7 @@
  * Description: Add custom tabs to the Affiliate Area
  * Author: Pippin Williamson and Andrew Munro
  * Author URI: http://affiliatewp.com
- * Version: 1.1
+ * Version: 1.1.1
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
  *
@@ -49,7 +49,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.0
 		 */
-		private $version = '1.1';
+		private $version = '1.1.1';
 
 		/**
 		 * Main AffiliateWP_Affiliate_Area_Tabs Instance
@@ -236,6 +236,10 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 			$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
 
+			if ( ! $options ) {
+				return $show;
+			}
+
 			if ( array_key_exists( $tab, $options ) ) {
 				$show = false;
 			}
@@ -252,10 +256,9 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function has_1_8() {
 
-			$version = get_option( 'affwp_version' );
-			$return  = true;
+			$return = true;
 
-			if ( version_compare( $version, '1.8', '<' ) ) {
+			if ( version_compare( AFFILIATEWP_VERSION, '1.8', '<' ) ) {
 				$return = false;
 			}
 
