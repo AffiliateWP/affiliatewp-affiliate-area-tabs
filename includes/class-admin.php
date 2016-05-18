@@ -185,9 +185,16 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
                 var count = $('#affiliatewp-tabs tbody tr').not( '#affiliatewp-tabs tbody tr:first-child').length;
 
+                var affwp_tabs_notice = 'You must have at least one active Affiliate Area tab.';
+
                 // instead of removing the last row, clear out the values
                 if ( count !== 1 ) {
                     $(this).parent().parent().remove();
+                } else if ( count <= 1 ) {
+
+                    // Add translatable string
+                    wp.a11y.speak( affwp_tabs_notice, 'assertive' );
+                    alert( affwp_tabs_notice );
                 } else {
                     $(this).closest('tr').find( 'td input, td select' ).val( '' );
                 }
