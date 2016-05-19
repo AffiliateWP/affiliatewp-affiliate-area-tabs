@@ -179,24 +179,25 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
             });
 
+            var affwp_tabs = {
+                    maybe_invalid : false,
+                    empty: false,
+                    count   : $( '#affiliatewp-tabs tbody tr').not( '#affiliatewp-tabs tbody tr:first-child' ).length,
+                    cboxes  : $( '.form-table tbody tr input[type="checkbox"]' ),
+                    cb_chk  : $( '.form-table tbody tr input[type="checkbox"]:checked' ),
+                    notice  : 'You must have at least one active Affiliate Area tab.',
+                    error   : function () {
+                        // Add translatable string
+                        wp.a11y.speak( affwp_tabs.notice, 'assertive' );
+                        // Initiate alert
+                        alert( affwp_tabs.notice );
+                        console.error( affwp_tabs.notice );
+                    }
+                }
 
             // remove tab
             $('.affwp_remove_tab').on('click', function(e) {
                 e.preventDefault();
-                var affwp_tabs = {
-                        maybe_invalid : false,
-                        count   : $( '#affiliatewp-tabs tbody tr').not( '#affiliatewp-tabs tbody tr:first-child' ).length,
-                        cboxes  : $( '.form-table tbody tr input[type="checkbox"]' ),
-                        cb_chk  : $( '.form-table tbody tr input[type="checkbox"]:checked' ),
-                        notice  : 'You must have at least one active Affiliate Area tab.',
-                        error   : function () {
-                            // Add translatable string
-                            wp.a11y.speak( affwp_tabs.notice, 'assertive' );
-                            // Initiate alert
-                            alert( affwp_tabs.notice );
-                            console.error( affwp_tabs.notice );
-                        }
-                    }
 
                 console.debug('Checked: ' + affwp_tabs.cb_chk.length );
                 console.debug('All: ' + affwp_tabs.cboxes.length );
@@ -204,25 +205,43 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 // All tab checkboxes are checked
                 if ( affwp_tabs.cb_chk.length === affwp_tabs.cboxes.length ) {
                         affwp_tabs.maybe_invalid = true;
-                    }
+                } else if ( affwp_tabs.cb_chk.length !== affwp_tabs.cboxes.length ) {
+                        affwp_tabs.maybe_invalid = false;
+                }
 
                 // All tab checkboxes are unchecked
                 if ( affwp_tabs.cb_chk.length === null || '' || undefined || 0 ) {
                         affwp_tabs.maybe_invalid = true;
-                    }
+                }
+
+                if ( ! $( '#affiliatewp-tabs tbody tr:nth-child(2) td input' ).val() ) {
+                    affwp_tabs.empty = true;
+                }
 
                 // Instead of removing the last row, clear out the values
                 if ( affwp_tabs.count !== 1 ) {
                     $(this).parent().parent().remove();
                 // If all tabs are removed, and there's only one tab
-                } else if ( affwp_tabs.count <= 1 && affwp_tabs.maybe_invalid ) {
+                } else if ( affwp_tabs.count <= 1 && affwp_tabs.maybe_invalid && affwp_tabs.empty ) {
                     affwp_tabs.error();
                     $( '#submit' ).attr( 'disabled', 'disabled' );
                 } else {
                     $(this).closest('tr').find( 'td input, td select' ).val( '' );
                 }
 
+
             });
+
+            // Globally, if both all (or none of) the tab checkboxes are checked,
+            // as well no custom tab having a defined title,
+            // disable the submit button.
+            if ( ! affwp_tabs.maybe_invalid && ! affwp_tabs.empty ) {
+                $( '#submit' ).removeAttr('disabled');
+            } else if ( affwp_tabs.maybe_invalid && affwp_tabs.empty === true ) {
+                $( '#submit' ).attr( 'disabled', 'disabled' );
+            } else if ( ! affwp_tabs.maybe_invalid ) {
+                $( '#submit' ).removeAttr('disabled');
+            }
 
         });
         </script>
