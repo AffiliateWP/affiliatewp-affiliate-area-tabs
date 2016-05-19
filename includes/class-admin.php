@@ -144,8 +144,12 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                     debug         : false,
                     maybe_invalid : false,
                     empty         : false,
-                    enable        : $( '#submit' ).attr( 'disabled', false ),
-                    disable       : $( '#submit' ).attr( 'disabled', 'disabled' ),
+                    enable        : function() {
+                        $( '#submit' ).attr( 'disabled', false );
+                    },
+                    disable       : function() {
+                        $( '#submit' ).attr( 'disabled', 'disabled' );
+                    },
                     custom_val    : $( '#affiliatewp-tabs tbody tr:nth-child(2) td input' ).val(),
                     row_last      : $('#affiliatewp-tabs tbody tr:last'),
                     count_all     : $('#affiliatewp-tabs tbody tr').length,
@@ -162,6 +166,14 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                     }
                 }
 
+            affwp_tabs.enable();
+
+            console.log(affwp_tabs.cboxes.length);
+            console.log(affwp_tabs.cb_chk.length);
+
+            if ( affwp_tabs.cb_chk.length !== affwp_tabs.cboxes.length ) {
+                affwp_tabs.enable();
+            }
 
             // Prevent enter key from creating new row
             $('#affiliatewp-tabs').on('keyup keypress', function(e) {
@@ -209,7 +221,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                     // Return an error
                     affwp_tabs.error();
                     // Disable submit button
-                    affwp_tabs.disable;
+                    //affwp_tabs.disable();
                 } else {
                     $(this).closest('tr').find( 'td input, td select' ).val( '' );
                 }
@@ -220,24 +232,23 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
             // Enable submit if entering a tab title
             $('#affiliatewp-tabs').on('keyup keypress', function() {
-                    affwp_tabs.enable;
+                affwp_tabs.enable();
             });
 
             // All tab checkboxes are checked
             if ( affwp_tabs.cb_chk.length === affwp_tabs.cboxes.length ) {
-                    affwp_tabs.maybe_invalid = true;
+                affwp_tabs.maybe_invalid = true;
             } else if ( affwp_tabs.cb_chk.length !== affwp_tabs.cboxes.length ) {
-                    affwp_tabs.maybe_invalid = false;
-                    affwp_tabs.enable;
+                affwp_tabs.maybe_invalid = false;
             }
 
             // All tab checkboxes are unchecked
             if ( affwp_tabs.cb_chk.length === null || '' || undefined || 0 ) {
-                    affwp_tabs.maybe_invalid = true;
+                affwp_tabs.maybe_invalid = true;
             }
 
-            // The input value of the first custom tab is an empty string,
-            // which returns false by when empty.
+            // The input value of the first custom tab,
+            // which returns false when empty.
             if ( ! affwp_tabs.custom_val ) {
                 affwp_tabs.empty = true;
             }
@@ -245,9 +256,12 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
             if ( affwp_tabs.count_main <= 1 && affwp_tabs.maybe_invalid && affwp_tabs.empty ) {
                 // Return the error
                 affwp_tabs.error();
+                affwp_tabs.disable();
             } else if ( affwp_tabs.custom_val ) {
-                affwp_tabs.enable;
+                affwp_tabs.enable();
             }
+
+            affwp_tabs.enable();
 
         });
         </script>
