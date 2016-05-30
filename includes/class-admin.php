@@ -140,22 +140,22 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
         <script type="text/javascript">
         jQuery(document).ready(function($) {
 
+
             var affwp_tabs = {
                     debug         : false,
                     maybe_invalid : false,
                     empty         : false,
                     enable        : function() {
-                        $( '#submit' ).attr( 'disabled', false );
+                        $( '#submit' ).prop( 'disabled', false );
                     },
                     disable       : function() {
-                        $( '#submit' ).attr( 'disabled', 'disabled' );
+                        $( '#submit' ).prop( 'disabled', true );
                     },
-                    custom_val    : $( '#affiliatewp-tabs tbody tr:nth-child(2) td input' ).val(),
+                    custom        : $( '#affiliatewp-tabs tbody tr:nth-child(2) td input' ),
                     row_last      : $('#affiliatewp-tabs tbody tr:last'),
                     count_all     : $('#affiliatewp-tabs tbody tr').length,
                     count_main    : $( '#affiliatewp-tabs tbody tr').not( '#affiliatewp-tabs tbody tr:first-child' ).length,
                     cboxes        : $( '.form-table tbody tr input[type="checkbox"]' ),
-                    cb_chk        : $( '.form-table tbody tr input[type="checkbox"]:checked' ),
                     notice        : 'You must have at least one active Affiliate Area tab.',
                     error         : function () {
                         // Add translatable string
@@ -163,17 +163,21 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                         // Initiate alert
                         alert( affwp_tabs.notice );
                         console.error( affwp_tabs.notice );
+                    },
+                    valcb         : function () {
+                        if( ( affwp_tabs.cboxes.length == affwp_tabs.cboxes.filter(":checked").length ) && ! affwp_tabs.custom.val() ) {
+                            affwp_tabs.maybe_invalid = true;
+                            affwp_tabs.disable();
+                            affwp_tabs.error();
+                        } else {
+                            affwp_tabs.maybe_invalid = false;
+                            affwp_tabs.enable();
+                        }
                     }
                 }
 
-            affwp_tabs.enable();
-
-            console.log(affwp_tabs.cboxes.length);
-            console.log(affwp_tabs.cb_chk.length);
-
-            if ( affwp_tabs.cb_chk.length !== affwp_tabs.cboxes.length ) {
-                affwp_tabs.enable();
-            }
+            // Check for checkbox states and disable
+            affwp_tabs.valcb();
 
             // Prevent enter key from creating new row
             $('#affiliatewp-tabs').on('keyup keypress', function(e) {
@@ -185,7 +189,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 }
             });
 
-            // add new tab
+            // Add a new tab
             $('#affwp_new_tab').on('click', function(e) {
 
                 e.preventDefault();
@@ -209,59 +213,57 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
             });
 
+            /**
+             * A listener bound to checkbox state changes.
+             * This is identical to the function
+             * affwp_tabs.valcb(), but accounts for
+             * live changes occurring in the dom.
+             *
+             * Returns an error, and disables the submit button if:
+             * 1. All core tabs are disabled, and
+             * 2. No custom tabs are present.
+             *
+             * @since  1.1.2
+             *
+             */
+            affwp_tabs.cboxes.change(function(){
+
+                if( ( affwp_tabs.cboxes.length == affwp_tabs.cboxes.filter(":checked").length ) && ! affwp_tabs.custom.val() ) {
+                    affwp_tabs.maybe_invalid = true;
+                    affwp_tabs.disable();
+                    affwp_tabs.error();
+                } else {
+                    affwp_tabs.maybe_invalid = false;
+                    affwp_tabs.enable();
+                }
+            });
+
             // Remove a custom tab
             $('.affwp_remove_tab').on('click', function(e) {
                 e.preventDefault();
 
+                console.log(affwp_tabs.count_main);
+
                 // Instead of removing the last row, clear out the values
                 if ( affwp_tabs.count_main !== 1 ) {
                     $(this).parent().parent().remove();
-                // If all tabs are removed, and there's only one tab
-                } else if ( affwp_tabs.count_main <= 1 && affwp_tabs.maybe_invalid && affwp_tabs.empty ) {
+                // See affwp_tabs.valcb()
+                } else if ( ( affwp_tabs.count_main <= 1 ) && affwp_tabs.maybe_invalid && ! affwp_tabs.custom.val() ) {
                     // Return an error
                     affwp_tabs.error();
                     // Disable submit button
-                    //affwp_tabs.disable();
+                    affwp_tabs.disable();
                 } else {
                     $(this).closest('tr').find( 'td input, td select' ).val( '' );
                 }
 
             });
 
-            // Basic validation
-
             // Enable submit if entering a tab title
             $('#affiliatewp-tabs').on('keyup keypress', function() {
                 affwp_tabs.enable();
             });
 
-            // All tab checkboxes are checked
-            if ( affwp_tabs.cb_chk.length === affwp_tabs.cboxes.length ) {
-                affwp_tabs.maybe_invalid = true;
-            } else if ( affwp_tabs.cb_chk.length !== affwp_tabs.cboxes.length ) {
-                affwp_tabs.maybe_invalid = false;
-            }
-
-            // All tab checkboxes are unchecked
-            if ( affwp_tabs.cb_chk.length === null || '' || undefined || 0 ) {
-                affwp_tabs.maybe_invalid = true;
-            }
-
-            // The input value of the first custom tab,
-            // which returns false when empty.
-            if ( ! affwp_tabs.custom_val ) {
-                affwp_tabs.empty = true;
-            }
-
-            if ( affwp_tabs.count_main <= 1 && affwp_tabs.maybe_invalid && affwp_tabs.empty ) {
-                // Return the error
-                affwp_tabs.error();
-                affwp_tabs.disable();
-            } else if ( affwp_tabs.custom_val ) {
-                affwp_tabs.enable();
-            }
-
-            affwp_tabs.enable();
 
         });
         </script>
