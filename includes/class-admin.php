@@ -213,6 +213,10 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
             });
 
+            affwp_tabs.custom.change(function() {
+                affwp_tabs.empty = ( affwp_tabs.custom ) ? true : false;
+            });
+
             /**
              * A listener bound to checkbox state changes.
              * This is identical to the function
