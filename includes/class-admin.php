@@ -213,6 +213,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
             });
 
+            // Check for content in the first custom tab input
             affwp_tabs.custom.change(function() {
                 affwp_tabs.empty = ( affwp_tabs.custom ) ? true : false;
             });
