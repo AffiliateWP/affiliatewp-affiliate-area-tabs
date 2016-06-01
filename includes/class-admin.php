@@ -264,12 +264,25 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
             });
 
-            // Enable submit if entering a tab title
+            // Enable submit if entering a tab title.
+            // Ensure that the value is checked on keyup.
             $('#affiliatewp-tabs').on('keyup keypress', function() {
-                affwp_tabs.enable();
+                var trim_custom = $.trim( affwp_tabs.custom.val() );
+
+                if ( ! affwp_tabs.maybe_invalid ) {
+                    affwp_tabs.enable();
+                } else {
+                    affwp_tabs.disable;
+                }
+
+                if( trim_custom.length > 0 ) {
+                    affwp_tabs.enable();
+                } else {
+                    affwp_tabs.disable();
+                    affwp_tabs.error();
+                }
+
             });
-
-
         });
         </script>
         <style type="text/css">
