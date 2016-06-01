@@ -313,7 +313,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
              *
              * If entering a tab title,
              *     Ensure that the value is checked on keyup, and
-             *     ensure that the value is not empty, or whitespace.
+             *     ensure that the value is not empty, nor whitespace.
              * Or:
              *     If there are no core tabs enabled, then
              *     Check for at least once custom tab.
