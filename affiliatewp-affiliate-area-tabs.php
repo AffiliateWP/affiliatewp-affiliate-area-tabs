@@ -221,10 +221,14 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			add_action( 'template_redirect', array( $this, 'redirect' ) );
 
 			if ( $this->has_1_8() ) {
+				$object = $this;
+
 				add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
-				add_filter( 'affwp_affiliate_area_tabs', function( $tabs ) {
-					return array_merge( $tabs, $this->get_tab_slugs() );
+
+				add_filter( 'affwp_affiliate_area_tabs', function( $tabs ) use( $object ) {
+					return array_merge( $tabs, $object->get_tab_slugs() );
 				} );
+
 			}
 
 		}
