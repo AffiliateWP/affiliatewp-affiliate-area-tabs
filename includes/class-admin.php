@@ -210,7 +210,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                     is_valid      : true,
                 }
 
-            function check() {
+            function _check() {
                 affwp_tabs.is_valid = ( affwp_tabs.val_custom() && affwp_tabs.val_cb() ) ? true : false;
                 if ( affwp_tabs.custom_title.val() === "" && affwp_tabs.custom_sel.val() === "0" && ! affwp_tabs.val_cb() ) {
                     affwp_tabs.disable();
@@ -322,10 +322,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
                 if ( affwp_tabs.val_cb() && affwp_tabs.val_custom() ) {
                     affwp_tabs.disable();
-                } else {
-                    affwp_tabs.enable();
-                }
-
             });
 
             /**
@@ -384,7 +380,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
             });
 
-            check();
+            _check();
 
         });
         </script>
