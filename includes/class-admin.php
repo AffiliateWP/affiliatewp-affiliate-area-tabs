@@ -166,24 +166,24 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
              * @type {Object}  affwp_tabs
              */
             var affwp_tabs = {
-                debug: false,
-                enable: function() {
+                debug       : false,
+                enable      : function() {
                     $( '#submit' ).prop( 'disabled', false );
                 },
-                disable: function() {
+                disable     : function() {
                     $( '#submit' ).prop( 'disabled', true );
                 },
                 custom_title: $( '#affiliatewp-tabs tbody tr:nth-child(2) td input' ),
-                custom_sel: $( '#affiliatewp-tabs tbody tr:nth-child(2) td select' ),
-                row_last: $( '#affiliatewp-tabs tbody tr:last' ),
-                count_all: $( '#affiliatewp-tabs tbody tr' ).length,
-                count_main: $( '#affiliatewp-tabs tbody tr' ).not( '#affiliatewp-tabs tbody tr:first-child' ).length,
-                cboxes: $( '.form-table tbody tr input[type="checkbox"]' ),
-                notice: {
-                    default: 'You must have at least one active Affiliate Area tab.',
-                    blank: 'You must select a page from the dropdown, and specify a tab title.'
+                custom_sel  : $( '#affiliatewp-tabs tbody tr:nth-child(2) td select' ),
+                row_last    : $( '#affiliatewp-tabs tbody tr:last' ),
+                count_all   : $( '#affiliatewp-tabs tbody tr' ).length,
+                count_main  : $( '#affiliatewp-tabs tbody tr' ).not( '#affiliatewp-tabs tbody tr:first-child' ).length,
+                cboxes      : $( '.form-table tbody tr input[type="checkbox"]' ),
+                notice      : {
+                    default : 'You must have at least one active Affiliate Area tab.',
+                    blank   : 'You must select a page from the dropdown, and specify a tab title.'
                 },
-                val_custom: function() {
+                val_custom  : function() {
                     var ct, cp;
                     ct = $.trim( affwp_tabs.custom_title.val() );
                     cp = $.trim( affwp_tabs.custom_sel.val() );
@@ -193,26 +193,26 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                         return false;
                     }
                 },
-                error: function( message ) {
+                error       : function( message ) {
                     wp.a11y.speak( message, 'assertive' );
                     alert( message );
                     if ( affwp_tabs.debug ) {
                         console.error( message );
                     }
                 },
-                val_cb: function() {
+                val_cb      : function() {
                     if ( ( affwp_tabs.cboxes.length == affwp_tabs.cboxes.filter( ":checked" ).length ) ) {
                         return false;
                     } else {
                         return true;
                     }
                 },
-                is_valid: true,
+                is_valid    : true,
             }
 
             function check() {
                 affwp_tabs.is_valid = ( affwp_tabs.val_custom() && affwp_tabs.val_cb() ) ? true : false;
-                if ( affwp_tabs.custom_title.val() === "" && affwp_tabs.custom_sel.val() === "0" && !affwp_tabs.val_cb() ) {
+                if ( affwp_tabs.custom_title.val() === "" && affwp_tabs.custom_sel.val() === "0" && ! affwp_tabs.val_cb() ) {
                     affwp_tabs.disable();
                 }
             }
@@ -279,7 +279,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
              */
             affwp_tabs.cboxes.change( function() {
 
-                if ( ( affwp_tabs.cboxes.length == affwp_tabs.cboxes.filter( ":checked" ).length ) && !affwp_tabs.custom_title.val() ) {
+                if ( ( affwp_tabs.cboxes.length == affwp_tabs.cboxes.filter( ":checked" ).length ) && ! affwp_tabs.custom_title.val() ) {
                     affwp_tabs.is_valid = false;
                     affwp_tabs.disable();
                     affwp_tabs.error( affwp_tabs.notice.default );
@@ -307,13 +307,13 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
              *
              */
             affwp_tabs.custom_title.blur( function() {
-                if ( $( this ).val() === "" && affwp_tabs.custom_sel.val() === "0" && !affwp_tabs.val_cb() ) {
+                if ( $( this ).val() === "" && affwp_tabs.custom_sel.val() === "0" && ! affwp_tabs.val_cb() ) {
                     affwp_tabs.disable();
                     affwp_tabs.error( affwp_tabs.notice.blank );
-                } else if ( $( this ).val() !== "" && affwp_tabs.custom_sel.val() === "0" && !affwp_tabs.val_cb() ) {
+                } else if ( $( this ).val() !== "" && affwp_tabs.custom_sel.val() === "0" && ! affwp_tabs.val_cb() ) {
                     affwp_tabs.disable();
                     affwp_tabs.error( affwp_tabs.notice.blank );
-                } else if ( $( this ).val() === "" && !affwp_tabs.val_cb() && affwp_tabs.custom_sel.val() !== "0" ) {
+                } else if ( $( this ).val() === "" && ! affwp_tabs.val_cb() && affwp_tabs.custom_sel.val() !== "0" ) {
                     affwp_tabs.disable();
                     affwp_tabs.error( affwp_tabs.notice.blank );
                 } else {
@@ -348,11 +348,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
             affwp_tabs.custom_sel.blur( function() {
                 // A select returns a zero - as a string - if empty.
                 if ( affwp_tabs.custom_sel.val() === "0" ) {
-                    if ( affwp_tabs.custom_title.val() === "" && !affwp_tabs.val_cb() ) {
+                    if ( affwp_tabs.custom_title.val() === "" && ! affwp_tabs.val_cb() ) {
                         affwp_tabs.disable();
                         affwp_tabs.error( affwp_tabs.notice.blank );
                     }
-                } else if ( affwp_tabs.custom_title.val() === "" && !affwp_tabs.val_cb() ) {
+                } else if ( affwp_tabs.custom_title.val() === "" && ! affwp_tabs.val_cb() ) {
                     affwp_tabs.disable();
                     affwp_tabs.error( affwp_tabs.notice.blank );
                 } else {
@@ -372,7 +372,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 // Instead of removing the last row, clear out the values
                 if ( affwp_tabs.count_main !== 1 ) {
                     $( this ).parent().parent().remove();
-                } else if ( !affwp_tabs.val_custom() && !affwp_tabs.val_cb() ) {
+                } else if ( ! affwp_tabs.val_custom() && ! affwp_tabs.val_cb() ) {
                     affwp_tabs.disable();
                     affwp_tabs.error( affwp_tabs.notice.default );
                 } else {
