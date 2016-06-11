@@ -129,6 +129,26 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		<?php
 	}
 
+	/**
+     * Returns an array of pages without the Affiliate Area
+     * @since 1.1.2
+     */
+	private function get_pages() {
+
+		$pages = affwp_get_pages();
+
+		if ( $pages ) {
+			foreach ( $pages as $key => $page ) {
+				if ( $key === affiliate_wp()->settings->get( 'affiliates_page' ) ) {
+					// remove the affiliate area from the pages array so it can never be selected
+					unset( $pages[$key] );
+				}
+			}
+		}
+
+		return $pages;
+	}
+
     /**
      * Render the table
      * @since 1.0.0
@@ -247,18 +267,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						<td></td>
 					</tr>
 
-                    <?php if ( $tabs ) :
+                    <?php
 
-						$pages = affwp_get_pages();
+					$pages = $this->get_pages();
 
-						// remove the affiliate area from the pages array so it can never be selected
-						if ( $pages ) {
-							foreach ( $pages as $key => $page ) {
-								if ( $key === affiliate_wp()->settings->get( 'affiliates_page' ) ) {
-									unset( $pages[$key] );
-								}
-							}
-						}
+					if ( $tabs ) :
 
 						foreach( $tabs as $key => $tab ) :
 
@@ -286,7 +299,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
                     <?php if ( empty( $tabs ) ) :
                         $count = 0;
-                        $pages = affwp_get_pages();
 
                         ?>
                         <tr>
