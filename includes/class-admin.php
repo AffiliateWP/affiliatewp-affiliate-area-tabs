@@ -98,9 +98,9 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			} elseif ( empty( $tab['title'] ) && isset( $tab['id'] ) ) {
 				// if only a page is selected, use the page's title for the tab's title
 				$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( get_the_title( $tab['id'] ) );
-            } else {
-                $input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
-            }
+			} else {
+				$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
+			}
 
         }
 
