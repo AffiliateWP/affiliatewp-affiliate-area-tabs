@@ -136,7 +136,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	private function get_pages() {
 
 		$pages             = affwp_get_pages();
-		$affiliate_area_id = affiliate_wp()->settings->get( 'affiliates_page' );
+		$affiliate_area_id = function_exists( 'affwp_get_affiliate_area_page_id' ) ? affwp_get_affiliate_area_page_id() : affiliate_wp()->settings->get( 'affiliates_page' );
 
 		if ( ! empty( $pages[ $affiliate_area_id ] ) ) {
 			unset( $pages[ $affiliate_area_id ] );
