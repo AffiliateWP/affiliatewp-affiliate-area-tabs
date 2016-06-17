@@ -87,9 +87,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
             $all = 7;
             if ( count( $checked ) === $all ) {
-                error_log(key($options));
-                error_log('All tabs disabled');
-                //$checked = 6;
                 $input['affiliate_area_hide_tabs']['urls'] = false;
             }
 		}
