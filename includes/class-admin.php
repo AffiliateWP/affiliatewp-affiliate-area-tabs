@@ -86,7 +86,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
             $checked = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
             $custom  = affiliatewp_affiliate_area_tabs()->get_tabs();
             $count   = count( $custom );
-            echo var_dump($count);
 
             $all = 7;
             if ( count( $checked ) === $all && absint( $custom ) >= 1 ) {
