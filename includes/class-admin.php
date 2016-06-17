@@ -101,11 +101,15 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
         foreach ( $input['affiliate_area_tabs'] as $key => $tab ) {
 
-            if ( empty( $tab['title'] ) ) {
-                unset( $input['affiliate_area_tabs'][ $key ] );
-            } else {
-                $input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
-            }
+			if ( empty( $tab['title'] ) && ! isset( $tab['id'] ) ) {
+				// remove tab row if there's no page or title entered
+				unset( $input['affiliate_area_tabs'][ $key ] );
+			} elseif ( empty( $tab['title'] ) && isset( $tab['id'] ) ) {
+				// if only a page is selected, use the page's title for the tab's title
+				$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( get_the_title( $tab['id'] ) );
+			} else {
+				$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
+			}
 
         }
 
@@ -134,6 +138,22 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	<?php endforeach; ?>
 	<p class="description"><?php echo $args['description']; ?></p>
 		<?php
+	}
+
+	/**
+     * Returns an array of pages without the Affiliate Area
+     * @since 1.1.2
+     */
+	private function get_pages() {
+
+		$pages             = affwp_get_pages();
+		$affiliate_area_id = function_exists( 'affwp_get_affiliate_area_page_id' ) ? affwp_get_affiliate_area_page_id() : affiliate_wp()->settings->get( 'affiliates_page' );
+
+		if ( ! empty( $pages[ $affiliate_area_id ] ) ) {
+			unset( $pages[ $affiliate_area_id ] );
+		}
+
+		return $pages;
 	}
 
     /**
@@ -309,18 +329,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						<td></td>
 					</tr>
 
-                    <?php if ( $tabs ) :
+                    <?php
 
-						$pages = affwp_get_pages();
+					$pages = $this->get_pages();
 
-						// remove the affiliate area from the pages array so it can never be selected
-						if ( $pages ) {
-							foreach ( $pages as $key => $page ) {
-								if ( $key === affiliate_wp()->settings->get( 'affiliates_page' ) ) {
-									unset( $pages[$key] );
-								}
-							}
-						}
+					if ( $tabs ) :
 
 						foreach( $tabs as $key => $tab ) :
 
@@ -348,7 +361,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
                     <?php if ( empty( $tabs ) ) :
                         $count = 0;
-                        $pages = affwp_get_pages();
 
                         ?>
                         <tr>
