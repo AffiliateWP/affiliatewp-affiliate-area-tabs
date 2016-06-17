@@ -3,7 +3,7 @@ Contributors: sumobi, mordauk
 Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing, affiliate marketing
 Requires at least: 3.9
 Tested up to: 4.6-alpha-37456
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -47,6 +47,11 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 2. Viewing the custom tabs on the front-end website
 
 == Changelog ==
+
+= 1.1.2 =
+* Fix: Main Affiliate Area should not be able to be selected as a tab
+* Fix: Tabs do not save if no title is entered
+* Tweak: Improved validation during save routine
 
 = 1.1.1 =
 * Fix: array_key_exists() PHP Warning
