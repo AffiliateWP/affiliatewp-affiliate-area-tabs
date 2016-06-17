@@ -172,38 +172,12 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
             /**
              * Primary affwp_tabs object
              *
-             *
-             * affwp_tabs.error
-             *     Returns a translatable error, via
-             *     wp.a11y.speak, shown in an alert,
-             *     as well the console.
-             *
-             * affwp_tabs.val_cb
-             *    Checks for checkbox states and disables submit,
-             *    if there are also no custom tabs present
-             *    with non-empty values.
-             *
-             * val_custom
-             *    Returns true if the values for the first custom
-             *    tab row title and select both are not empty.
-             *    Defaults to false, as this factory function
-             *    in itself does not directly generate an error if false.
-             *
              * @since  1.1.2
              *
              * @return {string}  The error string
              * @type {Object}  affwp_tabs
              */
             var affwp_tabs = {
-                debug       : false,
-                enable      : function() {
-                    $( '#submit' ).prop( 'disabled', false );
-                },
-                disable     : function() {
-                    $( '#submit' ).prop( 'disabled', true );
-                },
-                custom_title: $( '#affiliatewp-tabs tbody tr:nth-child(2) td input' ),
-                custom_sel  : $( '#affiliatewp-tabs tbody tr:nth-child(2) td select' ),
                 row_last    : $( '#affiliatewp-tabs tbody tr:last' ),
                 count_all   : $( '#affiliatewp-tabs tbody tr' ).length,
                 count_main  : $( '#affiliatewp-tabs tbody tr' ).not( '#affiliatewp-tabs tbody tr:first-child' ).length,
@@ -212,31 +186,10 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                     default : 'You must have at least one active Affiliate Area tab.',
                     blank   : 'You must select a page from the dropdown, and specify a tab title.'
                 },
-                val_custom  : function() {
-                    var ct, cp;
-                    ct = $.trim( affwp_tabs.custom_title.val() );
-                    cp = $.trim( affwp_tabs.custom_sel.val() );
-                    if ( ct && ( cp === "0" ) ) {
-                        return true;
-                    } else {
-                        return false;
-                    }
-                },
                 error       : function( message ) {
                     wp.a11y.speak( message, 'assertive' );
                     alert( message );
-                    if ( affwp_tabs.debug ) {
-                        console.error( message );
-                    }
-                },
-                val_cb      : function() {
-                    if ( ( affwp_tabs.cboxes.length == affwp_tabs.cboxes.filter( ":checked" ).length ) ) {
-                        return false;
-                    } else {
-                        return true;
-                    }
-                },
-                is_valid    : true,
+                }
             }
 
             /**
