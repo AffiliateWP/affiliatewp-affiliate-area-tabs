@@ -55,7 +55,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
 						'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
 						'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
-						'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' ),
+						'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
 					)
 				)
 			);
@@ -68,7 +68,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			'affwp_settings_affiliate_area_tabs',
 			'affwp_settings_affiliate_area_tabs'
 		);
-
     }
 
     /**
@@ -83,6 +82,16 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			foreach ( $hide_tabs_array as $key => $tab ) {
 				$input['affiliate_area_hide_tabs'][$key] = isset( $input['affiliate_area_hide_tabs'][$key] ) && true == $input['affiliate_area_hide_tabs'][$key] ? true : false;
 			}
+
+            $checked = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
+
+            $all = 7;
+            if ( count( $checked ) === $all ) {
+                error_log(key($options));
+                error_log('All tabs disabled');
+                //$checked = 6;
+                $input['affiliate_area_hide_tabs']['urls'] = false;
+            }
 		}
 
 		// clear out array if no tabs are selected for removal
@@ -210,13 +219,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 is_valid    : true,
             }
 
-            function check() {
-                affwp_tabs.is_valid = ( affwp_tabs.val_custom() && affwp_tabs.val_cb() ) ? true : false;
-                if ( affwp_tabs.custom_title.val() === "" && affwp_tabs.custom_sel.val() === "0" && ! affwp_tabs.val_cb() ) {
-                    affwp_tabs.disable();
-                }
-            }
-
             /**
              * Prevents the enter key from creating a new row
              *
@@ -265,102 +267,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
             } );
 
             /**
-             * A listener bound to checkbox state changes.
-             * This is identical to the function
-             * affwp_tabs.val_cb(), but accounts for
-             * live changes occurring in the dom.
-             *
-             * Returns an error, and disables the submit button if:
-             * 1. All core tabs are disabled, and
-             * 2. No custom tabs are present.
-             *
-             * @since  1.1.2
-             *
-             */
-            affwp_tabs.cboxes.change( function() {
-
-                if ( ( affwp_tabs.cboxes.length == affwp_tabs.cboxes.filter( ":checked" ).length ) && ! affwp_tabs.custom_title.val() ) {
-                    affwp_tabs.is_valid = false;
-                    affwp_tabs.disable();
-                    affwp_tabs.error( affwp_tabs.notice.default );
-                } else {
-                    affwp_tabs.is_valid = true;
-                    affwp_tabs.enable();
-                }
-            } );
-
-            /**
-             * Bound to the blur of the first custom tab input title.
-             * Enables or disables submit, and fires an error,
-             * on the following conditions:
-             *
-             * If entering a tab title,
-             *     Ensure that the value is checked on blur, and
-             *     ensure that the value is not empty, nor whitespace.
-             * Or:
-             *     If there are no core tabs enabled, then
-             *     Check for at least once custom tab.
-             *     If none are found, return an error,
-             *     and disable the submit button.
-             *
-             * @since  1.1.2
-             *
-             */
-            affwp_tabs.custom_title.blur( function() {
-                if ( $( this ).val() === "" && affwp_tabs.custom_sel.val() === "0" && ! affwp_tabs.val_cb() ) {
-                    affwp_tabs.disable();
-                    affwp_tabs.error( affwp_tabs.notice.blank );
-                } else if ( $( this ).val() !== "" && affwp_tabs.custom_sel.val() === "0" && ! affwp_tabs.val_cb() ) {
-                    affwp_tabs.disable();
-                    affwp_tabs.error( affwp_tabs.notice.blank );
-                } else if ( $( this ).val() === "" && ! affwp_tabs.val_cb() && affwp_tabs.custom_sel.val() !== "0" ) {
-                    affwp_tabs.disable();
-                    affwp_tabs.error( affwp_tabs.notice.blank );
-                } else {
-                    affwp_tabs.enable();
-                }
-
-                if ( affwp_tabs.val_cb() && affwp_tabs.val_custom() ) {
-                    affwp_tabs.disable();
-                }
-            } );
-
-            /**
-             * Bound to the blur of the first custom tab page select.
-             * Enables or disables submit, and fires an error,
-             * on the following conditions:
-             *
-             * If selecting a tab page,
-             *     Check if matches "0", the default value
-             *     of an empty select.
-             * If a match is found:
-             *     Check how many core tabs are disabled, and
-             *     check the value of the first custom tab title.
-             *
-             * Disables submit and returns an error if:
-             *     All core tabs disabled,
-             *     The first custom tab title is empty, and
-             *     the select is empty.
-             *
-             * @since  1.1.2
-             *
-             */
-            affwp_tabs.custom_sel.blur( function() {
-                // A select returns a zero - as a string - if empty.
-                if ( affwp_tabs.custom_sel.val() === "0" ) {
-                    if ( affwp_tabs.custom_title.val() === "" && ! affwp_tabs.val_cb() ) {
-                        affwp_tabs.disable();
-                        affwp_tabs.error( affwp_tabs.notice.blank );
-                    }
-                } else if ( affwp_tabs.custom_title.val() === "" && ! affwp_tabs.val_cb() ) {
-                    affwp_tabs.disable();
-                    affwp_tabs.error( affwp_tabs.notice.blank );
-                } else {
-                    affwp_tabs.enable();
-                }
-            } );
-
-            /**
              * Removes a custom affiliate area tab
              *
              * @since  1.1.2
@@ -378,11 +284,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 } else {
                     $( this ).closest( 'tr' ).find( 'td input, td select' ).val( '' );
                 }
-
             } );
-
-            check();
-
         } );
         </script>
         <style type="text/css">
