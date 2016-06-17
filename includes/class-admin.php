@@ -84,9 +84,12 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			}
 
             $checked = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
+            $custom  = affiliatewp_affiliate_area_tabs()->get_tabs();
+            $count   = count( $custom );
+            echo var_dump($count);
 
             $all = 7;
-            if ( count( $checked ) === $all ) {
+            if ( count( $checked ) === $all && absint( $custom ) >= 1 ) {
                 $input['affiliate_area_hide_tabs']['urls'] = false;
             }
 		}
@@ -295,9 +298,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
                 // Instead of removing the last row, clear out the values
                 if ( affwp_tabs.count_main !== 1 ) {
                     $( this ).parent().parent().remove();
-                } else if ( ! affwp_tabs.val_custom() && ! affwp_tabs.val_cb() ) {
-                    affwp_tabs.disable();
-                    affwp_tabs.error( affwp_tabs.notice.default );
                 } else {
                     $( this ).closest( 'tr' ).find( 'td input, td select' ).val( '' );
                 }
