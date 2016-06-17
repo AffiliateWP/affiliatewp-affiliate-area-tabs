@@ -92,11 +92,15 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
         foreach ( $input['affiliate_area_tabs'] as $key => $tab ) {
 
-            if ( empty( $tab['title'] ) ) {
-                unset( $input['affiliate_area_tabs'][ $key ] );
-            } else {
-                $input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
-            }
+			if ( empty( $tab['title'] ) && ! isset( $tab['id'] ) ) {
+				// remove tab row if there's no page or title entered
+				unset( $input['affiliate_area_tabs'][ $key ] );
+			} elseif ( empty( $tab['title'] ) && isset( $tab['id'] ) ) {
+				// if only a page is selected, use the page's title for the tab's title
+				$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( get_the_title( $tab['id'] ) );
+			} else {
+				$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
+			}
 
         }
 
