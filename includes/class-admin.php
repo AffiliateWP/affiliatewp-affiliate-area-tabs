@@ -79,18 +79,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		$hide_tabs_array = ! empty( $input['affiliate_area_hide_tabs'] ) ? $input['affiliate_area_hide_tabs'] : '';
 
 		if ( $hide_tabs_array ) {
+
 			foreach ( $hide_tabs_array as $key => $tab ) {
 				$input['affiliate_area_hide_tabs'][$key] = isset( $input['affiliate_area_hide_tabs'][$key] ) && true == $input['affiliate_area_hide_tabs'][$key] ? true : false;
 			}
 
-			$checked = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
-			$custom  = affiliatewp_affiliate_area_tabs()->get_tabs();
-			$count   = count( $custom );
-
-			$all = 7;
-			if ( count( $checked ) === $all && absint( $custom ) >= 1 ) {
-				$input['affiliate_area_hide_tabs']['urls'] = false;
-			}
 		}
 
 		// clear out array if no tabs are selected for removal
@@ -110,6 +103,13 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
 			}
 
+		}
+
+		// re-enable the first default tab if all other tabs are disabled and there's no custom tabs enabled
+		if ( isset( $input['affiliate_area_tabs'][0]['id'] ) && $input['affiliate_area_tabs'][0]['id'] === '0' || empty( $input['affiliate_area_tabs'] ) ) {
+			if ( count( $input['affiliate_area_hide_tabs'] ) === 7 ) {
+				$input['affiliate_area_hide_tabs']['urls'] = false;
+			}
 		}
 
 		return $input;
