@@ -247,7 +247,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				return $show;
 			}
 
-			if ( array_key_exists( $tab, $options ) ) {
+			if ( array_key_exists( $tab, $options ) && $options[$tab] == true ) {
 				$show = false;
 			}
 
