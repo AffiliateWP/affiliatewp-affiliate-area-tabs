@@ -52,6 +52,7 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 * Fix: Fatal error that could occur in some instances
 * Fix: Main Affiliate Area should not be able to be selected as a tab
 * Fix: Tabs do not save if no title is entered
+* Fix: Undefined index PHP Notice
 * Tweak: Improved validation during save routine
 
 = 1.1.1 =
