@@ -3,12 +3,12 @@
 class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 	public function __construct() {
-        add_filter( 'affwp_settings_tabs', array( $this, 'settings_tab' ) );
-        add_action( 'admin_init', array( $this, 'register_settings' ) );
-        add_filter( 'affwp_settings_affiliate_area_tabs_sanitize', array( $this, 'sanitize_tabs' ) );
+		add_filter( 'affwp_settings_tabs', array( $this, 'settings_tab' ) );
+		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_filter( 'affwp_settings_affiliate_area_tabs_sanitize', array( $this, 'sanitize_tabs' ) );
 	}
 
-    /**
+	/**
 	 * Register the new settings tab
 	 *
 	 * @access public
@@ -20,16 +20,16 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		return $tabs;
 	}
 
-    /**
-     * Register our settings
-     *
-     * @access public
-     * @since 1.0.0
-     * @return array
-     */
-    public function register_settings( ) {
+	/**
+	 * Register our settings
+	 *
+	 * @access public
+	 * @since 1.0.0
+	 * @return array
+	 */
+	public function register_settings( ) {
 
-        add_settings_section(
+		add_settings_section(
 			'affwp_settings_affiliate_area_tabs',
 			__return_null(),
 			'__return_false',
@@ -55,7 +55,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
 						'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
 						'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
-						'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' ),
+						'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
 					)
 				)
 			);
@@ -68,21 +68,22 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			'affwp_settings_affiliate_area_tabs',
 			'affwp_settings_affiliate_area_tabs'
 		);
+	}
 
-    }
-
-    /**
-     * Sanitize tabs
-     * @since 1.0.0
-     */
-    public function sanitize_tabs( $input ) {
+	/**
+	 * Sanitize tabs
+	 * @since 1.0.0
+	 */
+	public function sanitize_tabs( $input ) {
 
 		$hide_tabs_array = ! empty( $input['affiliate_area_hide_tabs'] ) ? $input['affiliate_area_hide_tabs'] : '';
 
 		if ( $hide_tabs_array ) {
+
 			foreach ( $hide_tabs_array as $key => $tab ) {
 				$input['affiliate_area_hide_tabs'][$key] = isset( $input['affiliate_area_hide_tabs'][$key] ) && true == $input['affiliate_area_hide_tabs'][$key] ? true : false;
 			}
+
 		}
 
 		// clear out array if no tabs are selected for removal
@@ -90,7 +91,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			$input['affiliate_area_hide_tabs'] = array();
 		}
 
-        foreach ( $input['affiliate_area_tabs'] as $key => $tab ) {
+		foreach ( $input['affiliate_area_tabs'] as $key => $tab ) {
 
 			if ( empty( $tab['title'] ) && ! isset( $tab['id'] ) ) {
 				// remove tab row if there's no page or title entered
@@ -102,18 +103,23 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
 			}
 
-        }
+		}
 
-        return $input;
-    }
+		// re-enable the first default tab if all other tabs are disabled and there's no custom tabs enabled
+		if ( isset( $input['affiliate_area_tabs'][0]['id'] ) && $input['affiliate_area_tabs'][0]['id'] === '0' || empty( $input['affiliate_area_tabs'] ) ) {
+			if ( count( $input['affiliate_area_hide_tabs'] ) === 7 ) {
+				$input['affiliate_area_hide_tabs']['urls'] = false;
+			}
+		}
 
-
+		return $input;
+	}
 
 	/**
-     * Hide existing AffiliateWP tabs
+	 * Hide existing AffiliateWP tabs
 	 *
-     * @since 1.1
-     */
+	 * @since 1.1
+	 */
 	public function callback_tabs( $args ) {
 
 		$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
@@ -134,9 +140,9 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	}
 
 	/**
-     * Returns an array of pages without the Affiliate Area
-     * @since 1.1.2
-     */
+	 * Returns an array of pages without the Affiliate Area
+	 * @since 1.1.2
+	 */
 	private function get_pages() {
 
 		$pages             = affwp_get_pages();
@@ -149,117 +155,122 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		return $pages;
 	}
 
-    /**
-     * Render the table
-     * @since 1.0.0
-     */
-    public function tabs_table() {
+	/**
+	 * Render the table
+	 * @since 1.0.0
+	 */
+	public function tabs_table() {
 
-        $tabs  = affiliatewp_affiliate_area_tabs()->get_tabs();
-        $count = count( $tabs );
+		$tabs  = affiliatewp_affiliate_area_tabs()->get_tabs();
+		$count = count( $tabs );
 
-        ?>
-        <script type="text/javascript">
-        jQuery(document).ready(function($) {
+		?>
+		<script type="text/javascript">
+		jQuery( document ).ready( function( $ ) {
 
-            // Prevent enter key from creating new row
-            $('#affiliatewp-tabs').on('keyup keypress', function(e) {
-                var keyCode = e.keyCode || e.which;
-                if (keyCode === 13) {
-                    e.preventDefault();
-                    return false;
-                }
-            });
+			/**
+			 * Primary affwp_tabs object
+			 *
+			 * @since  1.1.2
+			 *
+			 * @return {string}  The error string
+			 * @type {Object}  affwp_tabs
+			 */
+			var affwp_tabs = {
+				row_last    : $( '#affiliatewp-tabs tbody tr:last' ),
+				count_all   : $( '#affiliatewp-tabs tbody tr' ).length,
+				count_main  : $( '#affiliatewp-tabs tbody tr' ).not( '#affiliatewp-tabs tbody tr:first-child' ).length,
+				cboxes      : $( '.form-table tbody tr input[type="checkbox"]' ),
+				notice      : {
+					default : 'You must have at least one active Affiliate Area tab.',
+					blank   : 'You must select a page from the dropdown, and specify a tab title.'
+				},
+				error       : function( message ) {
+					wp.a11y.speak( message, 'assertive' );
+					alert( message );
+				}
+			}
 
-            // add new tab
-            $('#affwp_new_tab').on('click', function(e) {
+			/**
+			 * Prevents the enter key from creating a new row
+			 *
+			 * @since  0.1
+			 *
+			 * @return void
+			 */
+			$( '#affiliatewp-tabs' ).on( 'keyup keypress', function( e ) {
+				var keyCode = e.keyCode || e.which;
 
-                e.preventDefault();
+				if ( keyCode === 13 ) {
+					e.preventDefault();
+					return false;
+				}
+			} );
 
-                var row = $('#affiliatewp-tabs tbody tr:last');
+			/**
+			 * Adds a new affiliate area tab
+			 *
+			 * @since  0.1
+			 *
+			 *
+			 * @return {mixed}    A new custom affiliate area tab
+			 */
+			$( '#affwp_new_tab' ).on( 'click', function( e ) {
 
-                var count = $('#affiliatewp-tabs tbody tr').length;
+				e.preventDefault();
 
-                // clone the row and its child's data and events
-                clone = row.clone( true );
+				// Clone the row and its child's data and events
+				clone = affwp_tabs.row_last.clone( true );
 
-                // empty values
-                clone.find( 'td input, td select' ).val( '' );
+				// empty values
+				clone.find( 'td input, td select' ).val( '' );
 
-                clone.find( 'input, select' ).each(function() {
-                    var name = $( this ).attr( 'name' );
+				clone.find( 'input, select' ).each( function() {
+					var name = $( this ).attr( 'name' );
 
-                    name = name.replace( /\[(\d+)\]/, '[' + parseInt( count ) + ']');
+					name = name.replace( /\[(\d+)\]/, '[' + parseInt( affwp_tabs.count_all ) + ']' );
 
-                    $( this ).attr( 'name', name ).attr( 'id', name );
-                });
+					$( this ).attr( 'name', name ).attr( 'id', name );
+				} );
 
-                // insert new clone after existing row
-                clone.insertAfter( row );
+				// insert new clone after existing row
+				clone.insertAfter( affwp_tabs.row_last );
 
-            });
+			} );
 
+			/**
+			 * Removes a custom affiliate area tab
+			 *
+			 * @since  1.1.2
+			 *
+			 */
+			$( '.affwp_remove_tab' ).on( 'click', function( e ) {
+				e.preventDefault();
 
-            // remove tab
-            $('.affwp_remove_tab').on('click', function(e) {
-                e.preventDefault();
-                var affwp_tabs = {
-                        maybe_invalid : false,
-                        count   : $( '#affiliatewp-tabs tbody tr').not( '#affiliatewp-tabs tbody tr:first-child' ).length,
-                        cboxes  : $( '.form-table tbody tr input[type="checkbox"]' ),
-                        cb_chk  : $( '.form-table tbody tr input[type="checkbox"]:checked' ),
-                        notice  : 'You must have at least one active Affiliate Area tab.',
-                        error   : function () {
-                            // Add translatable string
-                            wp.a11y.speak( affwp_tabs.notice, 'assertive' );
-                            // Initiate alert
-                            alert( affwp_tabs.notice );
-                            console.error( affwp_tabs.notice );
-                        }
-                    }
-
-                console.debug('Checked: ' + affwp_tabs.cb_chk.length );
-                console.debug('All: ' + affwp_tabs.cboxes.length );
-
-                // All tab checkboxes are checked
-                if ( affwp_tabs.cb_chk.length === affwp_tabs.cboxes.length ) {
-                        affwp_tabs.maybe_invalid = true;
-                    }
-
-                // All tab checkboxes are unchecked
-                if ( affwp_tabs.cb_chk.length === null || '' || undefined ) {
-                        affwp_tabs.maybe_invalid = true;
-                    }
-
-                // Instead of removing the last row, clear out the values
-                if ( affwp_tabs.count !== 1 ) {
-                    $(this).parent().parent().remove();
-                // If all tabs are removed, and there's only one tab
-                } else if ( affwp_tabs.count <= 1 && affwp_tabs.maybe_invalid ) {
-                    affwp_tabs.error();
-                } else {
-                    $(this).closest('tr').find( 'td input, td select' ).val( '' );
-                }
-
-            });
-
-        });
-        </script>
-        <style type="text/css">
-        #affiliatewp-tabs th { padding-left: 10px; }
-        .affwp_remove_tab { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
-        .affwp_remove_tab:active, .affwp_remove_tab:hover { background-position: -10px 0!important }
-        </style>
-        <form id="affiliatewp-tabs-form">
-            <table id="affiliatewp-tabs" class="form-table wp-list-table widefat posts">
-                <thead>
-                    <tr>
-                        <th style="width:50%;"><?php _e( 'Tab Content', 'affiliatewp-affiliate-area-tabs' ); ?></th>
-                        <th><?php _e( 'Tab Title', 'affiliatewp-affiliate-area-tabs' ); ?></th>
-                        <th style="width:5%;"></th>
-                    </tr>
-                </thead>
-                <tbody>
+				// Instead of removing the last row, clear out the values
+				if ( affwp_tabs.count_main !== 1 ) {
+					$( this ).parent().parent().remove();
+				} else {
+					$( this ).closest( 'tr' ).find( 'td input, td select' ).val( '' );
+				}
+			} );
+		} );
+		</script>
+		<style type="text/css">
+		#affiliatewp-tabs th { padding-left: 10px; }
+		.affwp_remove_tab { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
+		.affwp_remove_tab:active, .affwp_remove_tab:hover { background-position: -10px 0!important }
+		</style>
+		<form id="affiliatewp-tabs-form">
+			<table id="affiliatewp-tabs" class="form-table wp-list-table widefat posts">
+				<thead>
+					<tr>
+						<th style="width:50%;"><?php _e( 'Tab Content', 'affiliatewp-affiliate-area-tabs' ); ?></th>
+						<th><?php _e( 'Tab Title', 'affiliatewp-affiliate-area-tabs' ); ?></th>
+						<th style="width:5%;"></th>
+					</tr>
+				</thead>
+				<tbody>
 
 					<tr>
 						<td><p class="description"><?php _e( 'Select which page will be used for the tab\'s content. This page will be blocked for non-affiliates.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
@@ -267,7 +278,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						<td></td>
 					</tr>
 
-                    <?php
+					<?php
 
 					$pages = $this->get_pages();
 
@@ -275,66 +286,66 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 						foreach( $tabs as $key => $tab ) :
 
-                            ?>
-                            <tr>
-                                <td>
-                                    <select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
-                                        <?php foreach( $pages as $id => $title ) : ?>
-                                            <option value="<?php echo $id; ?>"<?php selected( $tab['id'], $id ); ?>><?php echo $title; ?></option>
-                                        <?php endforeach; ?>
+							?>
+							<tr>
+								<td>
+									<select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
+										<?php foreach( $pages as $id => $title ) : ?>
+											<option value="<?php echo $id; ?>"<?php selected( $tab['id'], $id ); ?>><?php echo $title; ?></option>
+										<?php endforeach; ?>
 
-                                    </select>
+									</select>
 
-                                </td>
-                                <td>
-                                    <input name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]" type="text" class="widefat" value="<?php echo esc_attr( $tab['title'] ); ?>"/>
-                                </td>
-                                <td>
-                                    <a href="#" class="affwp_remove_tab" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+								</td>
+								<td>
+									<input name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]" type="text" class="widefat" value="<?php echo esc_attr( $tab['title'] ); ?>"/>
+								</td>
+								<td>
+									<a href="#" class="affwp_remove_tab" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
+								</td>
+							</tr>
+						<?php endforeach; ?>
 
-                    <?php endif; ?>
+					<?php endif; ?>
 
-                    <?php if ( empty( $tabs ) ) :
-                        $count = 0;
+					<?php if ( empty( $tabs ) ) :
+						$count = 0;
 
-                        ?>
-                        <tr>
-                            <td>
-                                <select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $count; ?>][id]">
-                                    <?php foreach( $pages as $id => $title ) : ?>
-                                        <option value="<?php echo $id; ?>"><?php echo $title; ?></option>
-                                    <?php endforeach; ?>
+						?>
+						<tr>
+							<td>
+								<select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $count; ?>][id]">
+									<?php foreach( $pages as $id => $title ) : ?>
+										<option value="<?php echo $id; ?>"><?php echo $title; ?></option>
+									<?php endforeach; ?>
 
-                                </select>
+								</select>
 
-                            </td>
-                            <td>
-                                <input name="affwp_settings[affiliate_area_tabs][<?php echo $count; ?>][title]" type="text" class="widefat" value="" />
-                            </td>
-                            <td>
-                                <a href="#" class="affwp_remove_tab" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
-                            </td>
-                        </tr>
-                    <?php endif; ?>
+							</td>
+							<td>
+								<input name="affwp_settings[affiliate_area_tabs][<?php echo $count; ?>][title]" type="text" class="widefat" value="" />
+							</td>
+							<td>
+								<a href="#" class="affwp_remove_tab" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
+							</td>
+						</tr>
+					<?php endif; ?>
 
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <th colspan="1">
-                            <button id="affwp_new_tab" name="affwp_new_tab" class="button"><?php _e( 'Add New Tab', 'affiliatewp-affiliate-area-tabs' ); ?></button>
-                        </th>
-                        <th colspan="3">
+				</tbody>
+				<tfoot>
+					<tr>
+						<th colspan="1">
+							<button id="affwp_new_tab" name="affwp_new_tab" class="button"><?php _e( 'Add New Tab', 'affiliatewp-affiliate-area-tabs' ); ?></button>
+						</th>
+						<th colspan="3">
 
-                        </th>
-                    </tr>
-                </tfoot>
-            </table>
-        </form>
+						</th>
+					</tr>
+				</tfoot>
+			</table>
+		</form>
 <?php
-    }
+	}
 
 }
 new AffiliateWP_Affiliate_Area_Tabs_Admin;

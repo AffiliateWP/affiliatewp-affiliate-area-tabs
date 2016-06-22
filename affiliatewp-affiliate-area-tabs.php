@@ -247,7 +247,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				return $show;
 			}
 
-			if ( array_key_exists( $tab, $options ) ) {
+			if ( array_key_exists( $tab, $options ) && $options[$tab] == true ) {
 				$show = false;
 			}
 
@@ -321,6 +321,17 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 			if ( ! empty( $tabs ) ) {
 				$tabs = array_values( $tabs );
+			}
+
+			foreach( $tabs as $key => $tab ) {
+
+				if( ! isset( $tab['id'] ) ) {
+					$tabs[ $key ]['id'] = 0;
+				}
+
+				if( empty( $tab['title'] ) && ! empty( $tab['id'] ) ) {
+					$tabs[ $key ]['title'] = get_the_title( $tab['id'] );
+				}
 			}
 
 			return $tabs;
