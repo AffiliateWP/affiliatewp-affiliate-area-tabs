@@ -396,7 +396,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			$tabs = $this->get_tabs();
 
 			// Make sure the arrays are unique. If 2 tabs are identical then the content will not be loaded twice.
-			$tabs = array_map( 'unserialize', array_unique( array_map( 'serialize', $tabs ) ) );
+			$tabs = array_unique( $tabs, SORT_REGULAR );
 
 			$tab_slugs = array_values( $this->get_tab_slugs() );
 
