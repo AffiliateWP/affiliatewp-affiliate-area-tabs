@@ -170,32 +170,9 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		jQuery( document ).ready( function( $ ) {
 
 			/**
-			 * Primary affwp_tabs object
-			 *
-			 * @since  1.1.2
-			 *
-			 * @return {string}  The error string
-			 * @type {Object}  affwp_tabs
-			 */
-			var affwp_tabs = {
-				row_last    : $( '#affiliatewp-tabs tbody tr:last' ),
-				count_all   : $( '#affiliatewp-tabs tbody tr' ).length,
-				count_main  : $( '#affiliatewp-tabs tbody tr' ).not( '#affiliatewp-tabs tbody tr:first-child' ).length,
-				cboxes      : $( '.form-table tbody tr input[type="checkbox"]' ),
-				notice      : {
-					default : 'You must have at least one active Affiliate Area tab.',
-					blank   : 'You must select a page from the dropdown, and specify a tab title.'
-				},
-				error       : function( message ) {
-					wp.a11y.speak( message, 'assertive' );
-					alert( message );
-				}
-			}
-
-			/**
 			 * Prevents the enter key from creating a new row
 			 *
-			 * @since  0.1
+			 * @since  1.0
 			 *
 			 * @return void
 			 */
@@ -211,8 +188,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			/**
 			 * Adds a new affiliate area tab
 			 *
-			 * @since  0.1
-			 *
+			 * @since  1.0
 			 *
 			 * @return {mixed}    A new custom affiliate area tab
 			 */
@@ -220,22 +196,25 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 				e.preventDefault();
 
+				var row_last = $('#affiliatewp-tabs tbody tr:last'),
+				    count    = $('#affiliatewp-tabs tbody tr.tab-row').length;
+
 				// Clone the row and its child's data and events
-				clone = affwp_tabs.row_last.clone( true );
+				clone = row_last.clone( true );
 
 				// empty values
-				clone.find( 'td input, td select' ).val( '' );
+                clone.find( 'td input, td select' ).val( '' );
 
-				clone.find( 'input, select' ).each( function() {
-					var name = $( this ).attr( 'name' );
+				clone.find( 'input, select' ).each(function() {
+                    var name = $( this ).attr( 'name' );
 
-					name = name.replace( /\[(\d+)\]/, '[' + parseInt( affwp_tabs.count_all ) + ']' );
+                    name = name.replace( /\[(\d+)\]/, '[' + parseInt( count ) + ']');
 
-					$( this ).attr( 'name', name ).attr( 'id', name );
-				} );
+                    $( this ).attr( 'name', name ).attr( 'id', name );
+                });
 
 				// insert new clone after existing row
-				clone.insertAfter( affwp_tabs.row_last );
+				clone.insertAfter( row_last );
 
 			} );
 
@@ -245,16 +224,20 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			 * @since  1.1.2
 			 *
 			 */
-			$( '.affwp_remove_tab' ).on( 'click', function( e ) {
-				e.preventDefault();
+            $('.affwp_remove_tab').on('click', function(e) {
+                e.preventDefault();
 
-				// Instead of removing the last row, clear out the values
-				if ( affwp_tabs.count_main !== 1 ) {
-					$( this ).parent().parent().remove();
-				} else {
-					$( this ).closest( 'tr' ).find( 'td input, td select' ).val( '' );
-				}
-			} );
+				var count = $('#affiliatewp-tabs tbody tr.tab-row').length;
+
+                // instead of removing the last row, clear out the values
+                if ( count !== 1 ) {
+                    $(this).parent().parent().remove();
+                } else {
+                    $(this).closest('tr').find( 'td input, td select' ).val( '' );
+                }
+
+            });
+
 		} );
 		</script>
 		<style type="text/css">
@@ -288,7 +271,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						foreach( $tabs as $key => $tab ) :
 
 							?>
-							<tr>
+							<tr class="tab-row">
 								<td>
 									<select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
 										<?php foreach( $pages as $id => $title ) : ?>
@@ -313,7 +296,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						$count = 0;
 
 						?>
-						<tr>
+						<tr class="tab-row">
 							<td>
 								<select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $count; ?>][id]">
 									<?php foreach( $pages as $id => $title ) : ?>
