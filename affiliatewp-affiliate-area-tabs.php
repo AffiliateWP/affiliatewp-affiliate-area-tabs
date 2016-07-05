@@ -354,36 +354,11 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 		/**
 		 * Make slug
-		 * http://stackoverflow.com/questions/2955251/php-function-to-make-slug-url-string
 		 *
 		 * @since 1.0.0
 		 */
 		public function make_slug( $title = '' ) {
-
-			// replace non letter or digits by -
-			 $title = preg_replace( '~[^\pL\d]+~u', '-', $title );
-
-			 // transliterate
-			 $title = iconv( 'utf-8', 'us-ascii//TRANSLIT', $title );
-
-			 // remove unwanted characters
-			 $title = preg_replace( '~[^-\w]+~', '', $title );
-
-			 // trim
-			 $title = trim( $title, '-' );
-
-			 // remove duplicate -
-			 $title = preg_replace( '~-+~', '-', $title );
-
-			 // lowercase
-			 $title = strtolower( $title );
-
-			 if ( empty( $title ) ) {
-			   return 'n-a';
-			 }
-
-			 return $title;
-
+			return rawurldecode( sanitize_title_with_dashes( $title ) );
 		}
 
 		/**
@@ -472,8 +447,8 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			if ( $tabs ) : ?>
 
 				<?php foreach ( $tabs as $tab ) :
-					$tab_slug = $this->make_slug( $tab['title'] );
 
+					$tab_slug = rawurldecode( sanitize_title_with_dashes( $tab['title'] ) );
 					$post = get_post( $tab['id'] );
 
 					// a tab's content cannot be the content of the page you're currently viewing
