@@ -369,11 +369,16 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		public function tab_content( $affiliate_id ) {
 
 			$tabs = $this->get_tabs();
+
+			// Make sure the arrays are unique. If 2 tabs are identical then the content will not be loaded twice.
+			$tabs = array_unique( $tabs, SORT_REGULAR );
+
 			$tab_slugs = array_values( $this->get_tab_slugs() );
 
 			if ( $tabs ) : ?>
 
 				<?php foreach ( $tabs as $tab ) :
+
 					$post        = get_post( $tab['id'] );
 					$tab_slug    = $this->make_slug( $tab['title'] );
 					$current_tab = isset( $_GET['tab'] ) && $_GET['tab'] ? $_GET['tab'] : '';
