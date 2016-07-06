@@ -1,10 +1,10 @@
 <?php
 /**
  * Plugin Name: AffiliateWP - Affiliate Area Tabs
- * Plugin URI: http://affiliatewp.com/
+ * Plugin URI: https://affiliatewp.com/
  * Description: Add custom tabs to the Affiliate Area
- * Author: Pippin Williamson and Andrew Munro
- * Author URI: http://affiliatewp.com
+ * Author: AffiliateWP
+ * Author URI: https://affiliatewp.com
  * Version: 1.1.3
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
@@ -484,7 +484,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		public function plugin_meta( $links, $file ) {
 		    if ( $file == plugin_basename( __FILE__ ) ) {
 		        $plugins_link = array(
-		            '<a title="' . __( 'Get more add-ons for AffiliateWP', 'affiliatewp-affiliate-area-tabs' ) . '" href="http://affiliatewp.com/addons/" target="_blank">' . __( 'More add-ons', 'affiliatewp-affiliate-area-tabs' ) . '</a>'
+		            '<a title="' . __( 'Get more add-ons for AffiliateWP', 'affiliatewp-affiliate-area-tabs' ) . '" href="'. admin_url( 'admin.php?page=affiliate-wp-add-ons' ) . '">' . __( 'More add-ons', 'affiliatewp-affiliate-area-tabs' ) . '</a>'
 		        );
 
 		        $links = array_merge( $links, $plugins_link );
@@ -509,23 +509,23 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 	function affiliatewp_affiliate_area_tabs() {
 
 		if ( ! class_exists( 'Affiliate_WP' ) ) {
-		
+
 			if ( ! class_exists( 'AffiliateWP_Activation' ) ) {
 				require_once 'includes/class-activation.php';
 			}
-			
+
 			$activation = new AffiliateWP_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
 			$activation = $activation->run();
-		
+
 		} elseif ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
-		
+
 			if ( ! class_exists( 'AffiliateWP_Activation' ) ) {
 				require_once 'includes/class-activation.php';
 			}
-			
+
 			$activation = new AffiliateWP_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
 			$activation = $activation->below_php_version();
-		
+
 		} else {
 			return AffiliateWP_Affiliate_Area_Tabs::instance();
 		}

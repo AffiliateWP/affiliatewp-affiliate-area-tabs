@@ -1,5 +1,5 @@
 === AffiliateWP - Affiliate Area Tabs ===
-Contributors: sumobi, mordauk
+Contributors: sumobi, mordauk, ramiabraham, drewapicture
 Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing, affiliate marketing
 Requires at least: 3.9
 Tested up to: 4.6-alpha-37575
@@ -52,6 +52,7 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 * Fix: The last custom tab could be removed resulting in an issue when saved
 * Fix: Custom tabs were sometimes not added in the correct order
 * Fix: Duplicate content when 2 identical tabs were set
+* Fix: Issue when custom tabs had special characters included
 * Tweak: Add-on now requires PHP 5.3 or newer
 
 = 1.1.2 =
