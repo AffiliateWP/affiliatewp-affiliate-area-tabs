@@ -2,7 +2,7 @@
 Contributors: sumobi, mordauk, ramiabraham, drewapicture
 Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing, affiliate marketing
 Requires at least: 3.9
-Tested up to: 4.6-alpha-37575
+Tested up to: 4.6.1
 Stable tag: 1.1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -47,6 +47,9 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 2. Viewing the custom tabs on the front-end website
 
 == Changelog ==
+
+= 1.1.4 =
+* New: Added the "payouts" tab introduced in AffiliateWP v1.9
 
 = 1.1.3 =
 * Fix: The last custom tab could be removed resulting in an issue when saved
