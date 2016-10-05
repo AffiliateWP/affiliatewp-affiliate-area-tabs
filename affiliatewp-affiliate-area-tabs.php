@@ -225,10 +225,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 				add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
 
-				add_filter( 'affwp_affiliate_area_tabs', function( $tabs ) use( $object ) {
-					return array_merge( $tabs, $object->get_tab_slugs() );
-				} );
-
+				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'add_tab_slugs' ) );
 			}
 
 		}
@@ -253,6 +250,19 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 			return $show;
 
+		}
+
+		/**
+		 * Adds custom tab slugs.
+		 *
+		 * @access public
+		 * @since  1.1.4
+		 *
+		 * @param array $tabs Affiliate Area tabs.
+		 * @return array Filtered Affiliate Area tabs.
+		 */
+		public function add_tab_slugs( $tabs ) {
+			return array_merge( $tabs, $this->get_tab_slugs() );
 		}
 
 		/**
