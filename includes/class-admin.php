@@ -53,6 +53,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
 						'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
 						'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
+						'payouts'   => __( 'Payouts', 'affiliatewp-affiliate-area-tabs' ),
 						'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
 						'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
 						'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
