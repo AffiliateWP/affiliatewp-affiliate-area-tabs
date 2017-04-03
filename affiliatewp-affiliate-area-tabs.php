@@ -295,6 +295,8 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			}
 
 			$page_ids = wp_list_pluck( $this->get_tabs(), 'id' );
+			$page_ids = array_filter( $page_ids );
+
 			return $page_ids;
 		}
 
