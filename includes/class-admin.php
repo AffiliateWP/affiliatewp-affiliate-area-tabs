@@ -21,6 +21,52 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	}
 
 	/**
+	 * Get a list of all tabs
+	 *
+	 * @access public
+	 * @since 1.1.6
+	 * @return array $tabs The tabs to output on the Affiliates -> Settings -> Affiliate Area Tabs page.
+	 */
+	public function get_tabs() {
+
+		$tabs = array();
+
+		/**
+		 * affwp_get_affiliate_dashboard_tabs() was introduced in AffiliateWP v2.1.7
+		 * This holds all the default AffiliateWP tabs and allows the addition of
+		 * new tabs via the affwp_get_affiliate_dashboard_tabs filter hook.
+		 */
+		if ( function_exists( 'affwp_get_affiliate_dashboard_tabs' ) ) {
+			
+			foreach ( affwp_get_affiliate_dashboard_tabs() as $tab ) {
+				$tabs[$tab['id']] = $tab['title'];
+			}
+
+		} else {
+
+			/**
+			 * If a previous version of AffiliateWP is being used output the
+			 * hard-coded tabs as before.
+			 */
+			$tabs = array(
+				'urls'      => __( 'Affiliate URLs', 'affiliatewp-affiliate-area-tabs' ),
+				'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
+				'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
+				'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
+				'payouts'   => __( 'Payouts', 'affiliatewp-affiliate-area-tabs' ),
+				'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
+				'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
+				'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
+			);
+
+		}
+		
+		return $tabs;
+
+	}
+
+
+	/**
 	 * Register our settings
 	 *
 	 * @access public
@@ -48,16 +94,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 					'name'        => 'affiliate_area_hide_tabs',
 					'id'          => 'affiliate-area-hide-tabs',
 					'description' => __( 'Select tabs to disable. These tabs will no longer appear in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ),
-					'tabs'        => array(
-						'urls'      => __( 'Affiliate URLs', 'affiliatewp-affiliate-area-tabs' ),
-						'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
-						'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
-						'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
-						'payouts'   => __( 'Payouts', 'affiliatewp-affiliate-area-tabs' ),
-						'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
-						'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
-						'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
-					)
+					'tabs'        => $this->get_tabs()
 				)
 			);
 		}
