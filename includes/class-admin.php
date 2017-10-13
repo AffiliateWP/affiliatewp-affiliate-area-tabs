@@ -37,9 +37,9 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		 * new tabs via the affwp_get_affiliate_dashboard_tabs filter hook.
 		 */
 		if ( function_exists( 'affwp_get_affiliate_dashboard_tabs' ) ) {
-			
-			foreach ( affwp_get_affiliate_dashboard_tabs() as $tab ) {
-				$tabs[$tab['id']] = $tab['title'];
+		
+			foreach ( affwp_get_affiliate_dashboard_tabs() as $key => $tab ) {
+				$tabs[$key] = $tab['title'];
 			}
 
 		} else {
