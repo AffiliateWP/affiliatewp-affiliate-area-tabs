@@ -223,7 +223,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			if ( $this->has_1_8() ) {
 				$object = $this;
 
-				add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
+				add_filter( 'affwp_get_affiliate_dashboard_tabs', array( $this, 'hide_existing_tabs' ), 10, 1 );
 
 				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'add_tab_slugs' ) );
 			}
@@ -231,25 +231,31 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Hide existing tabs from the Affiliate Area
+		 * Hides existing tabs from the Affiliate Area.
 		 *
-		 * @since 1.1
-		 * @return boolean
+		 * @since  1.1
+		 * @since  1.2 Compatibility with AffiliateWP 2.1.7.
+		 * @return array $tabs Affiliate dashboard tabs.
 		 */
-		public function hide_existing_tabs( $show, $tab ) {
+		public function hide_existing_tabs( $tabs ) {
 
 			$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
 
 			if ( ! $options ) {
-				return $show;
+				return;
 			}
 
-			if ( array_key_exists( $tab, $options ) && $options[$tab] == true ) {
-				$show = false;
+			foreach ( $tabs as $key => $tab ) {
+				if ( array_key_exists( $key, $options ) && $options[ $key ] == true ) {
+					// Set visible argument to false, for accuracy's sake.
+					$tabs[ $key ][ 'visible' ] = false;
+
+					// Unset the tab.
+					unset($tabs[ $key ]);
+				}
 			}
 
-			return $show;
-
+			return $tabs;
 		}
 
 		/**
