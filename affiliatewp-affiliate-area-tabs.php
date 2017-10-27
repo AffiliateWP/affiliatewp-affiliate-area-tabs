@@ -224,6 +224,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				$object = $this;
 
 				add_filter( 'affwp_get_affiliate_dashboard_tabs', array( $this, 'hide_existing_tabs' ), 10, 1 );
+				add_filter( 'affwp_get_affiliate_dashboard_tabs', array( $this, 'filter_tabs' ), 10, 1 );
 
 				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'add_tab_slugs' ) );
 			}
@@ -242,16 +243,13 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
 
 			if ( ! $options ) {
-				return;
+				return $tabs;
 			}
 
 			foreach ( $tabs as $key => $tab ) {
 				if ( array_key_exists( $key, $options ) && $options[ $key ] == true ) {
 					// Set visible argument to false, for accuracy's sake.
 					$tabs[ $key ][ 'visible' ] = false;
-
-					// Unset the tab.
-					unset($tabs[ $key ]);
 				}
 			}
 
@@ -349,6 +347,36 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 				if( empty( $tab['title'] ) && ! empty( $tab['id'] ) ) {
 					$tabs[ $key ]['title'] = get_the_title( $tab['id'] );
+				}
+			}
+
+			return $tabs;
+		}
+
+		/**
+		 * Add custom tabs to core tabs.
+		 *
+		 * @param  array  $tabs  Affiliate area tabs.
+		 * @return array  $tabs  Modified Affiliate Area tabs.
+		 * @since  2.1.7
+		 */
+		public function filter_tabs( $tabs ) {
+			$aat_tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
+
+			if ( ! empty( $aat_tabs ) ) {
+				$aat_tabs = array_values( $aat_tabs );
+			}
+
+			foreach( $aat_tabs as $key => $tab ) {
+				if( is_string( get_post_status( $tab['id'] ) ) ) {
+					$post = get_post( $tab['id'] );
+
+					$tabs[ $this->make_slug( $tab[ 'title' ] ) ] = array(
+						'title'    => get_the_title( $tab['id'] ),
+						'content'  => $post->post_content,
+						'priority' => 99,
+						'visible'  => true
+					);
 				}
 			}
 
