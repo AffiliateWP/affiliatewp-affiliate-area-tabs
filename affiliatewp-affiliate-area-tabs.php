@@ -212,11 +212,10 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			add_filter( 'plugin_row_meta', array( $this, 'plugin_meta' ), null, 2 );
 
 			// add new tab to affiliate area
-			add_action( 'affwp_affiliate_dashboard_tabs', array( $this, 'add_tab' ), 10, 2 );
-			add_action( 'affwp_get_affiliate_dashboard_tabs', array( $this, 'insert_tabs' ) );
+			add_action( 'affwp_affiliate_dashboard_tabs',     array( $this, 'add_tab' ), 10, 2 );
 
 			// add the tab's content
-			add_action( 'affwp_affiliate_dashboard_bottom', array( $this, 'tab_content' ) );
+			add_action( 'affwp_affiliate_dashboard_bottom',   array( $this, 'tab_content' ) );
 
 			// redirect if non-affiliate tries to access a tab's page
 			add_action( 'template_redirect', array( $this, 'redirect' ) );
@@ -464,12 +463,18 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		public function add_tab( $affiliate_id, $active_tab ) {
 
 			$tabs = $this->get_tabs();
+			$core_tabs = affwp_get_affiliate_dashboard_tabs();
 
-			if ( $tabs ) : ?>
-
-				<?php foreach ( $tabs as $tab ) :
+			if ( $tabs ) :
+				foreach ( $tabs as $tab ) :
 
 					$tab_slug = rawurldecode( sanitize_title_with_dashes( $tab['title'] ) );
+
+					if ( in_array( $tab_slug, $core_tabs ) ) {
+						// Don't add the tab if it's already present.
+						continue;
+					}
+
 					$post = get_post( $tab['id'] );
 
 					// a tab's content cannot be the content of the page you're currently viewing
@@ -486,41 +491,6 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			<?php endif; ?>
 
 		<?php
-		}
-
-
-		/**
-		 * Inserts Affiliate Area Tabs into the AffiliateWP core tabs array.
-		 *
-		 * @param  array $tabs Affiliate Dashboard tabs.
-		 * @return array $tabs Modified Affiliate Dashboard tabs.
-		 * @since  1.2
-		 */
-		public function insert_tabs( $core_tabs ) {
-
-			$aat_tabs = $this->get_tabs();
-
-			if ( $aat_tabs ) {
-				foreach ( $aat_tabs as $tab ) {
-					$post = get_post( $tab['id'] );
-
-					if ( $post ) {
-						$core_tabs[ $this->make_slug( $tab['title'] ) ] = array(
-							'title'    => $tab['title'],
-							'content'  => $post->post_content,
-							// Priority to be addressed in AAT #50
-							'priority' => isset( $tab['priority'] ) ? $tab['priority'] : '',
-							'visible'  => 'private' == $post->post_status ? false : true
-						);
-					} else {
-						affiliate_wp()->utils->log( 'AffiliateWP_Affiliate_Area_Tabs::insert: Unable to retrieve post object for custom tab ID ' . $tab[ 'id' ] );
-					}
-				}
-			} else {
-				affiliate_wp()->utils->log( 'AffiliateWP_Affiliate_Area_Tabs::insert: Unable to retrieve AAT tabs.' );
-			}
-
-			return $core_tabs;
 		}
 
 		/**
