@@ -213,6 +213,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 			// add new tab to affiliate area
 			add_action( 'affwp_affiliate_dashboard_tabs', array( $this, 'add_tab' ), 10, 2 );
+			add_action( 'affwp_get_affiliate_dashboard_tabs', array( $this, 'insert_tabs' ) );
 
 			// add the tab's content
 			add_action( 'affwp_affiliate_dashboard_bottom', array( $this, 'tab_content' ) );
@@ -223,7 +224,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			if ( $this->has_1_8() ) {
 				$object = $this;
 
-				add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
+				add_filter( 'affwp_get_affiliate_dashboard_tabs', array( $this, 'hide_existing_tabs' ), 10, 1 );
 
 				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'add_tab_slugs' ) );
 			}
@@ -231,25 +232,28 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Hide existing tabs from the Affiliate Area
+		 * Hides existing tabs from the Affiliate Area.
 		 *
-		 * @since 1.1
-		 * @return boolean
+		 * @since  1.1
+		 * @since  1.2 Compatibility with AffiliateWP 2.1.7.
+		 * @return array $tabs Affiliate dashboard tabs.
 		 */
-		public function hide_existing_tabs( $show, $tab ) {
+		public function hide_existing_tabs( $tabs ) {
 
 			$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
 
 			if ( ! $options ) {
-				return $show;
+				return $tabs;
 			}
 
-			if ( array_key_exists( $tab, $options ) && $options[$tab] == true ) {
-				$show = false;
+			foreach ( $tabs as $key => $tab ) {
+				if ( array_key_exists( $key, $options ) && $options[ $key ] == true ) {
+					// Set visible argument to false, for accuracy's sake.
+					$tabs[ $key ][ 'visible' ] = false;
+				}
 			}
 
-			return $show;
-
+			return $tabs;
 		}
 
 		/**
@@ -482,6 +486,41 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			<?php endif; ?>
 
 		<?php
+		}
+
+
+		/**
+		 * Inserts Affiliate Area Tabs into the AffiliateWP core tabs array.
+		 *
+		 * @param  array $tabs Affiliate Dashboard tabs.
+		 * @return array $tabs Modified Affiliate Dashboard tabs.
+		 * @since  1.2
+		 */
+		public function insert_tabs( $core_tabs ) {
+
+			$aat_tabs = $this->get_tabs();
+
+			if ( $aat_tabs ) {
+				foreach ( $aat_tabs as $tab ) {
+					$post = get_post( $tab['id'] );
+
+					if ( $post ) {
+						$core_tabs[ $this->make_slug( $tab['title'] ) ] = array(
+							'title'    => $tab['title'],
+							'content'  => $post->post_content,
+							// Priority to be addressed in AAT #50
+							'priority' => isset( $tab['priority'] ) ? $tab['priority'] : '',
+							'visible'  => 'private' == $post->post_status ? false : true
+						);
+					} else {
+						affiliate_wp()->utils->log( 'AffiliateWP_Affiliate_Area_Tabs::insert: Unable to retrieve post object for custom tab ID ' . $tab[ 'id' ] );
+					}
+				}
+			} else {
+				affiliate_wp()->utils->log( 'AffiliateWP_Affiliate_Area_Tabs::insert: Unable to retrieve AAT tabs.' );
+			}
+
+			return $core_tabs;
 		}
 
 		/**
