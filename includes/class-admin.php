@@ -31,15 +31,10 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 		$tabs = array();
 
-		/**
-		 * affwp_get_affiliate_dashboard_tabs() was introduced in AffiliateWP v2.1.7
-		 * This holds all the default AffiliateWP tabs and allows the addition of
-		 * new tabs via the affwp_get_affiliate_dashboard_tabs filter hook.
-		 */
-		if ( function_exists( 'affwp_get_affiliate_dashboard_tabs' ) ) {
+		if ( function_exists( 'affwp_get_affiliate_area_tabs' ) ) {
 		
-			foreach ( affwp_get_affiliate_dashboard_tabs() as $key => $tab ) {
-				$tabs[$key] = $tab['title'];
+			foreach ( affwp_get_affiliate_area_tabs() as $tab_slug => $tab_title ) {
+				$tabs[$tab_slug] = $tab_title;
 			}
 
 		} else {

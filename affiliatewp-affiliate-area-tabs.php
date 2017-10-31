@@ -211,9 +211,6 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			// plugin meta
 			add_filter( 'plugin_row_meta', array( $this, 'plugin_meta' ), null, 2 );
 
-			// add new tab to affiliate area
-			add_action( 'affwp_affiliate_dashboard_tabs', array( $this, 'add_tab' ), 10, 2 );
-
 			// add the tab's content
 			add_action( 'affwp_affiliate_dashboard_bottom', array( $this, 'tab_content' ) );
 
@@ -262,7 +259,18 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * @return array Filtered Affiliate Area tabs.
 		 */
 		public function add_tab_slugs( $tabs ) {
-			return array_merge( $tabs, $this->get_tab_slugs() );
+
+			$new_tabs = array();
+
+			foreach ( $this->get_tabs() as $tab_array ) {
+				$slug = $this->make_slug( $tab_array['title'] );
+				$new_tabs[$slug] = $tab_array['title'];
+			}
+
+			$tabs = array_merge( $tabs, $new_tabs );
+
+			return $tabs;
+			
 		}
 
 		/**
@@ -444,39 +452,6 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 					<?php endif; ?>
 
-				<?php endforeach; ?>
-
-			<?php endif; ?>
-
-		<?php
-		}
-
-		/**
-		 * Add tab
-		 *
-		 * @since 1.0.0
-		 * @return void
-		 */
-		public function add_tab( $affiliate_id, $active_tab ) {
-
-			$tabs = $this->get_tabs();
-
-			if ( $tabs ) : ?>
-
-				<?php foreach ( $tabs as $tab ) :
-
-					$tab_slug = rawurldecode( sanitize_title_with_dashes( $tab['title'] ) );
-					$post = get_post( $tab['id'] );
-
-					// a tab's content cannot be the content of the page you're currently viewing
-					if ( get_the_ID() === $post->ID ) {
-						continue;
-					}
-
-					?>
-					<li class="affwp-affiliate-dashboard-tab<?php echo $active_tab == $tab_slug ? ' active' : ''; ?>">
-						<a href="<?php echo esc_url( add_query_arg( 'tab', $tab_slug ) ); ?>"><?php echo $tab['title']; ?></a>
-					</li>
 				<?php endforeach; ?>
 
 			<?php endif; ?>
