@@ -32,8 +32,13 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		$tabs = array();
 
 		if ( function_exists( 'affwp_get_affiliate_area_tabs' ) ) {
-		
+
 			foreach ( affwp_get_affiliate_area_tabs() as $tab_slug => $tab_title ) {
+
+				if( empty( $tab_slug ) ) {
+					continue;
+				}
+
 				$tabs[$tab_slug] = $tab_title;
 			}
 
@@ -55,7 +60,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			);
 
 		}
-		
+
 		return $tabs;
 
 	}
