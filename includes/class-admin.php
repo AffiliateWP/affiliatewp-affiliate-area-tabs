@@ -162,9 +162,9 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 		
 	/**
-	 * Individual Price Row
+	 * Individual Tab Row
 	 *
-	 * Used to output a table row for each price associated with a download.
+	 * Used to output a row for each tab.
 	 * Can be called directly, or attached to an action.
 	 *
 	 * @since 1.2
