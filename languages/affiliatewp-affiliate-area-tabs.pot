@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: AffiliateWP - Affiliate Area Tabs\n"
-"POT-Creation-Date: 2016-10-05 21:53+1300\n"
+"POT-Creation-Date: 2017-11-16 19:40+1300\n"
 "PO-Revision-Date: 2015-04-04 11:12-0600\n"
 "Last-Translator: Andrew Munro, Sumobi <andrew@sumobi.com>\n"
 "Language-Team: AffiliateWP <support@affiliatewp.com>\n"
@@ -10,7 +10,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.8.9\n"
+"X-Generator: Poedit 2.0.4\n"
 "X-Poedit-KeywordsList: __;_e\n"
 "X-Poedit-Basepath: .\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -22,11 +22,11 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: ../affiliatewp-affiliate-area-tabs.php:497
+#: ../affiliatewp-affiliate-area-tabs.php:501
 msgid "Get more add-ons for AffiliateWP"
 msgstr ""
 
-#: ../affiliatewp-affiliate-area-tabs.php:497
+#: ../affiliatewp-affiliate-area-tabs.php:501
 msgid "More add-ons"
 msgstr ""
 
@@ -49,66 +49,83 @@ msgstr ""
 msgid "Your version of PHP is below the minimum version of PHP required by %s. Please contact your host and request that your version be upgraded to 5.3 or later."
 msgstr ""
 
-#: ../includes/class-admin.php:19 ../includes/class-admin.php:67
+#: ../includes/class-admin.php:52 ../includes/class-admin.php:92
 msgid "Affiliate Area Tabs"
 msgstr ""
 
-#: ../includes/class-admin.php:43
-msgid "Disable Tabs"
+#: ../includes/class-admin.php:152
+msgid "Add New Tab"
 msgstr ""
 
-#: ../includes/class-admin.php:50
-msgid "Select tabs to disable. These tabs will no longer appear in the Affiliate Area."
+#: ../includes/class-admin.php:188
+msgid "Click and drag to re-order"
 msgstr ""
 
-#: ../includes/class-admin.php:52
-msgid "Affiliate URLs"
+#: ../includes/class-admin.php:194
+#, php-format
+msgid "%s"
 msgstr ""
 
-#: ../includes/class-admin.php:53
-msgid "Statistics"
+#: ../includes/class-admin.php:195
+msgid "Edit tab"
 msgstr ""
 
-#: ../includes/class-admin.php:54
-msgid "Graphs"
+#: ../includes/class-admin.php:201
+msgid "(Default AffiliateWP tab)"
 msgstr ""
 
-#: ../includes/class-admin.php:55
-msgid "Referrals"
-msgstr ""
-
-#: ../includes/class-admin.php:56
-msgid "Payouts"
-msgstr ""
-
-#: ../includes/class-admin.php:57
-msgid "Visits"
-msgstr ""
-
-#: ../includes/class-admin.php:58
-msgid "Creatives"
-msgstr ""
-
-#: ../includes/class-admin.php:59
-msgid "Settings"
-msgstr ""
-
-#: ../includes/class-admin.php:253
-msgid "Tab Content"
-msgstr ""
-
-#: ../includes/class-admin.php:254
+#: ../includes/class-admin.php:215
 msgid "Tab Title"
 msgstr ""
 
-#: ../includes/class-admin.php:261
-msgid "Select which page will be used for the tab's content. This page will be blocked for non-affiliates."
-msgstr ""
-
-#: ../includes/class-admin.php:262
+#: ../includes/class-admin.php:216
 msgid "Enter a title for the tab."
 msgstr ""
 
-#: ../includes/class-admin.php:323
-msgid "Add New Tab"
+#: ../includes/class-admin.php:222
+msgid "Tab Content"
+msgstr ""
+
+#: ../includes/class-admin.php:223
+msgid "Select which page will be used for the tab's content. This page will be blocked for non-affiliates."
+msgstr ""
+
+#: ../includes/class-admin.php:248
+msgid "Hide tab in Affiliate Area"
+msgstr ""
+
+#: ../includes/class-admin.php:260
+msgid "Delete tab"
+msgstr ""
+
+#: ../includes/class-admin.php:277
+msgid "Affiliate URLs"
+msgstr ""
+
+#: ../includes/class-admin.php:278
+msgid "Statistics"
+msgstr ""
+
+#: ../includes/class-admin.php:279
+msgid "Graphs"
+msgstr ""
+
+#: ../includes/class-admin.php:280
+msgid "Referrals"
+msgstr ""
+
+#: ../includes/class-admin.php:281
+msgid "Payouts"
+msgstr ""
+
+#: ../includes/class-admin.php:282
+msgid "Visits"
+msgstr ""
+
+#: ../includes/class-admin.php:283
+msgid "Creatives"
+msgstr ""
+
+#: ../includes/class-admin.php:284
+msgid "Settings"
 msgstr ""

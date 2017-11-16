@@ -2,10 +2,10 @@
 /**
  * Plugin Name: AffiliateWP - Affiliate Area Tabs
  * Plugin URI: https://affiliatewp.com/
- * Description: Add custom tabs to the Affiliate Area
+ * Description: Add and reorder tabs in the Affiliate Area
  * Author: AffiliateWP
  * Author URI: https://affiliatewp.com
- * Version: 1.1.6
+ * Version: 1.2
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
  *
@@ -49,7 +49,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.0
 		 */
-		private $version = '1.1.6';
+		private $version = '1.2';
 
 		/**
 		 * Main AffiliateWP_Affiliate_Area_Tabs Instance
@@ -198,6 +198,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			if ( is_admin() ) {
 				require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-admin.php';
 			}
+
 		}
 
 		/**
@@ -218,23 +219,28 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			add_action( 'template_redirect', array( $this, 'redirect' ) );
 
 			if ( $this->has_1_8() ) {
+
 				$object = $this;
 
 				add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
 
-				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'add_tab_slugs' ) );
+				// Filter the tabs in the Affiliate Area and in the admin.
+				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'affiliate_area_tabs' ) );
+
 			}
 
 		}
-
+	
 		/**
-		 * Hide existing tabs from the Affiliate Area
+		 * Hide tabs from the Affiliate Area.
 		 *
 		 * @since 1.1
+		 * 
 		 * @return boolean
 		 */
 		public function hide_existing_tabs( $show, $tab ) {
 
+			// Retrieve the tabs that should be hidden.
 			$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
 
 			if ( ! $options ) {
@@ -250,31 +256,50 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Adds custom tab slugs.
+		 * Affiliate Area Tabs.
 		 *
-		 * @access public
-		 * @since  1.1.4
-		 *
-		 * @param array $tabs Affiliate Area tabs.
-		 * @return array Filtered Affiliate Area tabs.
+		 * @since 1.2
+		 * 
+		 * @return array $new_tabs The new tabs to show in the Affiliate Area
 		 */
-		public function add_tab_slugs( $tabs ) {
+		public function affiliate_area_tabs( $tabs ) {
+
+			// Get the Affiliate Area Tabs.
+			$affiliate_area_tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs' );
 
 			$new_tabs = array();
 
-			foreach ( $this->get_tabs() as $tab_array ) {
-				$slug = $this->make_slug( $tab_array['title'] );
-				$new_tabs[$slug] = $tab_array['title'];
+			if ( $affiliate_area_tabs ) {
+
+				foreach ( $affiliate_area_tabs as $key => $tab_array ) {
+
+					/**
+					 * "Affiliate URLs" and "Statistics" are default AffiliateWP tabs so should be left alone.
+					 * The make_slug() method creates new slugs for these two since they are two words.
+					 */
+					if ( 'Affiliate URLs' === $tab_array['title'] ) {
+						$slug = 'urls';
+					} elseif( 'Statistics' === $tab_array['title'] ) {
+						$slug = 'stats';
+					} else {
+						// TODO: Skip any default tab as this is not needed.
+						$slug = $this->make_slug( $tab_array['title'] );
+					}
+
+					$new_tabs[$slug] = $tab_array['title'];
+
+				}
+
+				return $new_tabs;
+
 			}
 
-			$tabs = array_merge( $tabs, $new_tabs );
-
 			return $tabs;
-			
+
 		}
 
 		/**
-		 * Determine if the user is on version 1.8 of AffiliateWP
+		 * Determine if the user is on version 1.8 of AffiliateWP.
 		 *
 		 * @since 1.1
 		 * @return boolean
@@ -291,7 +316,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Prevent non-affiliates from accessing any page that is added as a tab
+		 * Prevent non-affiliates from accessing any page that is added as a tab.
 		 *
 		 * @since 1.0.1
 		 * @return array $page_ids
@@ -306,10 +331,11 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			$page_ids = array_filter( $page_ids );
 
 			return $page_ids;
+
 		}
 
 		/**
-		 * Redirect to affiliate login page if content is accessed
+		 * Redirect to affiliate login page if content is accessed.
 		 *
 		 * @since 1.0.1
 		 * @return void
@@ -331,7 +357,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Get tabs
+		 * Get custom tabs.
 		 *
 		 * @since 1.0.0
 		 */
@@ -343,18 +369,19 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				$tabs = array_values( $tabs );
 			}
 
-			foreach( $tabs as $key => $tab ) {
+			foreach ( $tabs as $key => $tab ) {
 
-				if( ! isset( $tab['id'] ) ) {
+				if ( ! isset( $tab['id'] ) ) {
 					$tabs[ $key ]['id'] = 0;
 				}
 
-				if( empty( $tab['title'] ) && ! empty( $tab['id'] ) ) {
+				if ( empty( $tab['title'] ) && ! empty( $tab['id'] ) ) {
 					$tabs[ $key ]['title'] = get_the_title( $tab['id'] );
 				}
 			}
 
 			return $tabs;
+
 		}
 
 		/**
