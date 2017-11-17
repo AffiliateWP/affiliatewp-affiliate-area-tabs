@@ -240,15 +240,27 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function hide_existing_tabs( $show, $tab ) {
 
-			// Retrieve the tabs that should be hidden.
-			$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
+			// Retrieve the old tab array of the tabs that should be hidden.
+			$old_hide_tab_options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
+			
+			if ( ! empty( $old_hide_tab_options ) ) {
 
-			if ( ! $options ) {
-				return $show;
-			}
+				if ( array_key_exists( $tab, $old_hide_tab_options ) && $old_hide_tab_options[$tab] === true ) {
+					$show = false;
+				}
 
-			if ( array_key_exists( $tab, $options ) && $options[$tab] == true ) {
-				$show = false;
+			} else {
+				
+				// Look in the new array for hidden tabs.
+				$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
+
+				if ( $tabs ) {
+					foreach ( $tabs as $key => $tab_array ) {
+						if ( $tab_array['slug'] === $tab && ( isset( $tab_array['hide'] ) && 'yes' === $tab_array['hide'] ) ) {
+							$show = false;
+						}
+					}
+				}
 			}
 
 			return $show;
