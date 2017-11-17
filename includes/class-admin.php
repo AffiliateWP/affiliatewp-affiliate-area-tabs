@@ -198,7 +198,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			<div class="aat-repeatable-row-standard-fields" style="display: none;">
 
 				<?php if ( $this->is_default_tab( $tab_slug ) ) : ?>
-					<p class="aat-tab-default"><?php _e( '(Default AffiliateWP tab)', 'affiliatewp-affiliate-area-tabs' ); ?></p>
+					<p class="aat-tab-default"><?php _e( 'This is a default AffiliateWP tab.', 'affiliatewp-affiliate-area-tabs' ); ?></p>
 				<?php endif; ?>
 
 				<?php 
