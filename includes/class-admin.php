@@ -216,6 +216,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 					<span class="description"><?php _e( 'Enter a title for the tab.', 'affiliatewp-affiliate-area-tabs' ); ?></span>
 				
 					<input id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]" type="text" class="widefat" value="<?php echo esc_attr( $tab_title ); ?>"/>
+
+					<?php
+					// Save the tab's slug.
+					?>
+					<input name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][slug]" type="hidden" value="<?php echo $tab_slug; ?>" />
 				</p>
 
 				<p class="aat-tab-content"<?php echo $hidden; ?>>
