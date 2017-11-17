@@ -241,15 +241,31 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				</p>
 
 				<?php
-				/* Disable tab */
+				/**
+				 * Backwards Compatibility.
+				 * 
+				 * Look for old "affiliate_area_hide_tabs" setting and if found, check all the relevant new checkboxes.
+				 * When the settings are saved, the tab's "hide" option will be saved to the new "affiliate_area_tabs" array.
+				 */
+				$old_hide_tab_options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
+				
+				$checked = 'no';
 
-				$disabled_tabs = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
-				$checked       = isset( $disabled_tabs[$tab_slug] ) ? true : '';
+				if ( $old_hide_tab_options && ! isset( $tabs[$key]['hide'] ) ) {
+
+					if ( array_key_exists( $tab_slug, $old_hide_tab_options ) ) {
+						$checked = true === $old_hide_tab_options[$tab_slug] ? 'yes' : 'no';
+					}
+
+				} elseif ( isset( $tabs[$key]['hide'] ) && 'yes' === $tabs[$key]['hide'] ) {
+					$checked = 'yes';
+				}
+
 				?>
 				
 				<p class="aat-tab-hide">
-					<label for="affwp_settings[affiliate_area_hide_tabs][<?php echo $key; ?>]">
-						<input type="checkbox" id="affwp_settings[affiliate_area_hide_tabs][<?php echo $key; ?>]" class="affiliate-area-hide-tabs" name="affwp_settings[affiliate_area_hide_tabs][<?php echo $tab_slug; ?>]" value="<?php echo $tab_slug; ?>" <?php checked( $checked, true ); ?> />
+					<label for="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]">
+						<input type="checkbox" id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" class="affiliate-area-hide-tabs" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" value="yes" <?php checked( $checked, 'yes' ); ?> />
 						<?php _e( 'Hide tab in Affiliate Area', 'affiliatewp-affiliate-area-tabs' ); ?>
 					</label>
 				</p>
