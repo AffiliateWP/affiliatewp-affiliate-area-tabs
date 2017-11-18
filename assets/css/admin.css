@@ -15,12 +15,13 @@
 
 .aat_repeatable_row {
     display: flex;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .aat-repeatable-row-header {
     background: #fff;
     width: 100%;
+    box-shadow: 0 1px 1px rgba( 0,0,0,0.04 );
 }
 
 .aat-repeatable-row-title {
@@ -31,7 +32,7 @@
 
 .aat-repeatable-row-title,
 .aat-repeatable-row-standard-fields {
-    padding:10px;
+    padding: 15px;
 }
 
 .affiliate-area-tabs-title {
