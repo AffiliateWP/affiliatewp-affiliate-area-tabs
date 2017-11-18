@@ -243,25 +243,13 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function hide_existing_tabs( $show, $tab ) {
 
-			// Retrieve the old tab array of the tabs that should be hidden.
-			$old_hide_tab_options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
+			// Look in the new array for hidden tabs.
+			$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
 			
-			if ( ! empty( $old_hide_tab_options ) ) {
-
-				if ( array_key_exists( $tab, $old_hide_tab_options ) && $old_hide_tab_options[$tab] === true ) {
-					$show = false;
-				}
-
-			} else {
-				
-				// Look in the new array for hidden tabs.
-				$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
-
-				if ( $tabs ) {
-					foreach ( $tabs as $key => $tab_array ) {
-						if ( $tab_array['slug'] === $tab && ( isset( $tab_array['hide'] ) && 'yes' === $tab_array['hide'] ) ) {
-							$show = false;
-						}
+			if ( $tabs ) {
+				foreach ( $tabs as $key => $tab_array ) {
+					if ( isset( $tab_array['slug'] ) && $tab_array['slug'] === $tab && ( isset( $tab_array['hide'] ) && 'yes' === $tab_array['hide'] ) ) {
+						$show = false;
 					}
 				}
 			}
@@ -275,40 +263,30 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.2
 		 * 
-		 * @return array $new_tabs The new tabs to show in the Affiliate Area
+		 * @return array $tabs The tabs to show in the Affiliate Area
 		 */
 		public function affiliate_area_tabs( $tabs ) {
-
+			
 			// Get the Affiliate Area Tabs.
 			$affiliate_area_tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs' );
 
-			$new_tabs = array();
-
 			if ( $affiliate_area_tabs ) {
+				
+				$new_tabs = array();
 
+				// Create a new array in the needed format of tab slug => tab title
 				foreach ( $affiliate_area_tabs as $key => $tab_array ) {
-
-					/**
-					 * "Affiliate URLs" and "Statistics" are default AffiliateWP tabs so should be left alone.
-					 * The make_slug() method creates new slugs for these two since they are two words.
-					 */
-					if ( 'Affiliate URLs' === $tab_array['title'] ) {
-						$slug = 'urls';
-					} elseif( 'Statistics' === $tab_array['title'] ) {
-						$slug = 'stats';
-					} else {
-						// TODO: Skip any default tab as this is not needed.
-						$slug = $this->make_slug( $tab_array['title'] );
+					
+					if ( isset( $tab_array['slug'] ) ) {
+						$new_tabs[$tab_array['slug']] = $tab_array['title'];
 					}
-
-					$new_tabs[$slug] = $tab_array['title'];
-
+					
 				}
 
 				return $new_tabs;
-
+				
 			}
-
+		
 			return $tabs;
 
 		}
@@ -423,6 +401,28 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			return rawurldecode( sanitize_title_with_dashes( $title ) );
 		}
 
+		/**
+		 * Holds an array of the default tabs added by AffiliateWP, previous to 2.1.7.
+		 * 
+		 * @since 1.2
+		 */
+		public function default_tabs() {
+
+			$default_tabs = array(
+				'urls'      => __( 'Affiliate URLs', 'affiliatewp-affiliate-area-tabs' ),
+				'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
+				'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
+				'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
+				'payouts'   => __( 'Payouts', 'affiliatewp-affiliate-area-tabs' ),
+				'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
+				'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
+				'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
+			);
+
+			return $default_tabs;
+
+		}
+		
 		/**
 		 * Tab content
 		 *

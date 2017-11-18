@@ -98,7 +98,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			 * If a previous version of AffiliateWP is being used, output the
 			 * hard-coded tabs as before.
 			 */
-			$tabs = $this->default_tabs();
+			$tabs = affiliatewp_affiliate_area_tabs()->default_tabs();
 		}
 
 		return $tabs;
@@ -158,15 +158,17 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				<div class="widefat aat_repeatable_table">
 
 					<div class="aat-repeatables-wrap">
-
-						<?php foreach ( $tabs as $tab_slug => $tab_title ) : $i++; ?>
+					<?php 
+						$current_tabs  = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
+						
+						foreach ( $tabs as $tab_slug => $tab_title ) : $i++; ?>
 						
 						<?php
 						$key = $i;
 						$args = array();
 						$post_id = '';
 						$index = $key;
-						?>
+					?>
 
 						<div class="aat_repeatable_row" data-key="<?php echo esc_attr( $key ); ?>">
 							<?php do_action( 'affiliate_area_tabs_tab_row', $key, $args, $post_id, $index, $tab_slug, $tab_title ); ?>
@@ -186,8 +188,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			</form>
 	<?php
 	}
-
-		
+	
 	/**
 	 * Individual Tab Row
 	 *
@@ -228,15 +229,13 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 					<p class="aat-tab-default"><?php _e( 'This is a default AffiliateWP tab.', 'affiliatewp-affiliate-area-tabs' ); ?></p>
 				<?php endif; ?>
 
-				<?php 
+				<?php
 				/**
-				 * Options for custom tabs
-				 * 
-				 * @since 1.2
+				 * Tab title.
 				 */
-				
-				$hidden = $this->is_default_tab( $tab_slug ) ? ' style="display: none;"' : '';
+				$hidden = $this->is_default_tab( $tab_slug ) ? ' style="display: none;"' : ''; 
 				?>
+
 				<p class="aat-tab-title"<?php echo $hidden; ?>>
 
 					<label for="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]"><strong><?php _e( 'Tab Title', 'affiliatewp-affiliate-area-tabs' ); ?></strong></label>
@@ -245,21 +244,34 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 					<input id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]" type="text" class="widefat" value="<?php echo esc_attr( $tab_title ); ?>"/>
 
 					<?php
-					// Save the tab's slug.
+					/**
+					 * This makes sure the core tabs have their slug correctly saved as per the default_tabs() method.
+					 * Custom tab slugs are generated in update_settings()
+					 */
 					?>
 					<input name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][slug]" type="hidden" value="<?php echo $tab_slug; ?>" />
+
 				</p>
 
+				<?php
+				/**
+				 * Tab content.
+				 */
+				?>
 				<p class="aat-tab-content"<?php echo $hidden; ?>>
 					<label for="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]"><strong><?php _e( 'Tab Content', 'affiliatewp-affiliate-area-tabs' ); ?></strong></label>
 					<span class="description"><?php _e( 'Select which page will be used for the tab\'s content. This page will be blocked for non-affiliates.', 'affiliatewp-affiliate-area-tabs' ); ?></span>
 						
 					<?php
 					$pages = $this->get_pages();
+					
 					$tabs  = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
 					?>
 					<select id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]" class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
 						<?php foreach ( $pages as $id => $title ) :
+							/**
+							 * Backwards Compatibility.
+							 */
 							$selected = $tabs && isset( $tabs[$key]['id'] ) ? ' ' . selected( $tabs[$key]['id'], $id, false ) : '';
 						?>
 							<option value="<?php echo $id; ?>"<?php echo $selected; ?>><?php echo $title; ?></option>
@@ -268,28 +280,8 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				</p>
 
 				<?php
-				/**
-				 * Backwards Compatibility.
-				 * 
-				 * Look for old "affiliate_area_hide_tabs" setting and if found, check all the relevant new checkboxes.
-				 * When the settings are saved, the tab's "hide" option will be saved to the new "affiliate_area_tabs" array.
-				 */
-				$old_hide_tab_options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
-				
-				$checked = 'no';
-
-				if ( $old_hide_tab_options && ! isset( $tabs[$key]['hide'] ) ) {
-
-					if ( array_key_exists( $tab_slug, $old_hide_tab_options ) ) {
-						$checked = true === $old_hide_tab_options[$tab_slug] ? 'yes' : 'no';
-					}
-
-				} elseif ( isset( $tabs[$key]['hide'] ) && 'yes' === $tabs[$key]['hide'] ) {
-					$checked = 'yes';
-				}
-
+				$checked = isset( $tabs[$key]['hide'] ) && 'yes' === $tabs[$key]['hide'] ? 'yes' : 'no';
 				?>
-				
 				<p class="aat-tab-hide">
 					<label for="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]">
 						<input type="checkbox" id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" class="affiliate-area-hide-tabs" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" value="yes" <?php checked( $checked, 'yes' ); ?> />
@@ -315,28 +307,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	}
 
 	/**
-	 * Holds an array of the default tabs added by AffiliateWP, previous to 2.1.7.
-	 * 
-	 * @since 1.2
-	 */
-	public function default_tabs() {
-
-		$default_tabs = array(
-			'urls'      => __( 'Affiliate URLs', 'affiliatewp-affiliate-area-tabs' ),
-			'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
-			'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
-			'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
-			'payouts'   => __( 'Payouts', 'affiliatewp-affiliate-area-tabs' ),
-			'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
-			'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
-			'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
-		);
-
-		return $default_tabs;
-
-	}
-
-	/**
 	 * Determine if the tab is a default tab or not.
 	 * 
 	 * @since 1.2
@@ -345,7 +315,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 		$return = false;
 
-		if ( array_key_exists( $tab_slug, $this->default_tabs() ) ) {
+		if ( array_key_exists( $tab_slug, affiliatewp_affiliate_area_tabs()->default_tabs() ) ) {
 			$return = true;
 		}
 
