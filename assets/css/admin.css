@@ -87,7 +87,7 @@
 .aat-tab-number {
     font-style: italic;
     font-size: 12px;
-    margin-right: auto;
     align-self: center;
-    margin-left: 5px;
+    margin-left: auto;
+    margin-right: 10px;
 }
