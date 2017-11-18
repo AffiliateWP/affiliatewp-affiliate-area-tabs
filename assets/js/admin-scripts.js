@@ -119,21 +119,61 @@ jQuery(document).ready(function ($) {
 			$(".aat_repeatable_table .aat-repeatables-wrap").sortable({
 				handle: '.aat-draghandle-anchor', items: '.aat_repeatable_row', opacity: 0.6, cursor: 'move', axis: 'y', 
 				
-				// update: function() {
-				// 	var count  = 0;
-				// 	$(this).find( '.aat_repeatable_row' ).each(function() {
-				// 		$(this).find( 'input.edd_repeatable_index' ).each(function() {
-				// 			$( this ).val( count );
-				// 		});
-				// 		count++;
-				// 	});
-				// }
+				update: function() {
+
+					var key  = 1;
+					
+					$(this).find( '.aat_repeatable_row' ).each(function() {
+
+						// Update the data-key attribute.
+						$( this ).attr( 'data-key', key );
+
+						// Update the tab number key. Example (Tab 5)
+						$(this).find( '.aat-tab-number-key' ).text( parseInt( key ) );
+
+						// Update any input or select menu's name and ID attribute.
+						$(this).find( 'input, select' ).each(function() {
+							var name = $( this ).attr( 'name' );
+							var id   = $( this ).attr( 'id' );
+
+							if ( name ) {
+								name = name.replace( /\[(\d+)\]/, '[' + parseInt( key ) + ']');
+								$( this ).attr( 'name', name );
+							}
+
+							$( this ).attr( 'data-key', key );
+
+							if ( typeof id != 'undefined' ) {
+								id = id.replace( /(\d+)/, parseInt( key ) );
+								$( this ).attr( 'id', id );
+							}
+
+						});
+
+						// Update the label "for" attribute.
+						$(this).find( 'label' ).val( '' ).each(function() {
+							var labelFor = $( this ).attr( 'for' );
+
+							if ( typeof labelFor != 'undefined' ) {
+								labelFor = labelFor.replace( /(\d+)/, parseInt( key ) );
+								$( this ).attr( 'for', labelFor );
+							}
+
+						});
+
+						key++;
+
+					});
+				}
 				
 			});
+
+			
 
 		},
 
 		remove : function() {
+
 			$( document.body ).on( 'click', '.aat_remove_repeatable', function(e) {
 				e.preventDefault();
 
@@ -146,60 +186,70 @@ jQuery(document).ready(function ($) {
 
 				var row   = $(this).parents( '.aat_repeatable_row' ),
 					count = row.parent().find( '.aat_repeatable_row' ).length,
-				//	type  = $(this).data('type'),
-				//	repeatable = 'div.edd_repeatable_' + type + 's',
 					focusElement,
 					focusable,
 					firstFocusable;
 
-					// Set focus on next element if removing the first row. Otherwise set focus on previous element.
-					if ( $(this).is( '.ui-sortable .aat_repeatable_row:first-child .aat_remove_repeatable' ) ) {
-						focusElement  = row.next( '.aat_repeatable_row' );
-					} else {
-						focusElement  = row.prev( '.aat_repeatable_row' );
-					}
+				// Set focus on next element if removing the first row. Otherwise set focus on previous element.
+				if ( $(this).is( '.ui-sortable .aat_repeatable_row:first-child .aat_remove_repeatable' ) ) {
+					focusElement  = row.next( '.aat_repeatable_row' );
+				} else {
+					focusElement  = row.prev( '.aat_repeatable_row' );
+				}
 
-					focusable  = focusElement.find( 'select, input, textarea, button' ).filter( ':visible' );
-					firstFocusable = focusable.eq(0);
+				focusable  = focusElement.find( 'select, input, textarea, button' ).filter( ':visible' );
+				firstFocusable = focusable.eq(0);
 
-				// if ( type === 'price' ) {
-				// 	var price_row_id = row.data('key');
-				// 	/** remove from price condition */
-				// 	$( '.edd_repeatable_condition_field option[value="' + price_row_id + '"]' ).remove();
-				// }
-					
 				$( 'input, select', row ).val( '' );
-				row.fadeOut( 'fast' ).remove();
+				row.remove();
 				firstFocusable.focus();
-					
-				// if ( count > 1 ) {
-				// 	$( 'input, select', row ).val( '' );
-				// 	row.fadeOut( 'fast' ).remove();
-				// 	firstFocusable.focus();
-				// } else {
-				// 	switch( type ) {
-				// 		case 'price' :
-				// 			alert( edd_vars.one_price_min );
-				// 			break;
-				// 		case 'file' :
-				// 			$( 'input, select', row ).val( '' );
-				// 			break;
-				// 		default:
-				// 			alert( edd_vars.one_field_min );
-				// 			break;
-				// 	}
-				// }
 
 				// Re-index after deleting.
+			
+				var key  = 1;
 
-				// $(repeatable).each( function( rowIndex ) {
-				// 	$(this).find( 'input, select' ).each(function() {
-				// 		var name = $( this ).attr( 'name' );
-				// 		name = name.replace( /\[(\d+)\]/, '[' + rowIndex+ ']');
-				// 		$( this ).attr( 'name', name ).attr( 'id', name );
-				// 	});
-				// });
-				
+				$( '.aat-repeatables-wrap' ).find( '.aat_repeatable_row' ).each(function() {
+
+					// Update the data-key attribute.
+					$( this ).attr( 'data-key', key );
+					
+					// Update the tab number key. Example (Tab 5)
+					$(this).find( '.aat-tab-number-key' ).text( parseInt( key ) );
+					
+					// Update any input or select menu's name and ID attribute.
+					$(this).find( 'input, select' ).each(function() {
+						var name = $( this ).attr( 'name' );
+						var id   = $( this ).attr( 'id' );
+
+						if ( name ) {
+							name = name.replace( /\[(\d+)\]/, '[' + parseInt( key ) + ']');
+							$( this ).attr( 'name', name );
+						}
+
+						$( this ).attr( 'data-key', key );
+
+						if ( typeof id != 'undefined' ) {
+							id = id.replace( /(\d+)/, parseInt( key ) );
+							$( this ).attr( 'id', id );
+						}
+
+					});
+
+					// Update the label "for" attribute.
+					$(this).find( 'label' ).val( '' ).each(function() {
+						var labelFor = $( this ).attr( 'for' );
+
+						if ( typeof labelFor != 'undefined' ) {
+							labelFor = labelFor.replace( /(\d+)/, parseInt( key ) );
+							$( this ).attr( 'for', labelFor );
+						}
+
+					});
+
+					key++;
+
+				});
+
 			});
 		},
 
