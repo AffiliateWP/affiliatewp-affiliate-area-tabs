@@ -110,7 +110,9 @@ jQuery(document).ready(function ($) {
 			// Open settings for each tab.
 			$( document.body ).on( 'click', '.aat-repeatable-row-title', function(e) {
 				e.preventDefault();
+
 				$(this).next( '.aat-repeatable-row-standard-fields' ).toggle();
+				$(this).find( '.affiliate-area-tabs-edit .dashicons' ).toggleClass( 'dashicons-arrow-down dashicons-arrow-up' );
 			});
 		},
 

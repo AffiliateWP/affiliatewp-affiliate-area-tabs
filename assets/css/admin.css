@@ -5,12 +5,12 @@
 }
 
 .aat-draghandle-anchor span {
-    margin-top: 10px;
+    margin-top: 15px;
     color: #ccc;
 }
 
 .aat-draghandle-anchor:hover span {
-    color: #222;
+    color: #24282d;
 }
 
 .aat_repeatable_row {
@@ -31,14 +31,26 @@
 }
 
 .aat-repeatable-row-title,
+
 .aat-repeatable-row-standard-fields {
     padding: 15px;
+}
+
+.dashicons-arrow-down,
+.dashicons-arrow-up {
+    color: #72777c;
+}
+
+.dashicons-arrow-down:hover,
+.dashicons-arrow-up:hover {
+    color: #24282d;
 }
 
 .affiliate-area-tabs-title {
     font-weight: bold;
     display: inline-block;
 }
+
 
 .default-tab {
     font-style: italic;
@@ -47,6 +59,7 @@
 .description {
     display: block;
 }
+
 
 #affiliatewp-tabs th { padding-left: 10px; }
 
@@ -57,6 +70,10 @@
 .form-table .aat-repeatable-row-standard-fields p {
     margin-bottom: 10px;
     margin-top: 0;
+}
+
+.aat-repeatable-row-standard-fields {
+    padding-top: 0;
 }
 
 .form-table .aat-repeatable-row-standard-fields p:last-child {

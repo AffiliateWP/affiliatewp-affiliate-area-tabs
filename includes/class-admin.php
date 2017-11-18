@@ -220,7 +220,9 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 			<div class="aat-repeatable-row-title">
 				<?php printf( __( '%s', '' ), '<span class="affiliate-area-tabs-title">' . $tab_title . '</span><span class="aat-tab-number"> (Tab <span class="aat-tab-number-key">' . $key . '</span>)</span>' ); ?>
-				<span class="affiliate-area-tabs-edit"><a href="#"><?php _e( 'Edit tab', 'affiliatewp-affiliate-area-tabs' ); ?></a></span>
+				<span class="affiliate-area-tabs-edit">
+					<span class="dashicons dashicons-arrow-down"></span>
+				</span>
 			</div>
 			
 			<div class="aat-repeatable-row-standard-fields" style="display: none;">
