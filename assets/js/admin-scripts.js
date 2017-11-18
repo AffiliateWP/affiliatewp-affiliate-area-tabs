@@ -110,7 +110,7 @@ jQuery(document).ready(function ($) {
 			// Open settings for each tab.
 			$( document.body ).on( 'click', '.aat-repeatable-row-title', function(e) {
 				e.preventDefault();
-				$(this).next( '.aat-repeatable-row-standard-fields' ).slideToggle();
+				$(this).next( '.aat-repeatable-row-standard-fields' ).toggle();
 			});
 		},
 
