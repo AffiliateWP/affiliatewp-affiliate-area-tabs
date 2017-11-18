@@ -8,6 +8,33 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ), 100 );
 		add_action( 'affiliate_area_tabs_tab_row', array( $this, 'render_tab_row' ), 10, 6 );
+
+		add_filter( 'pre_update_option_affwp_settings', array( $this, 'update_settings' ), 10, 2 );
+	
+	}
+
+	/**
+	 * Update settings before they are saved.
+	 *
+	 * @access public
+	 * @since 1.2
+	 */
+	public function update_settings( $new_value, $old_value ) {
+
+		if ( $new_value['affiliate_area_tabs'] ) {
+			foreach ( $new_value['affiliate_area_tabs'] as $key => $tab_array ) {
+
+				// If the tab does not have a slug it's a custom one (core tabs already have slugs).
+				if ( empty( $tab_array['slug'] ) ) {
+					// Create slug for custom tabs
+					$new_value['affiliate_area_tabs'][$key]['slug'] = affiliatewp_affiliate_area_tabs()->make_slug( $tab_array['title'] );
+				}
+
+			}
+		}
+
+		return $new_value;
+
 	}
 
 	/**
