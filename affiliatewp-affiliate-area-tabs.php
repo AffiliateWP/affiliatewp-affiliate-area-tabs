@@ -194,6 +194,9 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * @return      void
 		 */
 		private function includes() {
+			
+			// Upgrade class.
+			require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-upgrades.php';
 
 			if ( is_admin() ) {
 				require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-admin.php';
