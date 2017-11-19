@@ -190,8 +190,8 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	}
 	
 	/**
-	 * Tab notices.
-	 * Let's the ned-user know how the tab was generated.
+	 * Tab notice.
+	 * Useful for add-ons to let the end-user know where the tab was added from.
 	 * 
 	 * @since 1.2
 	 * @param string $tab_slug The slug of the tab
