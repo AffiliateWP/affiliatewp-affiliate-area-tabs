@@ -194,9 +194,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						<?php endforeach; ?>
 
 						<div class="aat-add-repeatable-row">
-							<div class="submit" style="float: none; clear:both; padding: 4px 4px 0 0;">
-								<button class="button-secondary aat-add-repeatable"><?php _e( 'Add New Tab', 'affiliatewp-affiliate-area-tabs' ); ?></button>
-							</div>
+							<button class="button-secondary aat-add-repeatable"><?php _e( 'Add New Tab', 'affiliatewp-affiliate-area-tabs' ); ?></button>
 						</div>
 
 					</div>

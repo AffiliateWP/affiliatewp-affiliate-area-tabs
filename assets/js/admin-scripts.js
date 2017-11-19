@@ -111,12 +111,12 @@ jQuery(document).ready(function ($) {
 
 		add : function() {
 
-			$( document.body ).on( 'click', '.submit .aat-add-repeatable', function(e) {
+			$( document.body ).on( 'click', '.aat-add-repeatable', function(e) {
 
 				e.preventDefault();
 
 				var button = $( this ),
-					row    = button.parent().parent().prev( '.aat_repeatable_row' ),
+					row    = button.parent().prev( '.aat_repeatable_row' ),
 					clone  = AAT_Configuration.clone_repeatable(row);
 
 				clone.insertAfter( row );
