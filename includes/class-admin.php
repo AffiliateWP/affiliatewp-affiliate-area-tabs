@@ -141,7 +141,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			 * If a previous version of AffiliateWP is being used, output the
 			 * hard-coded tabs as before.
 			 */
-			$tabs = affiliatewp_affiliate_area_tabs()->default_tabs();
+			$tabs = $this->default_tabs();
 		}
 
 		return $tabs;

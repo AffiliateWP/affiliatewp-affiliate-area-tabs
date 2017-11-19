@@ -82,8 +82,8 @@ class Affiliate_Area_Tabs_Upgrades {
 		$options = get_option( 'affwp_settings' );
 
 		// Get the default AffiliateWP tabs. We need to merge these with any custom tabs.
-		$default_tabs = affiliatewp_affiliate_area_tabs()->default_tabs();
-		
+		$default_tabs = (new AffiliateWP_Affiliate_Area_Tabs_Admin() )->default_tabs();
+
 		// Create our new array in the needed format.
 		$new_tabs = array();
 
