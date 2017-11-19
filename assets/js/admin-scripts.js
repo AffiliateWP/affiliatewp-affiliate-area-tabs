@@ -100,7 +100,7 @@ jQuery(document).ready(function ($) {
 
 			// Uncheck "Hide tab in Affiliate Area" option if last one was selected.
 			clone.find( '.affiliate-area-hide-tabs' ).each( function() {
-				$( this ).val( parseInt( key ) ).removeAttr('checked');
+				$( this ).val('yes').removeAttr('checked');
 			});
 
 			// Show the the tab title and content for custom tabs.
