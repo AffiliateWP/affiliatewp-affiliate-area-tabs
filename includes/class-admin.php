@@ -189,6 +189,15 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	<?php
 	}
 	
+	/**
+	 * Tab notices.
+	 * Let's the ned-user know how the tab was generated.
+	 * 
+	 * @since 1.2
+	 * @param string $tab_slug The slug of the tab
+	 * 
+	 * @return string $notice The notice to show on the tab
+	 */
 	public function tab_notice( $tab_slug ) {
 
 		switch ( $tab_slug ) {
