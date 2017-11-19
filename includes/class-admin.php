@@ -189,6 +189,34 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	<?php
 	}
 	
+	public function tab_notice( $tab_slug ) {
+
+		switch ( $tab_slug ) {
+
+			case $this->is_default_tab( $tab_slug ):
+				$notice = __( 'This is a default AffiliateWP tab.', 'affiliatewp-affiliate-area-tabs' );
+				break;
+			
+			case 'order-details':
+				$notice = __( 'This tab has been added from the <em>Order Details For Affiliates</em> add-on.', 'affiliatewp-affiliate-area-tabs' );
+				break;
+
+			case 'direct-links':
+				$notice = __( 'This tab has been added from the <em>Direct Link Tracking</em> add-on.', 'affiliatewp-affiliate-area-tabs' );
+				break;
+
+			case 'coupons':
+				$notice = __( 'This tab has been added from the <em>Show Affiliate Coupons</em> add-on.', 'affiliatewp-affiliate-area-tabs' );
+				break;
+
+			default:
+				$notice = '';
+				break;
+		}
+
+		return $notice;
+	}
+
 	/**
 	 * Individual Tab Row
 	 *
@@ -227,8 +255,8 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			
 			<div class="aat-repeatable-row-standard-fields" style="display: none;">
 
-				<?php if ( $this->is_default_tab( $tab_slug ) ) : ?>
-					<p class="aat-tab-default"><?php _e( 'This is a default AffiliateWP tab.', 'affiliatewp-affiliate-area-tabs' ); ?></p>
+				<?php if ( $tab_notice = $this->tab_notice( $tab_slug ) ) : ?>
+					<p class="aat-tab-default"><?php echo $tab_notice; ?></p>
 				<?php endif; ?>
 
 				<?php
