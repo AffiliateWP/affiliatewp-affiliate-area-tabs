@@ -299,14 +299,10 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 						
 					<?php
 					$pages = $this->get_pages();
-					
 					$tabs  = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
 					?>
 					<select id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]" class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
 						<?php foreach ( $pages as $id => $title ) :
-							/**
-							 * Backwards Compatibility.
-							 */
 							$selected = $tabs && isset( $tabs[$key]['id'] ) ? ' ' . selected( $tabs[$key]['id'], $id, false ) : '';
 						?>
 							<option value="<?php echo $id; ?>"<?php echo $selected; ?>><?php echo $title; ?></option>
