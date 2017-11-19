@@ -402,28 +402,6 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Holds an array of the default tabs added by AffiliateWP, previous to 2.1.7.
-		 * 
-		 * @since 1.2
-		 */
-		public function default_tabs() {
-
-			$default_tabs = array(
-				'urls'      => __( 'Affiliate URLs', 'affiliatewp-affiliate-area-tabs' ),
-				'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
-				'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
-				'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
-				'payouts'   => __( 'Payouts', 'affiliatewp-affiliate-area-tabs' ),
-				'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
-				'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
-				'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
-			);
-
-			return $default_tabs;
-
-		}
-		
-		/**
 		 * Tab content
 		 *
 		 * @since 1.0.0

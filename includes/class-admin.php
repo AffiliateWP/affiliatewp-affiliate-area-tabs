@@ -405,16 +405,34 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	 * Determine if the tab is a default tab or not.
 	 * 
 	 * @since 1.2
+	 * 
+	 * @return boolean True if tab is a default tab, false otherwise.
 	 */
 	public function is_default_tab( $tab_slug ) {
+		return array_key_exists( $tab_slug, $this->default_tabs() );
+	}
 
-		$return = false;
+	/**
+	 * Holds an array of the default tabs added by AffiliateWP.
+	 * 
+	 * @since 1.2
+	 * 
+	 * @return array $default_tabs Array of default tabs.
+	 */
+	public function default_tabs() {
 
-		if ( array_key_exists( $tab_slug, affiliatewp_affiliate_area_tabs()->default_tabs() ) ) {
-			$return = true;
-		}
+		$default_tabs = array(
+			'urls'      => __( 'Affiliate URLs', 'affiliatewp-affiliate-area-tabs' ),
+			'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
+			'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
+			'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
+			'payouts'   => __( 'Payouts', 'affiliatewp-affiliate-area-tabs' ),
+			'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
+			'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
+			'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
+		);
 
-		return $return;
+		return $default_tabs;
 
 	}
 
