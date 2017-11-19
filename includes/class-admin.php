@@ -232,10 +232,15 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				<?php endif; ?>
 
 				<?php
+
+				/**
+				 * Hide a field if it's not a custom tab.
+				 */
+				$hidden = ! $this->is_custom_tab( $tab_slug ) ? ' style="display: none;"' : '';
+
 				/**
 				 * Tab title.
 				 */
-				$hidden = $this->is_default_tab( $tab_slug ) ? ' style="display: none;"' : ''; 
 				?>
 
 				<p class="aat-tab-title"<?php echo $hidden; ?>>
@@ -298,7 +303,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				 * 
 				 * @since 1.2
 				 */
-				if ( ! $this->is_default_tab( $tab_slug ) ) : ?>
+				if ( $this->is_custom_tab( $tab_slug ) ) : ?>
 				<p><a href="#" class="aat_remove_repeatable"><?php _e( 'Delete tab', 'affiliatewp-affiliate-area-tabs' ); ?></a></p>
 				<?php endif; ?>
 
@@ -306,6 +311,45 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		</div>
 		
 	<?php 
+	}
+
+	/**
+	 * Determine if the tab is a custom tab or not.
+	 * A custom tab is one that has been added using the "Add New Tab" button.
+	 * 
+	 * @since 1.2
+	 * @uses get_custom_tab_slugs()
+	 * 
+	 * @return boolean True if the tab is a custom tab, false otherwise.
+	 */
+	private function is_custom_tab( $tab_slug = '' ) {
+		return in_array( $tab_slug, $this->get_custom_tab_slugs() );
+	}
+
+	/**
+	 * Get custom tab slugs
+	 * 
+	 * @since 1.2
+	 * 
+	 * @return array $custom_tab_slugs Array of custom tab slugs
+	 */
+	private function get_custom_tab_slugs() {
+
+		$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
+
+		$custom_tab_slugs = array();
+
+		if ( $tabs ) {
+			foreach( $tabs as $tab_array ) {
+				// Custom tabs have a page ID set.
+				if ( $tab_array['id'] !== '0' ) {
+					$custom_tab_slugs[] = $tab_array['slug'];
+				}
+			}
+		}
+
+		return $custom_tab_slugs;
+
 	}
 
 	/**
