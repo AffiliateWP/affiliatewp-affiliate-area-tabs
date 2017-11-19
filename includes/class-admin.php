@@ -116,7 +116,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 		add_settings_field(
 			'affwp_settings[affiliate_area_tabs_list]',
-			__( 'Affiliate Area Tabs', 'affiliatewp-affiliate-area-tabs' ),
+			__( 'Affiliate Area Tabs', 'affiliatewp-affiliate-area-tabs' ) . $this->expand_collapse_tabs(),
 			array( $this, 'tabs_list' ),
 			'affwp_settings_affiliate_area_tabs',
 			'affwp_settings_affiliate_area_tabs'
@@ -124,6 +124,23 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 	}
 
+	/**
+	 * Add link to expand/collapse tabs
+	 *
+	 * @access private
+	 * @since 1.2
+	 * @return string
+	 */
+	private function expand_collapse_tabs() {
+		ob_start();
+		?>
+		<p>
+			<a href="#" class="aat-hide-show-tabs" data-text-swap="<?php _e( 'Collapse all tabs', 'affiliatewp-affiliate-area-tabs' );?>" data-text-original="<?php _e( 'Expand all tabs', 'affiliatewp-affiliate-area-tabs' );?>"><?php _e( 'Expand all tabs', 'affiliatewp-affiliate-area-tabs' );?></a>
+		</p>
+		<?php
+		return ob_get_clean();
+	}
+	
 	/**
 	 * Returns an array of pages without the Affiliate Area.
 	 * 

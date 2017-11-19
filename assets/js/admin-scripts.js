@@ -1,5 +1,25 @@
 jQuery(document).ready(function ($) {
 
+	// Expand/Collapse tabs
+	$( document.body ).on( 'click', '.aat-hide-show-tabs', function(e) {
+
+		e.preventDefault();
+
+		var tabs = $( '.aat-repeatable-row-standard-fields' );
+		var el = $(this);
+
+		// Change text.
+		el.text() == el.data("text-swap") ? el.text( el.data("text-original") ) : el.text( el.data("text-swap") );
+
+		// Show/hide tabs.
+		if ( el.text() === el.data("text-swap") ) {
+			tabs.show();
+		} else if (  el.text() === el.data("text-original") ) {
+			tabs.hide();
+		}
+
+	});
+
 	/**
 	 * Affiliate Area Tabs Configuration
 	 */
