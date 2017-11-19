@@ -4,37 +4,80 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 	public function __construct() {
 		add_filter( 'affwp_settings_tabs', array( $this, 'settings_tab' ) );
-		
+		add_filter( 'affwp_settings_affiliate_area_tabs_sanitize', array( $this, 'sanitize_tabs' ), 10, 1 );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ), 100 );
 		add_action( 'affiliate_area_tabs_tab_row', array( $this, 'render_tab_row' ), 10, 6 );
-
-		add_filter( 'pre_update_option_affwp_settings', array( $this, 'update_settings' ), 10, 2 );
-	
 	}
 
 	/**
-	 * Update settings before they are saved.
+	 * Sanitize tabs
 	 *
 	 * @access public
 	 * @since 1.2
+	 * 
+	 * @return array $input
 	 */
-	public function update_settings( $new_value, $old_value ) {
+	public function sanitize_tabs( $input ) {
 
-		if ( $new_value['affiliate_area_tabs'] ) {
-			foreach ( $new_value['affiliate_area_tabs'] as $key => $tab_array ) {
+		if ( ! empty($input['affiliate_area_tabs'] ) ) {
 
-				// If the tab does not have a slug it's a custom one (core tabs already have slugs).
-				if ( empty( $tab_array['slug'] ) ) {
-					// Create slug for custom tabs
-					$new_value['affiliate_area_tabs'][$key]['slug'] = affiliatewp_affiliate_area_tabs()->make_slug( $tab_array['title'] );
+			// The tabs currently stored in the DB.
+			$affiliate_area_tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs' );
+
+			// Sanitize each tab.
+			foreach ( $input['affiliate_area_tabs'] as $key => $tab ) {
+				
+				// Tab's must have both a title and id assigned.
+				if ( empty( $tab['title'] ) || ! isset( $tab['id'] ) ) {
+					
+					// Unset the tab
+					unset( $input['affiliate_area_tabs'][$key] );
+					
+					// Skip to the next tab.
+					continue;
 				}
 
+				// Create an initial tab slug for custom tabs (core tabs already have a slug).
+				if ( empty( $tab['slug'] ) ) {
+
+					// Create a slug from the tab's title
+					$new_slug = affiliatewp_affiliate_area_tabs()->make_slug( $tab['title'] );
+
+					// Check if the new tab slug already exists in AffiliateWP's list of tabs
+					if ( array_key_exists( $new_slug, affwp_get_affiliate_area_tabs() ) ) {
+						// If so, unset the tab. 
+						unset( $input['affiliate_area_tabs'][$key] );
+
+						// Skip to the next tab.
+						continue;
+
+					} else {
+						// It's a unique slug, store it with the tab
+						$input['affiliate_area_tabs'][$key]['slug'] = $new_slug;
+					}
+
+				}
+
+				// Existing custom tab.
+				if ( $this->is_custom_tab( $tab['slug'] ) ) {
+
+					// Create a slug.
+					$new_slug = affiliatewp_affiliate_area_tabs()->make_slug( $tab['title'] );
+
+					// Update a custom tab's slug when the custom tab's title is changed, and it doesn't already exist.
+					// If the new title mimicks an existing tab, it will simply keep the previous tab slug, rather than unsetting it.
+					if ( $tab['title'] !== $affiliate_area_tabs[$key]['title'] && ! array_key_exists( $new_slug, affwp_get_affiliate_area_tabs() ) ) {
+						$input['affiliate_area_tabs'][$key]['slug'] = $new_slug;
+					}
+				
+				}
+				
 			}
+
 		}
 
-		return $new_value;
-
+		return $input;
 	}
 
 	/**
