@@ -223,7 +223,8 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				break;
 		}
 
-		return $notice;
+		return apply_filters( 'affwp_aat_tab_notice', $notice, $tab_slug );
+
 	}
 
 	/**
