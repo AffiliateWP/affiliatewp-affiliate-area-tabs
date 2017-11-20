@@ -49,7 +49,9 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 == Changelog ==
 
 = 1.2 =
-* New: Drag and drop tabs to redorder them. Requires AffiliateWP version 2.1.7 or newer
+* New: Improved admin UI
+* New: Drag and drop tab reordering. Requires AffiliateWP version 2.1.7 or newer
+* New: Improved integration with other add-ons that add tabs to the Affiliate Area
 
 = 1.1.6 =
 * Tweak: Compatibility updates for AffiliateWP v2.1.7
