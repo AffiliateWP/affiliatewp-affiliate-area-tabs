@@ -183,7 +183,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		<?php
 		return ob_get_clean();
 	}
-	
+
 	/**
 	 * Returns an array of pages without the Affiliate Area.
 	 * 
@@ -212,38 +212,32 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 
 			$i = 0;
 			?>
+			<div class="widefat aat_repeatable_table">
 			
-			<form id="affiliatewp-tabs-list-form">
-			
-				<div class="widefat aat_repeatable_table">
+				<div class="aat-repeatables-wrap">
+				<?php 
+					foreach ( $tabs as $tab_slug => $tab_title ) : $i++; ?>
+					
+					<?php
+					$key = $i;
+					$args = array();
+					$post_id = '';
+					$index = $key;
+				?>
 
-					<div class="aat-repeatables-wrap">
-					<?php 
-						$current_tabs  = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
-						
-						foreach ( $tabs as $tab_slug => $tab_title ) : $i++; ?>
-						
-						<?php
-						$key = $i;
-						$args = array();
-						$post_id = '';
-						$index = $key;
-					?>
-
-						<div class="aat_repeatable_row" data-key="<?php echo esc_attr( $key ); ?>">
-							<?php do_action( 'affiliate_area_tabs_tab_row', $key, $args, $post_id, $index, $tab_slug, $tab_title ); ?>
-						</div>
-						
-						<?php endforeach; ?>
-
-						<div class="aat-add-repeatable-row">
-							<button class="button-secondary aat-add-repeatable"><?php _e( 'Add New Tab', 'affiliatewp-affiliate-area-tabs' ); ?></button>
-						</div>
-
+					<div class="aat_repeatable_row" data-key="<?php echo esc_attr( $key ); ?>">
+						<?php do_action( 'affiliate_area_tabs_tab_row', $key, $args, $post_id, $index, $tab_slug, $tab_title ); ?>
 					</div>
-				</div>
+					
+					<?php endforeach; ?>
 
-			</form>
+					<div class="aat-add-repeatable-row">
+						<button class="button-secondary aat-add-repeatable"><?php _e( 'Add New Tab', 'affiliatewp-affiliate-area-tabs' ); ?></button>
+					</div>
+
+				</div>
+			</div>
+
 	<?php
 	}
 	
@@ -315,7 +309,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		<div class="aat-repeatable-row-header">
 
 			<div class="aat-repeatable-row-title">
-				<?php printf( __( '%s', '' ), '<span class="affiliate-area-tabs-title">' . $tab_title . '</span><span class="aat-tab-number"> (Tab <span class="aat-tab-number-key">' . $key . '</span>)</span>' ); ?>
+				<?php printf( __( '%s', 'affiliatewp-affiliate-area-tabs' ), '<span class="affiliate-area-tabs-title">' . $tab_title . '</span><span class="aat-tab-number"> (Tab <span class="aat-tab-number-key">' . $key . '</span>)</span>' ); ?>
 				<span class="affiliate-area-tabs-edit">
 					<span class="dashicons dashicons-arrow-down"></span>
 				</span>
@@ -383,7 +377,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				?>
 				<p class="aat-tab-hide">
 					<label for="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]">
-						<input type="checkbox" id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" class="affiliate-area-hide-tabs" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" value="yes" <?php checked( $checked, 'yes' ); ?> />
+						<input type="checkbox" id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" class="affiliate-area-hide-tabs" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" value="yes"<?php checked( $checked, 'yes' ); ?> />
 						<?php _e( 'Hide tab in Affiliate Area', 'affiliatewp-affiliate-area-tabs' ); ?>
 					</label>
 				</p>
