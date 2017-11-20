@@ -98,7 +98,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		
 		$admin_deps = array();
 
-		wp_register_style( 'aat-admin', AFFWP_AAT_PLUGIN_URL . 'assets/css/admin.css', array( 'dashicons' ), AFFWP_AAT_VERSION );
+		wp_register_style( 'aat-admin', AFFWP_AAT_PLUGIN_URL . 'assets/css/admin' . $suffix . '.css', array( 'dashicons' ), AFFWP_AAT_VERSION );
 		wp_register_script( 'aat-admin-scripts', $js_dir . 'admin-scripts' . $suffix . '.js', $admin_deps, AFFWP_AAT_VERSION, false );
 
 		if (
