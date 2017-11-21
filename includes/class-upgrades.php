@@ -47,11 +47,6 @@ class Affiliate_Area_Tabs_Upgrades {
 			$this->v12_upgrade();
 		}
 
-		// Inconsistency between current and saved version.
-		if ( version_compare( $this->version, AFFWP_AAT_VERSION, '<>' ) ) {
-			$this->upgraded = true;
-		}
-
 		// If upgrades have occurred
 		if ( $this->upgraded ) {
 			update_option( 'affwp_aat_version_upgraded_from', $this->version );
@@ -68,21 +63,36 @@ class Affiliate_Area_Tabs_Upgrades {
 	 */
 	private function v12_upgrade() {
 		
+		// Remove filter from main class during upgrade routine.
+		remove_filter( 'affwp_affiliate_area_tabs', array( affiliatewp_affiliate_area_tabs(), 'affiliate_area_tabs' ) );
+
 		// Get the current Affiliate Area Tabs.
 		$affiliate_area_tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs' );
 
 		if ( $affiliate_area_tabs ) {
+
 			foreach ( $affiliate_area_tabs as $key => $tab_array ) {
+
+				$slug = affiliatewp_affiliate_area_tabs()->functions->make_slug( $tab_array['title'] );
+
+				// Check that the slug doesn't already exist
+				$i = 1;
+				
+				while ( array_key_exists( $slug, affwp_get_affiliate_area_tabs() ) ) {
+					$slug = $slug . '-' . $i++;
+				}
+
 				// Set the slug for any custom tab
-				$affiliate_area_tabs[$key]['slug']  = affiliatewp_affiliate_area_tabs()->make_slug( $tab_array['title'] );
+				$affiliate_area_tabs[$key]['slug'] = $slug;
 			}
+			
 		}
 
 		// Get the current AffiliateWP settings
 		$options = get_option( 'affwp_settings' );
 
 		// Get the default AffiliateWP tabs. We need to merge these with any custom tabs.
-		$default_tabs = (new AffiliateWP_Affiliate_Area_Tabs_Admin() )->default_tabs();
+		$default_tabs = affiliatewp_affiliate_area_tabs()->functions->default_tabs();
 
 		// Create our new array in the needed format.
 		$new_tabs = array();
@@ -115,17 +125,19 @@ class Affiliate_Area_Tabs_Upgrades {
 
 			}
 
-			// Finally, remove the old hidden tabs array, we don't need this anymore.
+			// Remove the old hidden tabs array (prior to 1.2).
 			unset( $options['affiliate_area_hide_tabs'] );
 
 		}
 		
-		// Merge
-		$reindexed = array_merge( $new_tabs, $affiliate_area_tabs );
-		
-		// Reindex array so it starts from 1
-		$options['affiliate_area_tabs'] = array_combine( range(1, count( $reindexed ) ), array_values( $reindexed ) );
+		if ( is_array( $new_tabs ) && is_array( $affiliate_area_tabs ) ) {
+			// Merge
+			$reindexed = array_merge( $new_tabs, $affiliate_area_tabs );
 
+			// Reindex array so it starts from 1
+			$options['affiliate_area_tabs'] = array_combine( range(1, count( $reindexed ) ), array_values( $reindexed ) );
+		}
+		
 		// Update options array to include our new tabs
 		update_option( 'affwp_settings', $options );
 
