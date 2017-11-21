@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: AffiliateWP - Affiliate Area Tabs\n"
-"POT-Creation-Date: 2017-11-16 19:40+1300\n"
+"POT-Creation-Date: 2017-11-21 21:34+1300\n"
 "PO-Revision-Date: 2015-04-04 11:12-0600\n"
 "Last-Translator: Andrew Munro, Sumobi <andrew@sumobi.com>\n"
 "Language-Team: AffiliateWP <support@affiliatewp.com>\n"
@@ -12,120 +12,137 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Poedit 2.0.4\n"
 "X-Poedit-KeywordsList: __;_e\n"
-"X-Poedit-Basepath: .\n"
+"X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Poedit-SearchPath-0: ..\n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Poedit-SearchPathExcluded-0: node_modules\n"
 
-#: ../affiliatewp-affiliate-area-tabs.php:91
-#: ../affiliatewp-affiliate-area-tabs.php:103
+#: affiliatewp-affiliate-area-tabs.php:99
+#: affiliatewp-affiliate-area-tabs.php:111
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: ../affiliatewp-affiliate-area-tabs.php:501
+#: affiliatewp-affiliate-area-tabs.php:433
 msgid "Get more add-ons for AffiliateWP"
 msgstr ""
 
-#: ../affiliatewp-affiliate-area-tabs.php:501
+#: affiliatewp-affiliate-area-tabs.php:433
 msgid "More add-ons"
 msgstr ""
 
-#: ../includes/class-activation.php:47
+#: includes/class-activation.php:47
 msgid "This plugin"
 msgstr ""
 
-#: ../includes/class-activation.php:93
+#: includes/class-activation.php:93
 #, php-format
 msgid "requires %s. Please activate it to continue."
 msgstr ""
 
-#: ../includes/class-activation.php:96
+#: includes/class-activation.php:96
 #, php-format
 msgid "requires %s. Please install it to continue."
 msgstr ""
 
-#: ../includes/class-activation.php:108
+#: includes/class-activation.php:108
 #, php-format
 msgid "Your version of PHP is below the minimum version of PHP required by %s. Please contact your host and request that your version be upgraded to 5.3 or later."
 msgstr ""
 
-#: ../includes/class-admin.php:52 ../includes/class-admin.php:92
+#: includes/class-admin.php:22 includes/class-admin.php:38
 msgid "Affiliate Area Tabs"
 msgstr ""
 
-#: ../includes/class-admin.php:152
+#: includes/class-admin.php:57
+msgid "Expand all tabs"
+msgstr ""
+
+#: includes/class-admin.php:58
+msgid "Collapse all tabs"
+msgstr ""
+
+#: includes/class-admin.php:204
 msgid "Add New Tab"
 msgstr ""
 
-#: ../includes/class-admin.php:188
+#: includes/class-admin.php:236
 msgid "Click and drag to re-order"
 msgstr ""
 
-#: ../includes/class-admin.php:194
+#: includes/class-admin.php:242
 #, php-format
 msgid "%s"
 msgstr ""
 
-#: ../includes/class-admin.php:195
-msgid "Edit tab"
-msgstr ""
-
-#: ../includes/class-admin.php:201
-msgid "(Default AffiliateWP tab)"
-msgstr ""
-
-#: ../includes/class-admin.php:215
+#: includes/class-admin.php:268
 msgid "Tab Title"
 msgstr ""
 
-#: ../includes/class-admin.php:216
+#: includes/class-admin.php:269
 msgid "Enter a title for the tab."
 msgstr ""
 
-#: ../includes/class-admin.php:222
+#: includes/class-admin.php:289
 msgid "Tab Content"
 msgstr ""
 
-#: ../includes/class-admin.php:223
+#: includes/class-admin.php:290
 msgid "Select which page will be used for the tab's content. This page will be blocked for non-affiliates."
 msgstr ""
 
-#: ../includes/class-admin.php:248
+#: includes/class-admin.php:312
 msgid "Hide tab in Affiliate Area"
 msgstr ""
 
-#: ../includes/class-admin.php:260
+#: includes/class-admin.php:324
 msgid "Delete tab"
 msgstr ""
 
-#: ../includes/class-admin.php:277
+#: includes/class-admin.php:347
+msgid "This is a default AffiliateWP tab."
+msgstr ""
+
+#: includes/class-admin.php:351
+msgid "This tab has been added from the <em>Order Details For Affiliates</em> add-on."
+msgstr ""
+
+#: includes/class-admin.php:355
+msgid "This tab has been added from the <em>Direct Link Tracking</em> add-on."
+msgstr ""
+
+#: includes/class-admin.php:359
+msgid "This tab has been added from the <em>Show Affiliate Coupons</em> add-on."
+msgstr ""
+
+#: includes/class-functions.php:41
 msgid "Affiliate URLs"
 msgstr ""
 
-#: ../includes/class-admin.php:278
+#: includes/class-functions.php:42
 msgid "Statistics"
 msgstr ""
 
-#: ../includes/class-admin.php:279
+#: includes/class-functions.php:43
 msgid "Graphs"
 msgstr ""
 
-#: ../includes/class-admin.php:280
+#: includes/class-functions.php:44
 msgid "Referrals"
 msgstr ""
 
-#: ../includes/class-admin.php:281
+#: includes/class-functions.php:45
 msgid "Payouts"
 msgstr ""
 
-#: ../includes/class-admin.php:282
+#: includes/class-functions.php:46
 msgid "Visits"
 msgstr ""
 
-#: ../includes/class-admin.php:283
+#: includes/class-functions.php:47
 msgid "Creatives"
 msgstr ""
 
-#: ../includes/class-admin.php:284
+#: includes/class-functions.php:48
 msgid "Settings"
 msgstr ""
