@@ -76,74 +76,78 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	 */
 	public function pre_update_option( $new_value, $old_value ) {
 
-		// Loop through tabs.
-		foreach ( $new_value['affiliate_area_tabs'] as $key => $tab ) {
+		if ( $new_value['affiliate_area_tabs'] ) {
 			
-			// Skip sanitization on any non-custom tab.
-			if ( 0 === $tab['id'] ) {
-				continue;
-			}
-
-			// Tab's must have both a title and id assigned.
-			if ( empty( $tab['title'] ) || ! isset( $tab['id'] ) ) {
+			// Loop through tabs.
+			foreach ( $new_value['affiliate_area_tabs'] as $key => $tab ) {
 				
-				// Unset the tab
-				unset( $new_value['affiliate_area_tabs'][$key] );
-				
-				// Skip to the next tab.
-				continue;
-			}
+				// Skip sanitization on any non-custom tab.
+				if ( 0 === $tab['id'] ) {
+					continue;
+				}
 
-			// Create an initial tab slug for custom tabs (core tabs already have a slug).
-			if ( empty( $tab['slug'] ) ) {
-				
-				// Create a slug from the tab's title
-				$new_value['affiliate_area_tabs'][$key]['slug'] = affiliatewp_affiliate_area_tabs()->functions->make_slug( $tab['title'] );
-
-			}
-
-			// Force the tab ID to be an integer.
-			$new_value['affiliate_area_tabs'][$key]['id'] = (int) $new_value['affiliate_area_tabs'][$key]['id'];
-			
-
-			// Determine if the tab is a custom tab.
-			if ( affiliatewp_affiliate_area_tabs()->functions->is_custom_tab( $tab['slug'] ) ) {
-
-				/**
-				 * Loop through the old values
-				 * 
-				 * This is neccessary since custom tabs could have moved position via the admin interface.
-				 * 
-				 * First we check if the custom tab exists in the old values.
-				 * If so, we then check its title. If the title changed, we attempt
-				 * To update its tab slug.
-				 */
-				foreach ( $old_value['affiliate_area_tabs'] as $old_key => $old_tab ) {
+				// Tab's must have both a title and id assigned.
+				if ( empty( $tab['title'] ) || ! isset( $tab['id'] ) ) {
 					
-					// Found the custom slug, must be the same tab.
-					if ( $old_tab['slug'] === $tab['slug'] ) {
-						
-						// Check to see if the tab's title was changed.
-						if ( $old_tab['title'] !== $tab['title'] ) {
-							// Create a new slug.
-							$new_slug = affiliatewp_affiliate_area_tabs()->functions->make_slug( $tab['title'] );
+					// Unset the tab
+					unset( $new_value['affiliate_area_tabs'][$key] );
+					
+					// Skip to the next tab.
+					continue;
+				}
 
-							// Check that the slug isn't already in-use.
-							if ( ! array_key_exists( $new_slug, affwp_get_affiliate_area_tabs() ) ) {
-								// Slug isn't being used, use the new slug.
-								$new_value['affiliate_area_tabs'][$key]['slug'] = $new_slug;
+				// Create an initial tab slug for custom tabs (core tabs already have a slug).
+				if ( empty( $tab['slug'] ) ) {
+					
+					// Create a slug from the tab's title
+					$new_value['affiliate_area_tabs'][$key]['slug'] = affiliatewp_affiliate_area_tabs()->functions->make_slug( $tab['title'] );
+
+				}
+
+				// Force the tab ID to be an integer.
+				$new_value['affiliate_area_tabs'][$key]['id'] = (int) $new_value['affiliate_area_tabs'][$key]['id'];
+				
+
+				// Determine if the tab is a custom tab.
+				if ( affiliatewp_affiliate_area_tabs()->functions->is_custom_tab( $tab['slug'] ) ) {
+
+					/**
+					 * Loop through the old values
+					 * 
+					 * This is neccessary since custom tabs could have moved position via the admin interface.
+					 * 
+					 * First we check if the custom tab exists in the old values.
+					 * If so, we then check its title. If the title changed, we attempt
+					 * To update its tab slug.
+					 */
+					foreach ( $old_value['affiliate_area_tabs'] as $old_key => $old_tab ) {
+						
+						// Found the custom slug, must be the same tab.
+						if ( $old_tab['slug'] === $tab['slug'] ) {
+							
+							// Check to see if the tab's title was changed.
+							if ( $old_tab['title'] !== $tab['title'] ) {
+								// Create a new slug.
+								$new_slug = affiliatewp_affiliate_area_tabs()->functions->make_slug( $tab['title'] );
+
+								// Check that the slug isn't already in-use.
+								if ( ! array_key_exists( $new_slug, affwp_get_affiliate_area_tabs() ) ) {
+									// Slug isn't being used, use the new slug.
+									$new_value['affiliate_area_tabs'][$key]['slug'] = $new_slug;
+								}
+
+								// If the new slug is already in-use, the slug will not change, and remain as its previous value.
+							
 							}
 
-							// If the new slug is already in-use, the slug will not change, and remain as its previous value.
-						
 						}
-
 					}
+
 				}
 
 			}
-
 		}
+		
 
 		return $new_value;
 
