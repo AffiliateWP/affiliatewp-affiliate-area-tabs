@@ -43,13 +43,20 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		private static $instance;
 
-
 		/**
 		 * The version number of AffiliateWP
 		 *
 		 * @since 1.0
 		 */
 		private $version = '1.2';
+
+		/**
+		 * The functions instance variable
+		 *
+		 * @var object
+		 * @since 1.2
+		 */
+		public $functions;
 
 		/**
 		 * Main AffiliateWP_Affiliate_Area_Tabs Instance
@@ -70,6 +77,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				self::$instance->load_textdomain();
 				self::$instance->includes();
 				self::$instance->hooks();
+				self::$instance->functions = new AffiliateWP_Affiliate_Area_Tabs_Functions;
 
 			}
 
@@ -195,6 +203,8 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		private function includes() {
 			
+			require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-functions.php';
+
 			// Upgrade class.
 			require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-upgrades.php';
 
@@ -274,7 +284,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				
 				$new_tabs = array();
 
-				// Create a new array in the needed format of tab slug => tab title
+				// Create a new array in the needed format of tab slug => tab title.
 				foreach ( $affiliate_area_tabs as $key => $tab_array ) {
 					
 					if ( isset( $tab_array['slug'] ) ) {
@@ -309,25 +319,6 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Prevent non-affiliates from accessing any page that is added as a tab.
-		 *
-		 * @since 1.0.1
-		 * @return array $page_ids
-		 */
-		public function protected_page_ids() {
-
-			if ( ! $this->get_tabs() ) {
-				return;
-			}
-
-			$page_ids = wp_list_pluck( $this->get_tabs(), 'id' );
-			$page_ids = array_filter( $page_ids );
-
-			return $page_ids;
-
-		}
-
-		/**
 		 * Redirect to affiliate login page if content is accessed.
 		 *
 		 * @since 1.0.1
@@ -335,14 +326,14 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function redirect() {
 
-			if ( ! $this->protected_page_ids() ) {
+			if ( ! affiliatewp_affiliate_area_tabs()->functions->protected_page_ids() ) {
 				return;
 			}
 
 			$redirect = affiliate_wp()->settings->get( 'affiliates_page' ) ? get_permalink( affiliate_wp()->settings->get( 'affiliates_page' ) ) : site_url();
 			$redirect = apply_filters( 'affiliatewp-affiliate-area-tabs', $redirect );
 
-			if ( in_array( get_the_ID(), $this->protected_page_ids() ) && ( ! affwp_is_affiliate() ) ) {
+			if ( in_array( get_the_ID(), affiliatewp_affiliate_area_tabs()->functions->protected_page_ids() ) && ( ! affwp_is_affiliate() ) ) {
 				wp_redirect( $redirect );
 				exit;
 			}
@@ -350,95 +341,43 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Get custom tabs.
-		 *
-		 * @since 1.0.0
-		 */
-		public function get_tabs() {
-
-			$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
-
-			if ( ! empty( $tabs ) ) {
-				$tabs = array_values( $tabs );
-			}
-
-			foreach ( $tabs as $key => $tab ) {
-
-				if ( ! isset( $tab['id'] ) ) {
-					$tabs[ $key ]['id'] = 0;
-				}
-
-				if ( empty( $tab['title'] ) && ! empty( $tab['id'] ) ) {
-					$tabs[ $key ]['title'] = get_the_title( $tab['id'] );
-				}
-			}
-
-			return $tabs;
-
-		}
-
-		/**
-		 * Retrieves tabs as a list of slugs.
-		 *
-		 * @since 1.1.1
-		 * @access public
-		 *
-		 * @return array List of tab slugs.
-		 */
-		public function get_tab_slugs() {
-			$tabs  = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
-			$slugs = array_map( array( $this, 'make_slug' ), wp_list_pluck( $tabs, 'title' ) );
-
-			return $slugs;
-		}
-
-		/**
-		 * Make slug
-		 *
-		 * @since 1.0.0
-		 */
-		public function make_slug( $title = '' ) {
-			return rawurldecode( sanitize_title_with_dashes( $title ) );
-		}
-
-		/**
-		 * Tab content
+		 * Tab content.
 		 *
 		 * @since 1.0.0
 		 */
 		public function tab_content( $affiliate_id ) {
 
-			$tabs = $this->get_tabs();
-
+			$tabs = affiliatewp_affiliate_area_tabs()->functions->get_all_tabs();			
+			
 			// Make sure the arrays are unique. If 2 tabs are identical then the content will not be loaded twice.
 			$tabs = array_unique( $tabs, SORT_REGULAR );
 
-			$tab_slugs = array_values( $this->get_tab_slugs() );
+			$tab_slugs = affiliatewp_affiliate_area_tabs()->functions->get_custom_tab_slugs();
 
 			if ( $tabs ) : ?>
 
 				<?php foreach ( $tabs as $tab ) :
 
 					$post        = get_post( $tab['id'] );
-					$tab_slug    = $this->make_slug( $tab['title'] );
+					$tab_slug    = $tab['slug'];
 					$current_tab = isset( $_GET['tab'] ) && $_GET['tab'] ? $_GET['tab'] : '';
 
 					/**
 					 * Showing a tab which has the [affiliate_area] shortcode inside will cause a nesting fatal error
-					 * Instead of erroring out, let's just show a blank tab
+					 * Instead of erroring out, let's just show a blank tab.
 					 */
 					if ( isset( $post->post_content ) && has_shortcode( $post->post_content, 'affiliate_area' ) ) {
 						continue;
 					}
 
-					// current tab doesn't match slug
+					// Current tab doesn't match slug
 			        if ( $current_tab && $current_tab !== $tab_slug ) {
 			            continue;
 			        }
 
 					/**
 					 * If we're on the Affiliate Area page (without query string)
-					 * and the current slug matches the first slug in the array, show the content
+					 * and the current slug matches the first slug in the array, show the content.
 					 */
 					if ( ( ! $current_tab ) && ( $tab_slugs[0] === $tab_slug ) ) :
 
@@ -460,7 +399,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 						<?php
 
-							// current tab doesn't match slug
+							// current tab doesn't match slug.
 							if ( $current_tab !== $tab_slug ) {
 								continue;
 							}
@@ -480,7 +419,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Modify plugin metalinks
+		 * Modify plugin metalinks.
 		 *
 		 * @access      public
 		 * @since       1.0.0
