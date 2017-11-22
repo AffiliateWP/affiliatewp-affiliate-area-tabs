@@ -130,8 +130,13 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 								// Create a new slug.
 								$new_slug = affiliatewp_affiliate_area_tabs()->functions->make_slug( $tab['title'] );
 
-								// Check that the slug isn't already in-use.
-								if ( ! array_key_exists( $new_slug, affwp_get_affiliate_area_tabs() ) ) {
+								/**
+								 * Check that the slug isn't already in-use.
+								 * AffiliateWP 2.17 or newer will look in the affwp_get_affiliate_area_tabs() function for the slug,
+								 * pre 2.1.7 will look in the currently saved tabs.
+								 * 
+								 */
+								if ( ! array_key_exists( $new_slug, affiliatewp_affiliate_area_tabs()->functions->get_tabs() ) ) {
 									// Slug isn't being used, use the new slug.
 									$new_value['affiliate_area_tabs'][$key]['slug'] = $new_slug;
 								}
