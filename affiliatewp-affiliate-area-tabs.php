@@ -203,11 +203,21 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		private function includes() {
 			
+			// Functions class.
 			require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-functions.php';
 
 			// Upgrade class.
 			require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-upgrades.php';
 
+			/**
+			 * Compatibility class.
+			 * This provides compatibility with AffiliateWP v1.8 - v2.1.6.1
+			 */
+			if ( $this->has_1_8() && ! $this->has_2_1_7() ) {
+				require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-compatibility.php';
+			}
+			
+			// Admin class.
 			if ( is_admin() ) {
 				require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-admin.php';
 			}
@@ -218,6 +228,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * Setup the default hooks and actions
 		 *
 		 * @since 1.0.0
+		 * 
 		 * @return void
 		 */
 		private function hooks() {
@@ -231,19 +242,19 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			// redirect if non-affiliate tries to access a tab's page
 			add_action( 'template_redirect', array( $this, 'redirect' ) );
 
-			if ( $this->has_1_8() ) {
-
-				$object = $this;
-
-				add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
+			// User has at least AffiliateWP version 2.1.7
+			if ( $this->has_2_1_7() ) {
 
 				// Filter the tabs in the Affiliate Area and in the admin.
 				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'affiliate_area_tabs' ) );
 
-			}
+			} 
+
+			// Hide tabs in the Affiliate Area.
+			add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
 
 		}
-	
+
 		/**
 		 * Hide tabs from the Affiliate Area.
 		 *
@@ -276,7 +287,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * @return array $tabs The tabs to show in the Affiliate Area
 		 */
 		public function affiliate_area_tabs( $tabs ) {
-			
+
 			// Get the Affiliate Area Tabs.
 			$affiliate_area_tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs' );
 
@@ -285,10 +296,10 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				$new_tabs = array();
 
 				// Create a new array in the needed format of tab slug => tab title.
-				foreach ( $affiliate_area_tabs as $key => $tab_array ) {
+				foreach ( $affiliate_area_tabs as $key => $tab ) {
 					
-					if ( isset( $tab_array['slug'] ) ) {
-						$new_tabs[$tab_array['slug']] = $tab_array['title'];
+					if ( isset( $tab['slug'] ) ) {
+						$new_tabs[$tab['slug']] = $tab['title'];
 					}
 					
 				}
@@ -296,7 +307,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				return $new_tabs;
 				
 			}
-		
+
 			return $tabs;
 
 		}
@@ -366,11 +377,13 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function tab_content( $affiliate_id ) {
 
+			// Get all tabs.
 			$tabs = affiliatewp_affiliate_area_tabs()->functions->get_all_tabs();			
 			
 			// Make sure the arrays are unique. If 2 tabs are identical then the content will not be loaded twice.
 			$tabs = array_unique( $tabs, SORT_REGULAR );
 
+			// Get tab slugs.
 			$tab_slugs = affiliatewp_affiliate_area_tabs()->functions->get_custom_tab_slugs();
 
 			if ( $tabs ) : ?>
@@ -378,7 +391,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				<?php foreach ( $tabs as $tab ) :
 
 					$post        = get_post( $tab['id'] );
-					$tab_slug    = $tab['slug'];
+					$tab_slug    = isset( $tab['slug'] ) ? $tab['slug'] : '';
 					$current_tab = isset( $_GET['tab'] ) && $_GET['tab'] ? $_GET['tab'] : '';
 
 					/**
