@@ -145,7 +145,9 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
                 $tabs = array();
 
                 foreach ( $saved_tabs as $tab ) {
-                    $tabs[$tab['slug']] = $tab['title'];
+                    if ( isset( $tab['slug'] ) ) {
+                        $tabs[$tab['slug']] = $tab['title'];
+                    }
                 }
 
             } else {
