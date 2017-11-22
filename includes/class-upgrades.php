@@ -75,14 +75,19 @@ class Affiliate_Area_Tabs_Upgrades {
 
 				$slug = affiliatewp_affiliate_area_tabs()->functions->make_slug( $tab_array['title'] );
 
-				// Check that the slug doesn't already exist
-				$i = 1;
-				
-				while ( array_key_exists( $slug, affwp_get_affiliate_area_tabs() ) ) {
-					$slug = $slug . '-' . $i++;
+				/**
+				 * If AffiliateWP 2.1.7 or newer, check slugs against the affwp_get_affiliate_area_tabs() function.
+				 */
+				if ( affiliatewp_affiliate_area_tabs()->has_2_1_7() ) {
+					// Check that the slug doesn't already exist
+					$i = 1;
+					while ( array_key_exists( $slug, affwp_get_affiliate_area_tabs() ) ) {
+						// If slug exists, append "-1" to make the slug unique.
+						$slug = $slug . '-' . $i++;
+					}
 				}
 
-				// Set the slug for any custom tab
+				// Set the slug for any custom tab.
 				$affiliate_area_tabs[$key]['slug'] = $slug;
 			}
 			
@@ -125,11 +130,11 @@ class Affiliate_Area_Tabs_Upgrades {
 
 			}
 
-			// Remove the old hidden tabs array (prior to 1.2).
-			unset( $options['affiliate_area_hide_tabs'] );
-
 		}
 		
+		// Remove the old hidden tabs array (prior to 1.2).
+		unset( $options['affiliate_area_hide_tabs'] );
+
 		if ( is_array( $new_tabs ) && is_array( $affiliate_area_tabs ) ) {
 			// Merge
 			$reindexed = array_merge( $new_tabs, $affiliate_area_tabs );
