@@ -15,6 +15,13 @@ Add and reorder tabs in AffiliateWP's Affiliate Area
 
 Affiliate Area Tabs allows you to add custom tabs to AffiliateWP's Affiliate Area. Each tab is linked to a WordPress page making it exceptionally easy to add and manage the tab's content. Pages assigned to a tab are only viewable to affiliates. Since version 1.8 of AffiliateWP it's possible to remove any of the existing tabs in the Affiliate Area (Affiliate URLs, Statistics etc).
 
+Affiliate Area Tabs allows you to:
+
+1. Add new custom tabs to your Affiliate Area
+2. Reorder any tab via drag and drop
+3. Hide tabs from appearing on the front-end Affiliate Area
+4. Manage tabs added by other AffiliateWP add-ons (Direct Link Tracking, Show Affiliate Coupons, Order Details For Affiliates)
+
 Here are just some of the things you could do:
 
 1. Add a "Request Payout" tab and then insert a form. Your affiliates can now request that they be paid at any time.
