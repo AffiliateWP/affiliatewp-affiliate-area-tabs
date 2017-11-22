@@ -133,25 +133,23 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
             $tabs = affwp_get_affiliate_area_tabs();
         } else {
             
-            // Pre AffiliateWP v2.1.7
+            // Pre AffiliateWP v2.1.7.
 
             /**
              * If a previous version of AffiliateWP (pre 2.1.7) is being used, 
              * output the tabs from the database. This will include any custom tabs. 
              */
-            $current_tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
+            $saved_tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
 
-            if ( $current_tabs ) {
+            if ( $saved_tabs ) {
                 $tabs = array();
 
-                foreach ( $current_tabs as $tab ) {
+                foreach ( $saved_tabs as $tab ) {
                     $tabs[$tab['slug']] = $tab['title'];
                 }
 
             } else {
-                /**
-                 * Tab settings have not been saved yet, use the default tab list.
-                 */
+                // Tab settings have not been saved yet, use the default tab list.
                 $tabs = affiliatewp_affiliate_area_tabs()->functions->default_tabs();
             }
 
