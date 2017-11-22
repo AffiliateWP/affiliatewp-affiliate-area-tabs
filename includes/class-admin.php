@@ -109,7 +109,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				
 
 				// Determine if the tab is a custom tab.
-				if ( affiliatewp_affiliate_area_tabs()->functions->is_custom_tab( $tab['slug'] ) ) {
+				if ( isset( $tab['slug'] ) && affiliatewp_affiliate_area_tabs()->functions->is_custom_tab( $tab['slug'] ) ) {
 
 					/**
 					 * Loop through the old values
