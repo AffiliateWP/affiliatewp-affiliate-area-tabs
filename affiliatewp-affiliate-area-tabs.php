@@ -302,9 +302,10 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Determine if the user is on version 1.8 of AffiliateWP.
+		 * Determine if the user is on version 1.8 of AffiliateWP or newer
 		 *
 		 * @since 1.1
+		 * 
 		 * @return boolean
 		 */
 		public function has_1_8() {
@@ -312,6 +313,24 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			$return = true;
 
 			if ( version_compare( AFFILIATEWP_VERSION, '1.8', '<' ) ) {
+				$return = false;
+			}
+
+			return $return;
+		}
+
+		/**
+		 * Determine if the user is on version 2.1.7 of AffiliateWP or later.
+		 *
+		 * @since 1.2
+		 * 
+		 * @return boolean
+		 */
+		public function has_2_1_7() {
+			
+			$return = true;
+
+			if ( version_compare( AFFILIATEWP_VERSION, '2.1.7', '<' ) ) {
 				$return = false;
 			}
 
