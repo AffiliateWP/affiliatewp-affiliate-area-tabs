@@ -228,7 +228,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
     }
 
     /**
-	 * Holds an array of tabs added add-ons.
+	 * Holds an array of tabs added by add-ons.
      * Currently used to store a notice for each tab. In the future it could
      * hold other information/settings related to these tabs.
 	 * 
@@ -241,13 +241,13 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
         $tabs = apply_filters( 'affwp_aat_add_on_tabs', 
             array(
                 'direct-links' => array(
-                    'notice' => __( 'This tab has been added from the <em>Direct Link Tracking</em> add-on. Only affiliates with Direct Link Tracking enabled will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' )
+                    'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with direct link tracking enabled will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Direct Link Tracking</em>' )
                 ),
                 'order-details' => array(
-                    'notice' => __( 'This tab has been added from the <em>Order Details For Affiliates</em> add-on. Only affiliates with access to order details will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' )
+                    'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with access to order details will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Order Details For Affiliates</em>' )
                 ),
                 'coupons' => array(
-                    'notice' => __( 'This tab has been added from the <em>Show Affiliate Coupons</em> add-on. Only affiliates with coupons assigned will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' )
+                    'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with coupons assigned will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Show Affiliate Coupons</em>' )
                 )
             )
         );
