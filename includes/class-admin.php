@@ -243,8 +243,20 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 			
 			<div class="aat-repeatable-row-standard-fields" style="display: none;">
 
-				<?php if ( $tab_notice = $this->tab_notices( $tab_slug ) ) : ?>
-					<p class="aat-tab-default"><?php echo $tab_notice; ?></p>
+				<?php 
+				/**
+				 * Tab notice.
+				 */
+				if ( array_key_exists( $tab_slug, $add_on_tabs = affiliatewp_affiliate_area_tabs()->functions->add_on_tabs() ) ) {
+					$notice = $add_on_tabs[$tab_slug]['notice'];
+				} elseif ( affiliatewp_affiliate_area_tabs()->functions->is_default_tab( $tab_slug ) ) {
+					$notice = __( 'This is a default AffiliateWP tab.', 'affiliatewp-affiliate-area-tabs' );
+				} else {
+					$notice = '';
+				}
+				
+				if ( $notice ) : ?>
+					<p class="aat-tab-default"><?php echo $notice; ?></p>
 				<?php endif; ?>
 
 				<?php
