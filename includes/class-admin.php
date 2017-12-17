@@ -326,43 +326,5 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	<?php 
 	}
 
-	/**
-	 * Tab notice.
-	 * Useful for add-ons to let the end-user know where the tab was added from.
-	 * 
-	 * @since 1.2
-	 * @param string $tab_slug The slug of the tab
-	 * 
-	 * @return string $notice The notice to show on the tab
-	 */
-	public function tab_notices( $tab_slug ) {
-
-		switch ( $tab_slug ) {
-
-			case affiliatewp_affiliate_area_tabs()->functions->is_default_tab( $tab_slug ):
-				$notice = __( 'This is a default AffiliateWP tab.', 'affiliatewp-affiliate-area-tabs' );
-				break;
-			
-			case 'order-details':
-				$notice = __( 'This tab has been added from the <em>Order Details For Affiliates</em> add-on.', 'affiliatewp-affiliate-area-tabs' );
-				break;
-
-			case 'direct-links':
-				$notice = __( 'This tab has been added from the <em>Direct Link Tracking</em> add-on.', 'affiliatewp-affiliate-area-tabs' );
-				break;
-
-			case 'coupons':
-				$notice = __( 'This tab has been added from the <em>Show Affiliate Coupons</em> add-on.', 'affiliatewp-affiliate-area-tabs' );
-				break;
-
-			default:
-				$notice = '';
-				break;
-		}
-
-		return apply_filters( 'affwp_aat_tab_notices', $notice, $tab_slug );
-
-	}
-
 }
 new AffiliateWP_Affiliate_Area_Tabs_Admin;
