@@ -245,8 +245,13 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			// User has at least AffiliateWP version 2.1.7
 			if ( $this->has_2_1_7() ) {
 
-				// Filter the tabs in the Affiliate Area and in the admin.
-				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'affiliate_area_tabs' ) );
+				/**
+				 * Filter the tabs in the Affiliate Area and in the admin.
+				 *
+				 * @since 1.1
+				 * @since 1.2 Increased priority to 9999 so we can better listen for other tabs being added. E.g. Direct Link Tracking.
+				 */
+				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'affiliate_area_tabs' ), 9999 );
 
 			} 
 
