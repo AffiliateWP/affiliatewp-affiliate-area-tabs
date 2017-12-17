@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: AffiliateWP - Affiliate Area Tabs
- * Plugin URI: https://affiliatewp.com/
+ * Plugin URI: https://affiliatewp.com/add-ons/official-free/affiliate-area-tabs/
  * Description: Add and reorder tabs in the Affiliate Area
  * Author: AffiliateWP
  * Author URI: https://affiliatewp.com
