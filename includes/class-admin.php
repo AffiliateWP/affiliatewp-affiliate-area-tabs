@@ -5,11 +5,14 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	public function __construct() {
 		add_filter( 'affwp_settings_tabs', array( $this, 'settings_tab' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
-		add_filter( 'affwp_settings_affiliate_area_tabs_sanitize', array( $this, 'sanitize_tabs' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ), 100 );
+		add_action( 'affiliate_area_tabs_tab_row', array( $this, 'render_tab_row' ), 10, 3 );
+		add_filter( 'pre_update_option_affwp_settings', array( $this, 'pre_update_option' ), 10, 2 );
 	}
 
+
 	/**
-	 * Register the new settings tab
+	 * Register the new settings tab.
 	 *
 	 * @access public
 	 * @since 1.0.0
@@ -21,352 +24,318 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	}
 
 	/**
-	 * Get a list of all tabs
-	 *
-	 * @access public
-	 * @since 1.1.6
-	 * @return array $tabs The tabs to output on the Affiliates -> Settings -> Affiliate Area Tabs page.
-	 */
-	public function get_tabs() {
-
-		$tabs = array();
-
-		if ( function_exists( 'affwp_get_affiliate_area_tabs' ) ) {
-
-			foreach ( affwp_get_affiliate_area_tabs() as $tab_slug => $tab_title ) {
-
-				if( empty( $tab_slug ) ) {
-					continue;
-				}
-
-				$tabs[$tab_slug] = $tab_title;
-			}
-
-		} else {
-
-			/**
-			 * If a previous version of AffiliateWP is being used output the
-			 * hard-coded tabs as before.
-			 */
-			$tabs = array(
-				'urls'      => __( 'Affiliate URLs', 'affiliatewp-affiliate-area-tabs' ),
-				'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
-				'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
-				'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
-				'payouts'   => __( 'Payouts', 'affiliatewp-affiliate-area-tabs' ),
-				'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
-				'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
-				'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' )
-			);
-
-		}
-
-		return $tabs;
-
-	}
-
-
-	/**
 	 * Register our settings
 	 *
 	 * @access public
 	 * @since 1.0.0
+	 * 
 	 * @return array
 	 */
-	public function register_settings( ) {
-
-		add_settings_section(
-			'affwp_settings_affiliate_area_tabs',
-			__return_null(),
-			'__return_false',
-			'affwp_settings_affiliate_area_tabs'
-		);
-
-		if ( affiliatewp_affiliate_area_tabs()->has_1_8() ) {
-			// add_settings_field( $id, $title, $callback, $page, $section, $args );
-			add_settings_field(
-				'affwp_settings[affiliate_area_hide_tabs]', // (string) (required) String for use in the 'id' attribute of tags.
-				__( 'Disable Tabs', 'affiliatewp-affiliate-area-tabs' ), // (string) (required) Title of the field.
-				array( $this, 'callback_tabs' ), // (string) (required) Function that fills the field with the desired inputs as part of the larger form. Passed a single argument, the $args array. Name and id of the input should match the $id given to this function. The function should echo its output.
-				'affwp_settings_affiliate_area_tabs', // (string) (required) The menu page on which to display this field. Should match $menu_slug from add_theme_page() or from do_settings_sections().
-				'affwp_settings_affiliate_area_tabs', // (string) (optional) The section of the settings page in which to show the box (default or a section you added with add_settings_section(), look at the page in the source to see what the existing ones are.)
-				array( // (array) (optional) Additional arguments that are passed to the $callback function. The 'label_for' key/value pair can be used to format the field title like so: <label for="value">$title</label>.
-					'name'        => 'affiliate_area_hide_tabs',
-					'id'          => 'affiliate-area-hide-tabs',
-					'description' => __( 'Select tabs to disable. These tabs will no longer appear in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ),
-					'tabs'        => $this->get_tabs()
-				)
-			);
-		}
+	public function register_settings() {
 
 		add_settings_field(
-			'affwp_settings[affiliate_area_tabs]',
-			__( 'Affiliate Area Tabs', 'affiliatewp-affiliate-area-tabs' ),
-			array( $this, 'tabs_table' ),
+			'affwp_settings[affiliate_area_tabs_list]',
+			__( 'Affiliate Area Tabs', 'affiliatewp-affiliate-area-tabs' ) . $this->expand_collapse_tabs(),
+			array( $this, 'tabs_list' ),
 			'affwp_settings_affiliate_area_tabs',
 			'affwp_settings_affiliate_area_tabs'
 		);
+
+	}
+
+	/**
+	 * Add link to expand/collapse tabs
+	 *
+	 * @access private
+	 * @since 1.2
+	 * 
+	 * @return string
+	 */
+	private function expand_collapse_tabs() {
+		ob_start();
+
+		$expand_text   = __( 'Expand all tabs', 'affiliatewp-affiliate-area-tabs' );
+		$collapse_text = __( 'Collapse all tabs', 'affiliatewp-affiliate-area-tabs' );
+		?>
+		<p>
+			<a href="#" class="aat-hide-show-tabs" data-text-swap="<?php echo $collapse_text; ?>" data-text-original="<?php echo $expand_text; ?>"><?php echo $expand_text; ?></a>
+		</p>
+		<?php
+		return ob_get_clean();
 	}
 
 	/**
 	 * Sanitize tabs
-	 * @since 1.0.0
-	 */
-	public function sanitize_tabs( $input ) {
-
-		$hide_tabs_array = ! empty( $input['affiliate_area_hide_tabs'] ) ? $input['affiliate_area_hide_tabs'] : '';
-
-		if ( $hide_tabs_array ) {
-
-			foreach ( $hide_tabs_array as $key => $tab ) {
-				$input['affiliate_area_hide_tabs'][$key] = isset( $input['affiliate_area_hide_tabs'][$key] ) && true == $input['affiliate_area_hide_tabs'][$key] ? true : false;
-			}
-
-		}
-
-		// clear out array if no tabs are selected for removal
-		if ( ! $hide_tabs_array ) {
-			$input['affiliate_area_hide_tabs'] = array();
-		}
-
-		if ( ! empty( $input['affiliate_area_tabs'] ) ) {
-			foreach ( $input['affiliate_area_tabs'] as $key => $tab ) {
-
-				if ( empty( $tab['title'] ) && ! isset( $tab['id'] ) ) {
-					// remove tab row if there's no page or title entered
-					unset( $input['affiliate_area_tabs'][ $key ] );
-				} elseif ( empty( $tab['title'] ) && isset( $tab['id'] ) ) {
-					// if only a page is selected, use the page's title for the tab's title
-					$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( get_the_title( $tab['id'] ) );
-				} else {
-					$input['affiliate_area_tabs'][ $key ]['title'] = sanitize_text_field( $tab['title'] );
-				}
-
-			}
-		}
-
-		// re-enable the first default tab if all other tabs are disabled and there's no custom tabs enabled
-		if ( isset( $input['affiliate_area_tabs'][0]['id'] ) && $input['affiliate_area_tabs'][0]['id'] === '0' || empty( $input['affiliate_area_tabs'] ) ) {
-			if ( count( $input['affiliate_area_hide_tabs'] ) === 7 ) {
-				$input['affiliate_area_hide_tabs']['urls'] = false;
-			}
-		}
-		return $input;
-	}
-
-	/**
-	 * Hide existing AffiliateWP tabs
 	 *
-	 * @since 1.1
+	 * @access public
+	 * @since 1.2
+	 * @param $new_value array of new values
+	 * @param $old_value array of old values
+	 * 
+	 * @return array $new_value
 	 */
-	public function callback_tabs( $args ) {
+	public function pre_update_option( $new_value, $old_value ) {
 
-		$options = affiliate_wp()->settings->get( 'affiliate_area_hide_tabs' );
-		$tabs    = $args['tabs'];
+		if ( isset( $new_value['affiliate_area_tabs'] ) ) {
+			
+			// Loop through tabs.
+			foreach ( $new_value['affiliate_area_tabs'] as $key => $tab ) {
+				
+				// Skip sanitization on any non-custom tab.
+				if ( 0 === $tab['id'] ) {
+					continue;
+				}
 
-		foreach ( $tabs as $tab => $label ) :
+				// Tab's must have both a title and id assigned.
+				if ( empty( $tab['title'] ) || ! isset( $tab['id'] ) ) {
+					
+					// Unset the tab
+					unset( $new_value['affiliate_area_tabs'][$key] );
+					
+					// Skip to the next tab.
+					continue;
+				}
 
-		$checked = isset( $options[$tab] ) ? $options[$tab] : '';
-	?>
-		<label for="<?php echo $args['id']; ?>-<?php echo $tab; ?>">
-			<input type="checkbox" id="<?php echo $args['id']; ?>-<?php echo $tab; ?>" name="affwp_settings[<?php echo $args['name']; ?>][<?php echo $tab; ?>]" value="<?php echo $tab; ?>" <?php checked( $checked, true ); ?> />
-			<?php echo $label; ?>
-		</label>
-		<br />
-	<?php endforeach; ?>
-	<p class="description"><?php echo $args['description']; ?></p>
-		<?php
+				// Create an initial tab slug for custom tabs (core tabs already have a slug).
+				if ( empty( $tab['slug'] ) ) {
+					
+					// Create a slug from the tab's title
+					$new_value['affiliate_area_tabs'][$key]['slug'] = affiliatewp_affiliate_area_tabs()->functions->make_slug( $tab['title'] );
+
+				}
+
+				// Force the tab ID to be an integer.
+				$new_value['affiliate_area_tabs'][$key]['id'] = (int) $new_value['affiliate_area_tabs'][$key]['id'];
+				
+
+				// Determine if the tab is a custom tab.
+				if ( isset( $tab['slug'] ) && affiliatewp_affiliate_area_tabs()->functions->is_custom_tab( $tab['slug'] ) ) {
+
+					/**
+					 * Loop through the old values
+					 * 
+					 * This is neccessary since custom tabs could have moved position via the admin interface.
+					 * 
+					 * First we check if the custom tab exists in the old values.
+					 * If so, we then check its title. If the title changed, we attempt
+					 * To update its tab slug.
+					 */
+					foreach ( $old_value['affiliate_area_tabs'] as $old_key => $old_tab ) {
+						
+						// Found the custom slug, must be the same tab.
+						if ( $old_tab['slug'] === $tab['slug'] ) {
+							
+							// Check to see if the tab's title was changed.
+							if ( $old_tab['title'] !== $tab['title'] ) {
+								// Create a new slug.
+								$new_slug = affiliatewp_affiliate_area_tabs()->functions->make_slug( $tab['title'] );
+
+								/**
+								 * Check that the slug isn't already in-use.
+								 * AffiliateWP 2.17 or newer will look in the affwp_get_affiliate_area_tabs() function for the slug,
+								 * pre 2.1.7 will look in the currently saved tabs.
+								 * 
+								 */
+								if ( ! array_key_exists( $new_slug, affiliatewp_affiliate_area_tabs()->functions->get_tabs() ) ) {
+									// Slug isn't being used, use the new slug.
+									$new_value['affiliate_area_tabs'][$key]['slug'] = $new_slug;
+								}
+
+								// If the new slug is already in-use, the slug will not change, and remain as its previous value.
+							
+							}
+
+						}
+					}
+
+				}
+
+			}
+		}
+		
+
+		return $new_value;
+
 	}
 
 	/**
-	 * Returns an array of pages without the Affiliate Area
-	 * @since 1.1.2
+	 * Admin scripts.
+	 *
+	 * @access public
+	 * @since 1.2
 	 */
-	private function get_pages() {
+	public function admin_scripts() {
 
-		$pages             = affwp_get_pages();
-		$affiliate_area_id = function_exists( 'affwp_get_affiliate_area_page_id' ) ? affwp_get_affiliate_area_page_id() : affiliate_wp()->settings->get( 'affiliates_page' );
+		// Admin CSS file.
+		$screen = get_current_screen();
 
-		if ( ! empty( $pages[ $affiliate_area_id ] ) ) {
-			unset( $pages[ $affiliate_area_id ] );
+		// Use minified libraries if SCRIPT_DEBUG is set to false.
+		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+
+		// Register scripts.
+		wp_register_style( 'aat-admin', AFFWP_AAT_PLUGIN_URL . 'assets/css/admin' . $suffix . '.css', array( 'dashicons' ), AFFWP_AAT_VERSION );
+		wp_register_script( 'aat-admin-scripts', AFFWP_AAT_PLUGIN_URL . 'assets/js/admin-scripts' . $suffix . '.js',  array(), AFFWP_AAT_VERSION, false );
+
+		// Enqueue scripts.
+		if ( $screen->id === 'affiliates_page_affiliate-wp-settings' && isset( $_GET['tab'] ) && $_GET['tab'] === 'affiliate_area_tabs' ) {
+			wp_enqueue_style( 'aat-admin' );
+			wp_enqueue_script( 'aat-admin-scripts' );
 		}
 
-		return $pages;
 	}
 
 	/**
-	 * Render the table
+	 * Render the tabs list
+	 * 
 	 * @since 1.0.0
 	 */
-	public function tabs_table() {
-
-		$tabs  = affiliatewp_affiliate_area_tabs()->get_tabs();
+	public function tabs_list() {
+		
+		$tabs  = affiliatewp_affiliate_area_tabs()->functions->get_tabs();
 		$count = count( $tabs );
-
+		$key   = 0;
 		?>
-		<script type="text/javascript">
-		jQuery( document ).ready( function( $ ) {
+		
+		<div class="widefat aat_repeatable_table">
+		
+			<div class="aat-repeatables-wrap">
+				<?php foreach ( $tabs as $tab_slug => $tab_title ) : $key++; ?>
+					<div class="aat_repeatable_row" data-key="<?php echo esc_attr( $key ); ?>">
+						<?php do_action( 'affiliate_area_tabs_tab_row', $key, $tab_slug, $tab_title ); ?>
+					</div>
+				<?php endforeach; ?>
 
-			/**
-			 * Prevents the enter key from creating a new row
-			 *
-			 * @since  1.0
-			 *
-			 * @return void
-			 */
-			$( '#affiliatewp-tabs' ).on( 'keyup keypress', function( e ) {
-				var keyCode = e.keyCode || e.which;
+				<div class="aat-add-repeatable-row">
+					<button class="button-secondary aat-add-repeatable"><?php _e( 'Add New Tab', 'affiliatewp-affiliate-area-tabs' ); ?></button>
+				</div>
 
-				if ( keyCode === 13 ) {
-					e.preventDefault();
-					return false;
+			</div>
+		</div>
+	<?php
+	}
+	
+	/**
+	 * Individual Tab Row
+	 *
+	 * Used to output a row for each tab.
+	 *
+	 * @since 1.2
+	 *
+	 * @param       $key
+	 * @param string $tab_slug
+	 * @param string $tab_title
+	 */
+	public function render_tab_row( $key, $tab_slug, $tab_title ) {
+		?>
+
+		<div class="aat-draghandle-anchor">
+			<span class="dashicons dashicons-move" title="<?php _e( 'Click and drag to re-order', 'affiliatewp-affiliate-area-tabs' ); ?>"></span>
+		</div>
+
+		<div class="aat-repeatable-row-header">
+
+			<div class="aat-repeatable-row-title">
+				<?php printf( __( '%s', 'affiliatewp-affiliate-area-tabs' ), '<span class="affiliate-area-tabs-title">' . $tab_title . '</span><span class="aat-tab-number"> (Tab <span class="aat-tab-number-key">' . $key . '</span>)</span>' ); ?>
+				<span class="affiliate-area-tabs-edit">
+					<span class="dashicons dashicons-arrow-down"></span>
+				</span>
+			</div>
+			
+			<div class="aat-repeatable-row-standard-fields" style="display: none;">
+
+				<?php 
+				/**
+				 * Tab notice.
+				 */
+				if ( array_key_exists( $tab_slug, $add_on_tabs = affiliatewp_affiliate_area_tabs()->functions->add_on_tabs() ) ) {
+					$notice = $add_on_tabs[$tab_slug]['notice'];
+				} elseif ( affiliatewp_affiliate_area_tabs()->functions->is_default_tab( $tab_slug ) ) {
+					$notice = __( 'This is a default AffiliateWP tab.', 'affiliatewp-affiliate-area-tabs' );
+				} else {
+					$notice = '';
 				}
-			} );
+				
+				if ( $notice ) : ?>
+					<p class="aat-tab-default"><?php echo $notice; ?></p>
+				<?php endif; ?>
 
-			/**
-			 * Adds a new affiliate area tab
-			 *
-			 * @since  1.0
-			 *
-			 * @return {mixed}    A new custom affiliate area tab
-			 */
-			$( '#affwp_new_tab' ).on( 'click', function( e ) {
+				<?php
 
-				e.preventDefault();
+				/**
+				 * Hide a field if it's not a custom tab.
+				 */
+				$hidden = ! affiliatewp_affiliate_area_tabs()->functions->is_custom_tab( $tab_slug ) ? ' style="display: none;"' : '';
 
-				var row_last = $('#affiliatewp-tabs tbody tr:last'),
-				    count    = $('#affiliatewp-tabs tbody tr.tab-row').length;
+				/**
+				 * Tab title.
+				 */
+				?>
 
-				// Clone the row and its child's data and events
-				clone = row_last.clone( true );
+				<p class="aat-tab-title"<?php echo $hidden; ?>>
 
-				// empty values
-                clone.find( 'td input, td select' ).val( '' );
-
-				clone.find( 'input, select' ).each(function() {
-                    var name = $( this ).attr( 'name' );
-
-                    name = name.replace( /\[(\d+)\]/, '[' + parseInt( count ) + ']');
-
-                    $( this ).attr( 'name', name ).attr( 'id', name );
-                });
-
-				// insert new clone after existing row
-				clone.insertAfter( row_last );
-
-			} );
-
-			/**
-			 * Removes a custom affiliate area tab
-			 *
-			 * @since  1.1.2
-			 *
-			 */
-            $('.affwp_remove_tab').on('click', function(e) {
-                e.preventDefault();
-
-				var count = $('#affiliatewp-tabs tbody tr.tab-row').length;
-
-                // instead of removing the last row, clear out the values
-                if ( count !== 1 ) {
-                    $(this).parent().parent().remove();
-                } else {
-                    $(this).closest('tr').find( 'td input, td select' ).val( '' );
-                }
-
-            });
-
-		} );
-		</script>
-		<style type="text/css">
-		#affiliatewp-tabs th { padding-left: 10px; }
-		.affwp_remove_tab { margin: 8px 0 0 0; cursor: pointer; width: 10px; height: 10px; display: inline-block; text-indent: -9999px; overflow: hidden; }
-		.affwp_remove_tab:active, .affwp_remove_tab:hover { background-position: -10px 0!important }
-		</style>
-		<form id="affiliatewp-tabs-form">
-			<table id="affiliatewp-tabs" class="form-table wp-list-table widefat posts">
-				<thead>
-					<tr>
-						<th style="width:50%;"><?php _e( 'Tab Content', 'affiliatewp-affiliate-area-tabs' ); ?></th>
-						<th><?php _e( 'Tab Title', 'affiliatewp-affiliate-area-tabs' ); ?></th>
-						<th style="width:5%;"></th>
-					</tr>
-				</thead>
-				<tbody>
-
-					<tr>
-						<td><p class="description"><?php _e( 'Select which page will be used for the tab\'s content. This page will be blocked for non-affiliates.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
-						<td><p class="description"><?php _e( 'Enter a title for the tab.', 'affiliatewp-affiliate-area-tabs' ); ?></p></td>
-						<td></td>
-					</tr>
+					<label for="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]"><strong><?php _e( 'Tab Title', 'affiliatewp-affiliate-area-tabs' ); ?></strong></label>
+					<span class="description"><?php _e( 'Enter a title for the tab.', 'affiliatewp-affiliate-area-tabs' ); ?></span>
+				
+					<input id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]" type="text" class="widefat" value="<?php echo esc_attr( $tab_title ); ?>"/>
 
 					<?php
+					/**
+					 * This makes sure the core tabs have their slug correctly saved as per the default_tabs() method.
+					 * Custom tab slugs are generated in update_settings()
+					 */
+					?>
+					<input name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][slug]" type="hidden" value="<?php echo $tab_slug; ?>" />
 
-					$pages = $this->get_pages();
+				</p>
 
-					if ( $tabs ) :
+				<?php
+				/**
+				 * Tab content.
+				 */
+				?>
+				<p class="aat-tab-content"<?php echo $hidden; ?>>
+					<label for="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]"><strong><?php _e( 'Tab Content', 'affiliatewp-affiliate-area-tabs' ); ?></strong></label>
+					<span class="description"><?php _e( 'Select which page will be used for the tab\'s content. This page will be blocked for non-affiliates.', 'affiliatewp-affiliate-area-tabs' ); ?></span>
+						
+					<?php
 
-						foreach( $tabs as $key => $tab ) :
-
-							?>
-							<tr class="tab-row">
-								<td>
-									<select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
-										<?php foreach( $pages as $id => $title ) : ?>
-											<option value="<?php echo $id; ?>"<?php selected( $tab['id'], $id ); ?>><?php echo $title; ?></option>
-										<?php endforeach; ?>
-
-									</select>
-
-								</td>
-								<td>
-									<input name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][title]" type="text" class="widefat" value="<?php echo esc_attr( $tab['title'] ); ?>"/>
-								</td>
-								<td>
-									<a href="#" class="affwp_remove_tab" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
-								</td>
-							</tr>
-						<?php endforeach; ?>
-
-					<?php endif; ?>
-
-					<?php if ( empty( $tabs ) ) :
-						$count = 0;
-
+					$pages = affiliatewp_affiliate_area_tabs()->functions->get_pages();
+					$tabs  = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
+					?>
+					<select id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]" class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][id]">
+						<?php foreach ( $pages as $id => $title ) :
+							$selected = $tabs && isset( $tabs[$key]['id'] ) ? ' ' . selected( $tabs[$key]['id'], $id, false ) : '';
 						?>
-						<tr class="tab-row">
-							<td>
-								<select class="widefat" name="affwp_settings[affiliate_area_tabs][<?php echo $count; ?>][id]">
-									<?php foreach( $pages as $id => $title ) : ?>
-										<option value="<?php echo $id; ?>"><?php echo $title; ?></option>
-									<?php endforeach; ?>
+							<option value="<?php echo $id; ?>"<?php echo $selected; ?>><?php echo $title; ?></option>
+						<?php endforeach; ?>
+					</select>
+				</p>
 
-								</select>
+				<?php
+				$checked = isset( $tabs[$key]['hide'] ) && 'yes' === $tabs[$key]['hide'] ? 'yes' : 'no';
+				?>
+				<p class="aat-tab-hide">
+					<label for="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]">
+						<input type="checkbox" id="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" class="affiliate-area-hide-tabs" name="affwp_settings[affiliate_area_tabs][<?php echo $key; ?>][hide]" value="yes"<?php checked( $checked, 'yes' ); ?> />
+						<?php _e( 'Hide tab in Affiliate Area', 'affiliatewp-affiliate-area-tabs' ); ?>
+					</label>
+				</p>
 
-							</td>
-							<td>
-								<input name="affwp_settings[affiliate_area_tabs][<?php echo $count; ?>][title]" type="text" class="widefat" value="" />
-							</td>
-							<td>
-								<a href="#" class="affwp_remove_tab" style="background: url(<?php echo admin_url('/images/xit.gif'); ?>) no-repeat;">&times;</a>
-							</td>
-						</tr>
-					<?php endif; ?>
+				<?php 
+				/**
+				 * Delete custom tab.
+				 * Only custom tabs can be deleted.
+				 * 
+				 * @since 1.2
+				 */
+				if ( affiliatewp_affiliate_area_tabs()->functions->is_custom_tab( $tab_slug ) ) : ?>
+				<p><a href="#" class="aat_remove_repeatable"><?php _e( 'Delete tab', 'affiliatewp-affiliate-area-tabs' ); ?></a></p>
+				<?php endif; ?>
 
-				</tbody>
-				<tfoot>
-					<tr>
-						<th colspan="1">
-							<button id="affwp_new_tab" name="affwp_new_tab" class="button"><?php _e( 'Add New Tab', 'affiliatewp-affiliate-area-tabs' ); ?></button>
-						</th>
-						<th colspan="3">
-
-						</th>
-					</tr>
-				</tfoot>
-			</table>
-		</form>
-<?php
+			</div>
+		</div>
+		
+	<?php 
 	}
 
 }
