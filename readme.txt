@@ -2,7 +2,7 @@
 Contributors: sumobi, mordauk, ramiabraham, drewapicture
 Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing, affiliate marketing
 Requires at least: 3.9
-Tested up to: 4.9
+Tested up to: 4.9.1
 Stable tag: 1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -13,7 +13,7 @@ Add and reorder tabs in AffiliateWP's Affiliate Area
 
 > This plugin requires [AffiliateWP](https://affiliatewp.com/ "AffiliateWP") in order to function.
 
-Affiliate Area Tabs allows you to add custom tabs to AffiliateWP's Affiliate Area. Each tab is linked to a WordPress page making it exceptionally easy to add and manage the tab's content. Pages assigned to a tab are only viewable to affiliates. Since version 1.8 of AffiliateWP it's possible to remove any of the existing tabs in the Affiliate Area (Affiliate URLs, Statistics etc).
+Affiliate Area Tabs allows you to add custom tabs to AffiliateWP's Affiliate Area. Each tab is linked to a WordPress page making it exceptionally easy to add and manage the tab's content. Pages assigned to a tab are only viewable to affiliates. 
 
 Affiliate Area Tabs allows you to:
 
