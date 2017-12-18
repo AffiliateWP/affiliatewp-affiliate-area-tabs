@@ -10,7 +10,6 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		add_filter( 'pre_update_option_affwp_settings', array( $this, 'pre_update_option' ), 10, 2 );
 	}
 
-
 	/**
 	 * Register the new settings tab.
 	 *
