@@ -298,7 +298,8 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 			if ( $affiliate_area_tabs ) {
 				
-				$new_tabs = array();
+				$new_tabs        = array();
+				$saved_tab_slugs = array();
 
 				// Create a new array in the needed format of tab slug => tab title.
 				foreach ( $affiliate_area_tabs as $key => $tab ) {
@@ -323,6 +324,9 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 							}
 
 						}
+
+						// Store an array of tab slugs.
+						$saved_tab_slugs[] = $tab['slug'];
 					}
 					
 				}
@@ -332,10 +336,6 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				 * and the tab slug isn't a custom tab (it's ID will be 0), append the tab to the end of $affiliate_area_tabs. 
 				 * That way it can be re-ordered by admin and saved into its new location.
 				 */
-				
-				// Retrieve an array of tab slugs currently stored in the settings.
-				$saved_tab_slugs = wp_list_pluck( $affiliate_area_tabs, 'slug' );
-
 				foreach ( $tabs as $tab_slug => $tab_title ) {
 
 					if ( ! in_array( $tab_slug, $saved_tab_slugs ) && ! $this->functions->is_custom_tab( $tab_slug ) ) {
