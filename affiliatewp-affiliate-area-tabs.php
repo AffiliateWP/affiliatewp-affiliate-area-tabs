@@ -305,25 +305,26 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 					
 					if ( isset( $tab['slug'] ) ) {
 						$new_tabs[$tab['slug']] = $tab['title'];
+
+						/**
+						 * If the saved tab slug exists inside $affiliate_area_tabs, but not in $tabs (tabs from filter),
+						 * and it's not a custom tab added via the admin then it should be unset from $affiliate_area_tabs immediately.
+						 */
+						if ( ! array_key_exists( $tab['slug'], $tabs ) && ! $this->functions->is_custom_tab( $tab['slug'] ) ) {
+
+							/**
+							 * Tabs added by add-ons should always be visible in the admin tab list
+							 * and only visible in the Affiliate Area if the affiliate has access.
+							 */
+							if ( array_key_exists( $tab['slug'], $this->functions->add_on_tabs() ) && ! is_admin() ) {
+								unset( $new_tabs[$tab['slug']] );
+							} else {
+								unset( $new_tabs[$tab['slug']] );
+							}
+
+						}
 					}
 					
-					/**
-					 * If the saved tab slug exists inside $affiliate_area_tabs, but not in $tabs (tabs from filter),
-					 * and it's not a custom tab added via the admin then it should be unset from $affiliate_area_tabs immediately.
-					 */
-					if ( ! array_key_exists( $tab['slug'], $tabs ) && ! $this->functions->is_custom_tab( $tab['slug'] ) ) {
-						
-						/**
-						 * Tabs added by add-ons should always be visible in the admin tab list
-						 * and only visible in the Affiliate Area if the affiliate has access.
-						 */
-						if ( array_key_exists( $tab['slug'], $this->functions->add_on_tabs() ) && ! is_admin() ) {
-							unset( $new_tabs[$tab['slug']] );
-						} else {
-							unset( $new_tabs[$tab['slug']] );
-						}
-						
-					}
 				}
 
 				/**
