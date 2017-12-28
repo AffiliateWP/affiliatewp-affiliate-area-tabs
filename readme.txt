@@ -55,6 +55,10 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 
 == Changelog ==
 
+= 1.2.1 =
+* Fix: Settings screen not loading CSS and JS when some site languages were used
+* Tweak: If the site language is changed, re-saving the settings now retranslates tab titles (if the translation file is available)
+
 = 1.2 =
 * New: Improved admin UI
 * New: Drag and drop tab reordering. Requires AffiliateWP version 2.1.7 or newer
