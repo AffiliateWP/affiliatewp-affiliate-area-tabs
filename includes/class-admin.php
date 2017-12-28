@@ -76,10 +76,32 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	public function pre_update_option( $new_value, $old_value ) {
 
 		if ( isset( $new_value['affiliate_area_tabs'] ) ) {
-			
+
 			// Loop through tabs.
 			foreach ( $new_value['affiliate_area_tabs'] as $key => $tab ) {
 				
+				/**
+				 * Reset any default tab's title based on the affiliate-wp 
+				 * text domain. This ensures the tab title is correctly
+				 * translated again on save if the site's language is changed.
+				 */
+				$default_tabs = affiliatewp_affiliate_area_tabs()->functions->default_tabs();
+
+				if ( array_key_exists( $tab['slug'], $default_tabs ) ) {
+					$new_value['affiliate_area_tabs'][$key]['title'] = $default_tabs[$tab['slug']];
+				}
+
+				/**
+				 * Reset any add-on tab's title based on the add-on's text domain.
+				 * This ensures the tab title is correctly translated again on save 
+				 * if the site's language is changed.
+				 */
+				$add_on_tabs = affiliatewp_affiliate_area_tabs()->functions->add_on_tabs();
+				
+				if ( array_key_exists( $tab['slug'], $add_on_tabs ) ) {
+					$new_value['affiliate_area_tabs'][$key]['title'] = $add_on_tabs[$tab['slug']]['title'];
+				}
+
 				// Skip sanitization on any non-custom tab.
 				if ( 0 === $tab['id'] ) {
 					continue;
@@ -150,8 +172,8 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				}
 
 			}
+
 		}
-		
 
 		return $new_value;
 
