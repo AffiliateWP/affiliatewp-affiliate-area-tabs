@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: AffiliateWP - Affiliate Area Tabs\n"
-"POT-Creation-Date: 2017-12-17 18:36+1300\n"
+"POT-Creation-Date: 2017-12-29 08:38+1300\n"
 "PO-Revision-Date: 2015-04-04 11:12-0600\n"
 "Last-Translator: Andrew Munro, Sumobi <andrew@sumobi.com>\n"
 "Language-Team: AffiliateWP <support@affiliatewp.com>\n"
@@ -23,11 +23,11 @@ msgstr ""
 msgid "Cheatin&#8217; huh?"
 msgstr ""
 
-#: affiliatewp-affiliate-area-tabs.php:503
+#: affiliatewp-affiliate-area-tabs.php:504
 msgid "Get more add-ons for AffiliateWP"
 msgstr ""
 
-#: affiliatewp-affiliate-area-tabs.php:503
+#: affiliatewp-affiliate-area-tabs.php:504
 msgid "More add-ons"
 msgstr ""
 
@@ -50,56 +50,56 @@ msgstr ""
 msgid "Your version of PHP is below the minimum version of PHP required by %s. Please contact your host and request that your version be upgraded to 5.3 or later."
 msgstr ""
 
-#: includes/class-admin.php:22 includes/class-admin.php:38
+#: includes/class-admin.php:21 includes/class-admin.php:37
 msgid "Affiliate Area Tabs"
 msgstr ""
 
-#: includes/class-admin.php:57
+#: includes/class-admin.php:56
 msgid "Expand all tabs"
 msgstr ""
 
-#: includes/class-admin.php:58
+#: includes/class-admin.php:57
 msgid "Collapse all tabs"
 msgstr ""
 
-#: includes/class-admin.php:209
+#: includes/class-admin.php:230
 msgid "Add New Tab"
 msgstr ""
 
-#: includes/class-admin.php:232
+#: includes/class-admin.php:253
 msgid "Click and drag to re-order"
 msgstr ""
 
-#: includes/class-admin.php:238
+#: includes/class-admin.php:259
 #, php-format
 msgid "%s"
 msgstr ""
 
-#: includes/class-admin.php:253
+#: includes/class-admin.php:274
 msgid "This is a default AffiliateWP tab."
 msgstr ""
 
-#: includes/class-admin.php:276
+#: includes/class-admin.php:297
 msgid "Tab Title"
 msgstr ""
 
-#: includes/class-admin.php:277
+#: includes/class-admin.php:298
 msgid "Enter a title for the tab."
 msgstr ""
 
-#: includes/class-admin.php:297
+#: includes/class-admin.php:318
 msgid "Tab Content"
 msgstr ""
 
-#: includes/class-admin.php:298
+#: includes/class-admin.php:319
 msgid "Select which page will be used for the tab's content. This page will be blocked for non-affiliates."
 msgstr ""
 
-#: includes/class-admin.php:320
+#: includes/class-admin.php:341
 msgid "Hide tab in Affiliate Area"
 msgstr ""
 
-#: includes/class-admin.php:332
+#: includes/class-admin.php:353
 msgid "Delete tab"
 msgstr ""
 
@@ -140,12 +140,24 @@ msgstr ""
 msgid "This tab has been added from the %s add-on. Only affiliates with direct link tracking enabled will see this tab in the Affiliate Area."
 msgstr ""
 
-#: includes/class-functions.php:247
+#: includes/class-functions.php:245
+msgid "Direct Links"
+msgstr ""
+
+#: includes/class-functions.php:248
 #, php-format
 msgid "This tab has been added from the %s add-on. Only affiliates with access to order details will see this tab in the Affiliate Area."
 msgstr ""
 
-#: includes/class-functions.php:250
+#: includes/class-functions.php:249
+msgid "Order Details"
+msgstr ""
+
+#: includes/class-functions.php:252
 #, php-format
 msgid "This tab has been added from the %s add-on. Only affiliates with coupons assigned will see this tab in the Affiliate Area."
+msgstr ""
+
+#: includes/class-functions.php:253
+msgid "Coupons"
 msgstr ""
