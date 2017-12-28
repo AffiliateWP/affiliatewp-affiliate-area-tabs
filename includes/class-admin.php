@@ -76,7 +76,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	public function pre_update_option( $new_value, $old_value ) {
 		
 		if ( isset( $new_value['affiliate_area_tabs'] ) ) {
-			
+
 			// Loop through tabs.
 			foreach ( $new_value['affiliate_area_tabs'] as $key => $tab ) {
 				
