@@ -36,7 +36,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 	 * @return array $default_tabs Array of default tabs.
 	 */
 	public function default_tabs() {
-        
+
         $default_tabs = array(
             'urls'      => __( 'Affiliate URLs', 'affiliate-wp' ),
             'stats'     => __( 'Statistics', 'affiliate-wp' ),
@@ -241,13 +241,16 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
         $tabs = apply_filters( 'affwp_aat_add_on_tabs', 
             array(
                 'direct-links' => array(
-                    'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with direct link tracking enabled will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Direct Link Tracking</em>' )
+                    'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with direct link tracking enabled will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Direct Link Tracking</em>' ),
+                    'title'  => __( 'Direct Links', 'affiliatewp-direct-link-tracking' )
                 ),
                 'order-details' => array(
-                    'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with access to order details will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Order Details For Affiliates</em>' )
+                    'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with access to order details will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Order Details For Affiliates</em>' ),
+                    'title'  => __( 'Order Details', 'affiliatewp-order-details-for-affiliates' )
                 ),
                 'coupons' => array(
-                    'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with coupons assigned will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Show Affiliate Coupons</em>' )
+                    'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with coupons assigned will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Show Affiliate Coupons</em>' ),
+                    'title'  => __( 'Coupons', 'affiliatewp-show-affiliate-coupons' )
                 )
             )
         );
