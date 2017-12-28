@@ -166,7 +166,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	public function admin_scripts() {
 
 		// Admin CSS file.
-		$screen = get_current_screen();
+		$screen = affwp_get_current_screen();
 
 		// Use minified libraries if SCRIPT_DEBUG is set to false.
 		$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
@@ -176,7 +176,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 		wp_register_script( 'aat-admin-scripts', AFFWP_AAT_PLUGIN_URL . 'assets/js/admin-scripts' . $suffix . '.js',  array(), AFFWP_AAT_VERSION, false );
 
 		// Enqueue scripts.
-		if ( $screen->id === 'affiliates_page_affiliate-wp-settings' && isset( $_GET['tab'] ) && $_GET['tab'] === 'affiliate_area_tabs' ) {
+		if ( $screen === 'affiliate-wp-settings' && isset( $_GET['tab'] ) && $_GET['tab'] === 'affiliate_area_tabs' ) {
 			wp_enqueue_style( 'aat-admin' );
 			wp_enqueue_script( 'aat-admin-scripts' );
 		}
