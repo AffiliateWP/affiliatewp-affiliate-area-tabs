@@ -271,12 +271,6 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 */
 		public function render_custom_tab( $content, $active_tab ) {
 
-			// Get all tabs.
-			$tabs = affiliatewp_affiliate_area_tabs()->functions->get_all_tabs();
-			
-			// Get custom tab slugs.
-			$custom_tab_slugs = affiliatewp_affiliate_area_tabs()->functions->get_custom_tab_slugs();
-
 			if ( ! $this->functions->is_custom_tab( $active_tab ) ) {
 				// Not a custom tab, return the content.
 				return $content;
