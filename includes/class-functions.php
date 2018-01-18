@@ -1,7 +1,7 @@
 <?php
 
 class AffiliateWP_Affiliate_Area_Tabs_Functions {
-    
+
     /**
 	 * Determine if the tab is a custom tab or not.
 	 * A custom tab is one that has been added using the "Add New Tab" button.
@@ -53,7 +53,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
     }
 
     /**
-	 * Returns an array of pages (minus the the Affiliate Area).
+	 * Returns an array of pages (minus the Affiliate Area).
 	 * 
 	 * @since 1.1.2
 	 */
@@ -224,6 +224,66 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
         }
 
         return $tabs;
+
+    }
+
+    /**
+     * Get all custom tabs.
+     * 
+     * Gets a multi-dimensional array of all custom tabs currently saved in the database.
+     * Each custom tab in the array contains its own array of:
+     * 
+     * id
+     * title
+     * slug
+     * hide (only set if tab is hidden)
+     * 
+     * @since 1.2.2
+     * 
+     * @return array $custom_tabs All custom tabs stored in the DB 
+     */
+    public function get_all_custom_tabs() {
+
+        $tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
+
+        foreach ( $tabs as $key => $tab ) {
+
+            if ( 0 === $tab['id'] ) {
+                unset( $tabs[$key]);
+            }
+        }
+
+        return $tabs;
+
+    }
+
+    /**
+     * Get a custom tab's content
+     * 
+     * @since 1.2.2
+     * @param string $tab_slug The tab slug to retrieve the content for.
+     * 
+     * @return string $tab_content The tab's post content.
+    */
+    public function get_custom_tab_content( $tab_slug = '' ) {
+
+        // Return if no tab has been specified.
+        if ( ! $tab_slug ) {
+            return;
+        }
+
+        foreach ( $this->get_all_custom_tabs() as $custom_tab ) {
+
+            // Find the custom tab within the array.
+            if ( $tab_slug === $custom_tab['slug'] ) {
+                $post        = get_post( $custom_tab['id'] );
+                $tab_content = $post->post_content;
+                break;
+            }
+
+        }
+
+        return apply_filters( 'the_content', $tab_content );
 
     }
 

@@ -236,10 +236,10 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			// plugin meta
 			add_filter( 'plugin_row_meta', array( $this, 'plugin_meta' ), null, 2 );
 
-			// add the tab's content
-			add_action( 'affwp_affiliate_dashboard_bottom', array( $this, 'tab_content' ) );
+			// Render the tab content.
+			add_filter( 'affwp_render_affiliate_dashboard_tab', array( $this, 'render_custom_tab' ), 10, 2 );
 
-			// redirect if non-affiliate tries to access a tab's page
+			// Redirect if non-affiliate tries to access a tab's page.
 			add_action( 'template_redirect', array( $this, 'redirect' ) );
 
 			// User has at least AffiliateWP version 2.1.7
@@ -258,6 +258,46 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			// Hide tabs in the Affiliate Area.
 			add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
 
+		}
+
+		/**
+		 * Filter an existing tab's content
+		 * 
+		 * @since 2.1.2
+		 * @param string $content
+		 * @param string $active_tab The slug of the active tab.
+		 * 
+		 * @return string $content The content to show in the tab.
+		 */
+		public function render_custom_tab( $content, $active_tab ) {
+
+			if ( ! $this->functions->is_custom_tab( $active_tab ) ) {
+				// Not a custom tab, return the content.
+				return $content;
+			}
+
+			// Get the tab's content.
+			$content = $this->custom_tab_content( $active_tab );
+
+			// Return the $content.
+			return $content;
+
+		}
+
+		/**
+		 * The custom tab's content.
+		 *
+		 * @since 2.1.2
+		 * @param string $active_tab The slug of the active tab.
+		 * 
+		 * @return string $content The content of the tab
+		 */
+		public function custom_tab_content( $active_tab ) {
+			?>
+			<div id="affwp-affiliate-dashboard-tab-<?php echo $active_tab; ?>" class="affwp-tab-content">
+				<?php echo $this->functions->get_custom_tab_content( $active_tab ); ?>
+			</div>
+			<?php
 		}
 
 		/**
@@ -409,85 +449,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 		}
 
-		/**
-		 * Tab content.
-		 *
-		 * @since 1.0.0
-		 */
-		public function tab_content( $affiliate_id ) {
-
-			// Get all tabs.
-			$tabs = affiliatewp_affiliate_area_tabs()->functions->get_all_tabs();			
-			
-			// Make sure the arrays are unique. If 2 tabs are identical then the content will not be loaded twice.
-			$tabs = array_unique( $tabs, SORT_REGULAR );
-
-			// Get tab slugs.
-			$tab_slugs = affiliatewp_affiliate_area_tabs()->functions->get_custom_tab_slugs();
-
-			if ( $tabs ) : ?>
-
-				<?php foreach ( $tabs as $tab ) :
-
-					$post        = get_post( $tab['id'] );
-					$tab_slug    = isset( $tab['slug'] ) ? $tab['slug'] : '';
-					$current_tab = isset( $_GET['tab'] ) && $_GET['tab'] ? $_GET['tab'] : '';
-
-					/**
-					 * Showing a tab which has the [affiliate_area] shortcode inside will cause a nesting fatal error
-					 * Instead of erroring out, let's just show a blank tab.
-					 */
-					if ( isset( $post->post_content ) && has_shortcode( $post->post_content, 'affiliate_area' ) ) {
-						continue;
-					}
-
-					// Current tab doesn't match slug
-			        if ( $current_tab && $current_tab !== $tab_slug ) {
-			            continue;
-			        }
-
-					/**
-					 * If we're on the Affiliate Area page (without query string)
-					 * and the current slug matches the first slug in the array, show the content.
-					 */
-					if ( ( ! $current_tab ) && ( $tab_slugs[0] === $tab_slug ) ) :
-
-						/**
-						 * If the active tab does not exist in the tab slugs array,
-						 * then one of the other default tabs is active, skip
-						 */
-						if ( ! in_array( affwp_get_active_affiliate_area_tab(), $tab_slugs ) ) {
-							continue;
-						}
-
-						?>
-
-						<div id="affwp-affiliate-dashboard-tab-<?php echo $tab_slug; ?>" class="affwp-tab-content">
-							<?php echo apply_filters( 'the_content', $post->post_content ); ?>
-						</div>
-
-					<?php else : ?>
-
-						<?php
-
-							// current tab doesn't match slug.
-							if ( $current_tab !== $tab_slug ) {
-								continue;
-							}
-
-						?>
-						<div id="affwp-affiliate-dashboard-tab-<?php echo $tab_slug; ?>" class="affwp-tab-content">
-							<?php echo apply_filters( 'the_content', $post->post_content ); ?>
-						</div>
-
-					<?php endif; ?>
-
-				<?php endforeach; ?>
-
-			<?php endif; ?>
-
-		<?php
-		}
+		
 
 		/**
 		 * Modify plugin metalinks.
