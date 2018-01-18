@@ -53,7 +53,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
     }
 
     /**
-	 * Returns an array of pages (minus the the Affiliate Area).
+	 * Returns an array of pages (minus the Affiliate Area).
 	 * 
 	 * @since 1.1.2
 	 */
