@@ -258,13 +258,13 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
     }
 
     /**
-	 * Get a custom tab's content
-	 * 
-	 * @since 1.2.2
+     * Get a custom tab's content
+     * 
+     * @since 1.2.2
      * @param string $tab_slug The tab slug to retrieve the content for.
-	 * 
-	 * @return string $tab_content The tab's post content.
-	 */
+     * 
+     * @return string $tab_content The tab's post content.
+    */
     public function get_custom_tab_content( $tab_slug = '' ) {
 
         // Return if no tab has been specified.

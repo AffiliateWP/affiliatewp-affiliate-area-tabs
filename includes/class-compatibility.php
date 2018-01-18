@@ -3,7 +3,7 @@
 class AffiliateWP_Affiliate_Area_Tabs_Compatibility {
     
     public function __construct() {
-		// Add new tab to affiliate area.
+        // Add new tab to affiliate area.
         add_action( 'affwp_affiliate_dashboard_tabs', array( $this, 'add_tab' ), 10, 2 );
         
         // This added the custom slugs to the older affwp_affiliate_area_tabs array.
@@ -11,7 +11,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Compatibility {
 
         // Add the tab's content.
         add_action( 'affwp_affiliate_dashboard_bottom', array( $this, 'tab_content' ) );
-	}
+    }
 
 
     /**
