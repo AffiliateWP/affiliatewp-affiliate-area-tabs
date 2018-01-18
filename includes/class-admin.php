@@ -128,7 +128,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 				// Force the tab ID to be an integer.
 				$new_value['affiliate_area_tabs'][$key]['id'] = (int) $new_value['affiliate_area_tabs'][$key]['id'];
 				
-
+				
 				// Determine if the tab is a custom tab.
 				if ( isset( $tab['slug'] ) && affiliatewp_affiliate_area_tabs()->functions->is_custom_tab( $tab['slug'] ) ) {
 
@@ -167,6 +167,22 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 							}
 
 						}
+					}
+
+				}
+
+				/**
+				 * Unset any tab if the page has the [affiliate_area] shotcode on it.
+				 */
+				if ( isset( $tab['id'] ) ) {
+					
+					$post         = get_post( $tab['id'] );
+					$post_content = isset( $post->post_content ) ? $post->post_content : '';
+
+					if ( $post_content && has_shortcode( $post_content, 'affiliate_area' ) ) {
+						unset( $new_value['affiliate_area_tabs'][$key] );
+						// Skip to the next tab.
+						continue;
 					}
 
 				}
