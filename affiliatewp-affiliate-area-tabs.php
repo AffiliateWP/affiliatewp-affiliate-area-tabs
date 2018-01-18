@@ -263,7 +263,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		/**
 		 * Filter an existing tab's content
 		 * 
-		 * @since 2.1.2
+		 * @since 1.1.2
 		 * @param string $content
 		 * @param string $active_tab The slug of the active tab.
 		 * 
@@ -287,7 +287,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		/**
 		 * The custom tab's content.
 		 *
-		 * @since 2.1.2
+		 * @since 1.1.2
 		 * @param string $active_tab The slug of the active tab.
 		 * 
 		 * @return string $content The content of the tab
