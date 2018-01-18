@@ -10,7 +10,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Compatibility {
         add_filter( 'affwp_affiliate_area_tabs', array( $this, 'add_tab_slugs' ) );
 
         // Add the tab's content.
-		add_action( 'affwp_affiliate_dashboard_bottom', array( $this, 'tab_content' ) );
+        add_action( 'affwp_affiliate_dashboard_bottom', array( $this, 'tab_content' ) );
 	}
 
 
