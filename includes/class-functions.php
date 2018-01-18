@@ -1,7 +1,7 @@
 <?php
 
 class AffiliateWP_Affiliate_Area_Tabs_Functions {
-    
+
     /**
 	 * Determine if the tab is a custom tab or not.
 	 * A custom tab is one that has been added using the "Add New Tab" button.
