@@ -179,7 +179,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 		if ( $tabs ) {
 			foreach( $tabs as $tab_array ) {
 				// Custom tabs have a page ID set.
-				if ( ! empty( $tab_array[‘id’] ) && (int) $tab_array[‘id’] !== 0 && isset( $tab_array[‘slug’] ) ) {
+				if ( ! empty( $tab_array['id'] ) && (int) $tab_array['id'] !== 0 && isset( $tab_array['slug'] ) ) {
 					$custom_tab_slugs[] = $tab_array['slug'];
 				}
 			}
