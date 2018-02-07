@@ -5,7 +5,7 @@
  * Description: Add and reorder tabs in the Affiliate Area
  * Author: AffiliateWP
  * Author URI: https://affiliatewp.com
- * Version: 1.2.3
+ * Version: 1.2.4
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
  *
@@ -48,7 +48,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.0
 		 */
-		private $version = '1.2.3';
+		private $version = '1.2.4';
 
 		/**
 		 * The functions instance variable
