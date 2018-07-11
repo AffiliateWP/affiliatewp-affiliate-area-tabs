@@ -311,6 +311,10 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 				'coupons' => array(
 					'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with coupons assigned will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Show Affiliate Coupons</em>' ),
 					'title'  => __( 'Coupons', 'affiliatewp-show-affiliate-coupons' )
+				),
+				'lifetime-customers' => array(
+					'notice' => sprintf( __( 'This tab has been added from the %s add-on. Only affiliates with access to their lifetime customers will see this tab in the Affiliate Area.', 'affiliatewp-affiliate-area-tabs' ), '<em>Lifetime Commissions</em>' ),
+					'title'  => __( 'Lifetime Customers', 'affiliatewp-show-affiliate-coupons' ),
 				)
 			)
 		);
