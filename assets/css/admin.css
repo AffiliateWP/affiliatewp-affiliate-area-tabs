@@ -11,7 +11,6 @@
   color: #24282d;
 }
 .aat_repeatable_row {
-  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
   margin-bottom: 10px;
@@ -22,12 +21,10 @@
   box-shadow: 0 1px 1px rgba(0, 0, 0, 0.04);
 }
 .aat-repeatable-row-title {
-  display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -ms-flex-pack: justify;
+      justify-content: space-between;
   cursor: pointer;
 }
 .aat-repeatable-row-title,
