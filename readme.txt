@@ -2,8 +2,8 @@
 Contributors: sumobi, mordauk, ramiabraham, drewapicture
 Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing, affiliate marketing
 Requires at least: 3.9
-Tested up to: 4.9.7
-Stable tag: 1.2.5
+Tested up to: 50
+Stable tag: 1.2.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -54,6 +54,9 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 2. Viewing the custom tabs on the front-end website
 
 == Changelog ==
+
+= 1.2.6 =
+* Fix: Conflict with Thrive Architect Page Builder
 
 = 1.2.5 =
 * Tweak: Provides a notice for the "Lifetime Customers" tab, new in Lifetime Commissions v1.3
