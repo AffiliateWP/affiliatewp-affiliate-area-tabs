@@ -283,7 +283,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 
 		}
 
-		return apply_filters( 'the_content', $tab_content );
+		return do_shortcode( wpautop( $tab_content ) );
 
 	}
 

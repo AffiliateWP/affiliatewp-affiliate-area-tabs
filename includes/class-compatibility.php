@@ -115,7 +115,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Compatibility {
                     ?>
 
                     <div id="affwp-affiliate-dashboard-tab-<?php echo $tab_slug; ?>" class="affwp-tab-content">
-                        <?php echo apply_filters( 'the_content', $post->post_content ); ?>
+	                    <?php echo do_shortcode( wpautop( $post->post_content ) ); ?>
                     </div>
 
                 <?php else : ?>
@@ -129,7 +129,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Compatibility {
 
                     ?>
                     <div id="affwp-affiliate-dashboard-tab-<?php echo $tab_slug; ?>" class="affwp-tab-content">
-                        <?php echo apply_filters( 'the_content', $post->post_content ); ?>
+	                    <?php echo do_shortcode( wpautop( $post->post_content ) ); ?>
                     </div>
 
                 <?php endif; ?>
