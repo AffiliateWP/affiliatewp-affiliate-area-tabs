@@ -272,6 +272,8 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 			return;
 		}
 
+		$tab_content = '';
+
 		foreach ( $this->get_all_custom_tabs() as $custom_tab ) {
 
 			// Find the custom tab within the array.
@@ -281,6 +283,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 				break;
 			}
 
+		}
+
+		if ( has_shortcode( $tab_content, 'affiliate_area_graphs' ) ) {
+			wp_enqueue_script( 'jquery-ui-datepicker' );
+			wp_enqueue_style( 'jquery-ui-css' );
 		}
 
 		return do_shortcode( wpautop( $tab_content ) );
