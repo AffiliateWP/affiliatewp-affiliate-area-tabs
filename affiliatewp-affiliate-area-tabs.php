@@ -3,8 +3,8 @@
  * Plugin Name: AffiliateWP - Affiliate Area Tabs
  * Plugin URI: https://affiliatewp.com/add-ons/official-free/affiliate-area-tabs/
  * Description: Add and reorder tabs in the Affiliate Area
- * Author: AffiliateWP
- * Author URI: https://affiliatewp.com
+ * Author: Sandhills Development, LLC
+ * Author URI: https://sandhillsdev.com
  * Version: 1.2.7
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
