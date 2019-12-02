@@ -5,7 +5,7 @@
  * Description: Add and reorder tabs in the Affiliate Area
  * Author: Sandhills Development, LLC
  * Author URI: https://sandhillsdev.com
- * Version: 1.2.7
+ * Version: 1.2.8
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
  *
@@ -48,7 +48,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.0
 		 */
-		private $version = '1.2.7';
+		private $version = '1.2.8';
 
 		/**
 		 * The functions instance variable
@@ -202,7 +202,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * @return      void
 		 */
 		private function includes() {
-			
+
 			// Functions class.
 			require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-functions.php';
 
@@ -216,7 +216,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			if ( $this->has_1_8() && ! $this->has_2_1_7() ) {
 				require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-compatibility.php';
 			}
-			
+
 			// Admin class.
 			if ( is_admin() ) {
 				require_once AFFWP_AAT_PLUGIN_DIR . 'includes/class-admin.php';
@@ -228,7 +228,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * Setup the default hooks and actions
 		 *
 		 * @since 1.0.0
-		 * 
+		 *
 		 * @return void
 		 */
 		private function hooks() {
@@ -253,7 +253,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				 */
 				add_filter( 'affwp_affiliate_area_tabs', array( $this, 'affiliate_area_tabs' ), 9999 );
 
-			} 
+			}
 
 			// Hide tabs in the Affiliate Area.
 			add_filter( 'affwp_affiliate_area_show_tab', array( $this, 'hide_existing_tabs' ), 10, 2 );
@@ -262,11 +262,11 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 		/**
 		 * Filter an existing tab's content
-		 * 
+		 *
 		 * @since 1.1.2
 		 * @param string $content
 		 * @param string $active_tab The slug of the active tab.
-		 * 
+		 *
 		 * @return string $content The content to show in the tab.
 		 */
 		public function render_custom_tab( $content, $active_tab ) {
@@ -289,7 +289,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.1.2
 		 * @param string $active_tab The slug of the active tab.
-		 * 
+		 *
 		 * @return string $content The content of the tab
 		 */
 		public function custom_tab_content( $active_tab ) {
@@ -304,14 +304,14 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * Hide tabs from the Affiliate Area.
 		 *
 		 * @since 1.1
-		 * 
+		 *
 		 * @return boolean
 		 */
 		public function hide_existing_tabs( $show, $tab ) {
 
 			// Look in the new array for hidden tabs.
 			$tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs', array() );
-			
+
 			if ( $tabs ) {
 				foreach ( $tabs as $key => $tab_array ) {
 					if ( isset( $tab_array['slug'] ) && $tab_array['slug'] === $tab && ( isset( $tab_array['hide'] ) && 'yes' === $tab_array['hide'] ) ) {
@@ -328,7 +328,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * Affiliate Area Tabs.
 		 *
 		 * @since 1.2
-		 * 
+		 *
 		 * @return array $tabs The tabs to show in the Affiliate Area
 		 */
 		public function affiliate_area_tabs( $tabs ) {
@@ -337,13 +337,13 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			$affiliate_area_tabs = affiliate_wp()->settings->get( 'affiliate_area_tabs' );
 
 			if ( $affiliate_area_tabs ) {
-				
+
 				$new_tabs        = array();
 				$saved_tab_slugs = array();
 
 				// Create a new array in the needed format of tab slug => tab title.
 				foreach ( $affiliate_area_tabs as $key => $tab ) {
-					
+
 					if ( isset( $tab['slug'] ) ) {
 						$new_tabs[$tab['slug']] = $tab['title'];
 
@@ -368,12 +368,12 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 						// Store an array of tab slugs.
 						$saved_tab_slugs[] = $tab['slug'];
 					}
-					
+
 				}
 
 				/**
 				 * If the tab slug exists in $tabs (added via filter), but not in $affiliate_area_tabs (because its already been saved),
-				 * and the tab slug isn't a custom tab (it's ID will be 0), append the tab to the end of $affiliate_area_tabs. 
+				 * and the tab slug isn't a custom tab (it's ID will be 0), append the tab to the end of $affiliate_area_tabs.
 				 * That way it can be re-ordered by admin and saved into its new location.
 				 */
 				foreach ( $tabs as $tab_slug => $tab_title ) {
@@ -384,7 +384,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 				}
 
 				return $new_tabs;
-				
+
 			}
 
 			return $tabs;
@@ -395,7 +395,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * Determine if the user is on version 1.8 of AffiliateWP or newer
 		 *
 		 * @since 1.1
-		 * 
+		 *
 		 * @return boolean
 		 */
 		public function has_1_8() {
@@ -413,11 +413,11 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * Determine if the user is on version 2.1.7 of AffiliateWP or later.
 		 *
 		 * @since 1.2
-		 * 
+		 *
 		 * @return boolean
 		 */
 		public function has_2_1_7() {
-			
+
 			$return = true;
 
 			if ( version_compare( AFFILIATEWP_VERSION, '2.1.7', '<' ) ) {
@@ -449,7 +449,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 		}
 
-		
+
 
 		/**
 		 * Modify plugin metalinks.
