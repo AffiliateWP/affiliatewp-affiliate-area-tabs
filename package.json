@@ -5,7 +5,7 @@
 		"grunt-cli": "latest"
 	},
 	"devDependencies": {
-		"grunt": "^1.0.3",
+		"grunt": "^1.0.4",
 		"grunt-autoprefixer": "latest",
 		"grunt-contrib-concat": "latest",
 		"grunt-contrib-less": "latest",
