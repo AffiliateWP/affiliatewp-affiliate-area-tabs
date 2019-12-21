@@ -4,7 +4,7 @@ Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, morda
 Requires at least: 3.9
 Tested up to: 5.3
 Requires PHP: 5.3
-Stable tag: 1.2.7
+Stable tag: 1.2.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -14,7 +14,7 @@ Add and reorder tabs in AffiliateWP's Affiliate Area
 
 > This plugin requires [AffiliateWP](https://affiliatewp.com/ "AffiliateWP") in order to function.
 
-Affiliate Area Tabs allows you to add custom tabs to AffiliateWP's Affiliate Area. Each tab is linked to a WordPress page making it exceptionally easy to add and manage the tab's content. Pages assigned to a tab are only viewable to affiliates. 
+Affiliate Area Tabs allows you to add custom tabs to AffiliateWP's Affiliate Area. Each tab is linked to a WordPress page making it exceptionally easy to add and manage the tab's content. Pages assigned to a tab are only viewable to affiliates.
 
 Affiliate Area Tabs allows you to:
 
@@ -56,6 +56,9 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 
 == Changelog ==
 
+= 1.2.8 =
+* Fix: The "Lifetime Customers" tab title (added by the Lifetime Commissions add-on) was unable to be translated due to an incorrect textdomain
+
 = 1.2.7 =
 * Fix: [affiliate_area_graphs] short code doesn't render in custom tabs
 
@@ -66,10 +69,10 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 * Tweak: Provides a notice for the "Lifetime Customers" tab, new in Lifetime Commissions v1.3
 
 = 1.2.4 =
-* Fix: Tabs not saving correctly due to previous update 
+* Fix: Tabs not saving correctly due to previous update
 
 = 1.2.3 =
-* Fix: A custom tab with no page assigned could potentially cause an issue when loading the Affiliate Area 
+* Fix: A custom tab with no page assigned could potentially cause an issue when loading the Affiliate Area
 
 = 1.2.2 =
 * Fix: Navigating between tabs in the Affiliate Area could produce a 503 error on some servers
