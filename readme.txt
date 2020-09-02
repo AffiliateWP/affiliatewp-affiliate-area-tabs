@@ -2,7 +2,7 @@
 Contributors: sumobi, mordauk, ramiabraham, drewapicture
 Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing, affiliate marketing
 Requires at least: 3.9
-Tested up to: 5.3
+Tested up to: 5.5
 Requires PHP: 5.3
 Stable tag: 1.2.8
 License: GPLv2 or later
