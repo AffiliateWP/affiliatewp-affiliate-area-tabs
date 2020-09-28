@@ -428,6 +428,24 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
+		 * Determine if the user is on version 2.6 of AffiliateWP or later.
+		 *
+		 * @since 1.2.9
+		 *
+		 * @return boolean
+		 */
+		public function has_2_6() {
+
+			$return = true;
+
+			if ( version_compare( AFFILIATEWP_VERSION, '2.6', '<' ) ) {
+				$return = false;
+			}
+
+			return $return;
+		}
+
+		/**
 		 * Redirect to affiliate login page if content is accessed.
 		 *
 		 * @since 1.0.1
