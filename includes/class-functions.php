@@ -38,15 +38,15 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 	public function default_tabs() {
 
 		$default_tabs = array(
-			'urls'      => __( 'Affiliate URLs', 'affiliate-wp' ),
-			'stats'     => __( 'Statistics', 'affiliate-wp' ),
-			'graphs'    => __( 'Graphs', 'affiliate-wp' ),
-			'referrals' => __( 'Referrals', 'affiliate-wp' ),
-			'payouts'   => __( 'Payouts', 'affiliate-wp' ),
-			'visits'    => __( 'Visits', 'affiliate-wp' ),
-			'creatives' => __( 'Creatives', 'affiliate-wp' ),
-			'settings'  => __( 'Settings', 'affiliate-wp' )
+			'urls'      => __( 'Affiliate URLs', 'affiliatewp-affiliate-area-tabs' ),
+			'stats'     => __( 'Statistics', 'affiliatewp-affiliate-area-tabs' ),
+			'graphs'    => __( 'Graphs', 'affiliatewp-affiliate-area-tabs' ),
+			'referrals' => __( 'Referrals', 'affiliatewp-affiliate-area-tabs' ),
+			'payouts'   => __( 'Payouts', 'affiliatewp-affiliate-area-tabs' ),
+			'visits'    => __( 'Visits', 'affiliatewp-affiliate-area-tabs' ),
 			'coupons'   => __( 'Coupons', 'affiliatewp-affiliate-area-tabs' ),
+			'creatives' => __( 'Creatives', 'affiliatewp-affiliate-area-tabs' ),
+			'settings'  => __( 'Settings', 'affiliatewp-affiliate-area-tabs' ),
 		);
 
 		return $default_tabs;
