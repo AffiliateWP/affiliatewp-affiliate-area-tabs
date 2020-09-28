@@ -46,6 +46,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 			'visits'    => __( 'Visits', 'affiliate-wp' ),
 			'creatives' => __( 'Creatives', 'affiliate-wp' ),
 			'settings'  => __( 'Settings', 'affiliate-wp' )
+			'coupons'   => __( 'Coupons', 'affiliatewp-affiliate-area-tabs' ),
 		);
 
 		return $default_tabs;
