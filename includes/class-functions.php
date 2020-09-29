@@ -124,7 +124,8 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 	 *
 	 * @access public
 	 * @since 1.1.6
-	 * @since 1.2 Use affwp_get_affiliate_area_tabs (since Affiliate 2.1.7), 
+	 * @since 1.2 Use affwp_get_affiliate_area_tabs (since Affiliate 2.1.7).
+	 * @since 1.2.9 Add coupons to tabs retrieved from affwp_get_affiliate_area_tabs() if it doesn't exists.
 	 * otherwise fallback
 	 * 
 	 * @return array $tabs The array of tabs to show
