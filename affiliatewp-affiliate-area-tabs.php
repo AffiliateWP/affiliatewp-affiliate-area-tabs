@@ -446,6 +446,25 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
+		 * Determine if the post content has blocks.
+		 *
+		 * @since 1.2.9
+		 *
+		 * @param string $post_content Post content.
+		 * @return boolean
+		 */
+		public function has_blocks( $post_content ) {
+
+			$return = true;
+
+			if ( ! function_exists( 'has_blocks' ) || ! has_blocks( $post_content ) ) {
+				return false;
+			}
+
+			return $return;
+		}
+
+		/**
 		 * Redirect to affiliate login page if content is accessed.
 		 *
 		 * @since 1.0.1
