@@ -132,6 +132,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 		
 		if ( function_exists( 'affwp_get_affiliate_area_tabs' ) ) {
 			$tabs = affwp_get_affiliate_area_tabs();
+
+			if ( affiliatewp_affiliate_area_tabs()->has_2_6() && ! array_key_exists( 'coupons', $tabs ) ) {
+				$tabs['coupons'] = __( 'Coupons', 'affiliatewp-affiliate-area-tabs' );
+			}
+
 		} else {
 			
 			// Pre AffiliateWP v2.1.7.
