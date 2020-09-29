@@ -117,6 +117,7 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 	 *		'referrals' => 'Referrals',
 	 *		'payouts'   => 'Payouts',
 	 *		'visits'    => 'Visits',
+	 *		'coupons'   => 'Coupons',
 	 *		'creatives' => 'Creatives',
 	 *		'settings'  => 'Settings'
 	 *	)
