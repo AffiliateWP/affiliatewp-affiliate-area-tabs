@@ -298,8 +298,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 			wp_enqueue_style( 'jquery-ui-css' );
 		}
 
-		return do_shortcode( wpautop( $tab_content ) );
-
+		if ( affiliatewp_affiliate_area_tabs()->has_blocks( $tab_content ) ) {
+			return apply_filters( 'the_content', do_blocks( $tab_content ) );
+		} else {
+			return do_shortcode( wpautop( $tab_content ) );
+		}
 	}
 
 	/**
