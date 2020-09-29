@@ -458,7 +458,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			$return = true;
 
 			if ( ! function_exists( 'has_blocks' ) || ! has_blocks( $post_content ) ) {
-				return false;
+				$return = false;
 			}
 
 			return $return;
