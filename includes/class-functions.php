@@ -333,6 +333,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 			)
 		);
 
+		// Remove the coupons tab as an add-on tab in AffiliateWP 2.6 and newer.
+		if ( affiliatewp_affiliate_area_tabs()->has_2_6() && array_key_exists( 'coupons', $tabs ) ) {
+			unset( $tabs['coupons'] );
+		}
+
 		return $tabs;
 
 	}
