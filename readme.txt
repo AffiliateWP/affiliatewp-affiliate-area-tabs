@@ -56,6 +56,10 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 
 == Changelog ==
 
+= 1.2.9 =
+* Fix: Unable to hide Coupons tab with AffiliateWP v2.6
+* Fix: Custom tabs not displaying dynamic blocks
+
 = 1.2.8 =
 * Fix: The "Lifetime Customers" tab title (added by the Lifetime Commissions add-on) was unable to be translated due to an incorrect textdomain
 
