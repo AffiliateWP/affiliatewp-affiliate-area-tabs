@@ -446,12 +446,12 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		}
 
 		/**
-		 * Determine if the post content has blocks.
+		 * Determines if the post content has blocks.
 		 *
 		 * @since 1.2.9
 		 *
 		 * @param string $post_content Post content.
-		 * @return boolean
+		 * @return bool True if the post content has blocks, otherwise false.
 		 */
 		public function has_blocks( $post_content ) {
 
