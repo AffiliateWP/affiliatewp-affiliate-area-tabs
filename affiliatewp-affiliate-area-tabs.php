@@ -5,7 +5,7 @@
  * Description: Add and reorder tabs in the Affiliate Area
  * Author: Sandhills Development, LLC
  * Author URI: https://sandhillsdev.com
- * Version: 1.2.8
+ * Version: 1.2.9
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
  *
@@ -48,7 +48,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.0
 		 */
-		private $version = '1.2.8';
+		private $version = '1.2.9';
 
 		/**
 		 * The functions instance variable
@@ -421,6 +421,43 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 			$return = true;
 
 			if ( version_compare( AFFILIATEWP_VERSION, '2.1.7', '<' ) ) {
+				$return = false;
+			}
+
+			return $return;
+		}
+
+		/**
+		 * Determine if the user is on version 2.6 of AffiliateWP or later.
+		 *
+		 * @since 1.2.9
+		 *
+		 * @return boolean
+		 */
+		public function has_2_6() {
+
+			$return = true;
+
+			if ( version_compare( AFFILIATEWP_VERSION, '2.6', '<' ) ) {
+				$return = false;
+			}
+
+			return $return;
+		}
+
+		/**
+		 * Determines if the post content has blocks.
+		 *
+		 * @since 1.2.9
+		 *
+		 * @param string $post_content Post content.
+		 * @return bool True if the post content has blocks, otherwise false.
+		 */
+		public function has_blocks( $post_content ) {
+
+			$return = true;
+
+			if ( ! function_exists( 'has_blocks' ) || ! has_blocks( $post_content ) ) {
 				$return = false;
 			}
 

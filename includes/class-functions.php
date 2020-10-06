@@ -44,8 +44,9 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 			'referrals' => __( 'Referrals', 'affiliate-wp' ),
 			'payouts'   => __( 'Payouts', 'affiliate-wp' ),
 			'visits'    => __( 'Visits', 'affiliate-wp' ),
+			'coupons'   => __( 'Coupons', 'affiliate-wp' ),
 			'creatives' => __( 'Creatives', 'affiliate-wp' ),
-			'settings'  => __( 'Settings', 'affiliate-wp' )
+			'settings'  => __( 'Settings', 'affiliate-wp' ),
 		);
 
 		return $default_tabs;
@@ -116,13 +117,15 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 	 *		'referrals' => 'Referrals',
 	 *		'payouts'   => 'Payouts',
 	 *		'visits'    => 'Visits',
+	 *		'coupons'   => 'Coupons',
 	 *		'creatives' => 'Creatives',
 	 *		'settings'  => 'Settings'
 	 *	)
 	 *
 	 * @access public
 	 * @since 1.1.6
-	 * @since 1.2 Use affwp_get_affiliate_area_tabs (since Affiliate 2.1.7), 
+	 * @since 1.2 Use affwp_get_affiliate_area_tabs (since Affiliate 2.1.7).
+	 * @since 1.2.9 Add coupons to tabs retrieved from affwp_get_affiliate_area_tabs() if it doesn't exists.
 	 * otherwise fallback
 	 * 
 	 * @return array $tabs The array of tabs to show
@@ -131,6 +134,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 		
 		if ( function_exists( 'affwp_get_affiliate_area_tabs' ) ) {
 			$tabs = affwp_get_affiliate_area_tabs();
+
+			if ( affiliatewp_affiliate_area_tabs()->has_2_6() && ! array_key_exists( 'coupons', $tabs ) ) {
+				$tabs['coupons'] = __( 'Coupons', 'affiliatewp-affiliate-area-tabs' );
+			}
+
 		} else {
 			
 			// Pre AffiliateWP v2.1.7.
@@ -290,8 +298,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 			wp_enqueue_style( 'jquery-ui-css' );
 		}
 
-		return do_shortcode( wpautop( $tab_content ) );
-
+		if ( affiliatewp_affiliate_area_tabs()->has_blocks( $tab_content ) ) {
+			return apply_filters( 'the_content', do_blocks( $tab_content ) );
+		} else {
+			return do_shortcode( wpautop( $tab_content ) );
+		}
 	}
 
 	/**
@@ -325,6 +336,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Functions {
 				)
 			)
 		);
+
+		// Remove the coupons tab as an add-on tab in AffiliateWP 2.6 and newer.
+		if ( affiliatewp_affiliate_area_tabs()->has_2_6() && array_key_exists( 'coupons', $tabs ) ) {
+			unset( $tabs['coupons'] );
+		}
 
 		return $tabs;
 

@@ -4,7 +4,7 @@ Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, morda
 Requires at least: 3.9
 Tested up to: 5.5
 Requires PHP: 5.3
-Stable tag: 1.2.8
+Stable tag: 1.2.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,10 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 2. Viewing the custom tabs on the front-end website
 
 == Changelog ==
+
+= 1.2.9 =
+* Fix: Unable to hide Coupons tab with AffiliateWP v2.6
+* Fix: Custom tabs not displaying dynamic blocks
 
 = 1.2.8 =
 * Fix: The "Lifetime Customers" tab title (added by the Lifetime Commissions add-on) was unable to be translated due to an incorrect textdomain

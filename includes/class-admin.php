@@ -227,8 +227,11 @@ class AffiliateWP_Affiliate_Area_Tabs_Admin {
 	 * @since 1.0.0
 	 */
 	public function tabs_list() {
-		
-		$tabs  = affiliatewp_affiliate_area_tabs()->functions->get_tabs();
+		$tabs = affiliatewp_affiliate_area_tabs()->functions->get_tabs();
+
+		// This ensure that drag & drop reordering work for the coupons tab in the admin.
+		$tabs = affiliatewp_affiliate_area_tabs()->affiliate_area_tabs( $tabs );
+
 		$count = count( $tabs );
 		$key   = 0;
 		?>
