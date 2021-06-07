@@ -1,25 +1,12 @@
 <?php
 /**
- * Plugin Name: AffiliateWP - Affiliate Area Tabs
- * Plugin URI: https://affiliatewp.com/add-ons/official-free/affiliate-area-tabs/
- * Description: Add and reorder tabs in the Affiliate Area
- * Author: Sandhills Development, LLC
- * Author URI: https://sandhillsdev.com
- * Version: 1.2.9
- * Text Domain: affiliatewp-affiliate-area-tabs
- * Domain Path: languages
+ * Core: Plugin Bootstrap
  *
- * AffiliateWP is distributed under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 2 of the License, or
- * any later version.
- *
- * AffiliateWP is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with AffiliateWP. If not, see <http://www.gnu.org/licenses/>.
+ * @package     AffiliateWP Affiliate Area Tabs
+ * @subpackage  Core
+ * @copyright   Copyright (c) 2021, Sandhills Development, LLC
+ * @license     http://opensource.org/licenses/gpl-2.0.php GNU Public License
+ * @since       1.3
  */
 
 // Exit if accessed directly
@@ -27,6 +14,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
+	/**
+	 * Main plugin bootstrap.
+	 *
+	 * @since 1.0.0
+	 */
 	final class AffiliateWP_Affiliate_Area_Tabs {
 
 		/**
