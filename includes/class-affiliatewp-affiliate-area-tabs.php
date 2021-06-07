@@ -526,30 +526,6 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 	 * @return object The one true AffiliateWP_Affiliate_Area_Tabs Instance
 	 */
 	function affiliatewp_affiliate_area_tabs() {
-
-		if ( ! class_exists( 'Affiliate_WP' ) ) {
-
-			if ( ! class_exists( 'AffiliateWP_Activation' ) ) {
-				require_once 'includes/class-activation.php';
-			}
-
-			$activation = new AffiliateWP_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
-			$activation = $activation->run();
-
-		} elseif ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
-
-			if ( ! class_exists( 'AffiliateWP_Activation' ) ) {
-				require_once 'includes/class-activation.php';
-			}
-
-			$activation = new AffiliateWP_Activation( plugin_dir_path( __FILE__ ), basename( __FILE__ ) );
-			$activation = $activation->below_php_version();
-
-		} else {
-			return AffiliateWP_Affiliate_Area_Tabs::instance();
-		}
-
+		return AffiliateWP_Affiliate_Area_Tabs::instance();
 	}
-	add_action( 'plugins_loaded', 'affiliatewp_affiliate_area_tabs', 100 );
-
 }
