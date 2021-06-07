@@ -43,6 +43,14 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		private $version = '1.2.9';
 
 		/**
+		 * Main plugin file.
+		 *
+		 * @since 1.3
+		 * @var   string
+		 */
+		private $file = '';
+
+		/**
 		 * The functions instance variable
 		 *
 		 * @var object
@@ -58,13 +66,16 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 *
 		 * @since 1.0
 		 * @static var array $instance
+		 *
+		 * @param string $file Main plugin file.
 		 * @return The one true AffiliateWP_Affiliate_Area_Tabs
 		 */
-		public static function instance() {
+		public static function instance( $file = null ) {
 
 			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof AffiliateWP_Affiliate_Area_Tabs ) ) {
 
 				self::$instance = new AffiliateWP_Affiliate_Area_Tabs;
+				self::$instance->file = $file;
 				self::$instance->setup_constants();
 				self::$instance->load_textdomain();
 				self::$instance->includes();
@@ -139,17 +150,17 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 
 			// Plugin Folder Path
 			if ( ! defined( 'AFFWP_AAT_PLUGIN_DIR' ) ) {
-				define( 'AFFWP_AAT_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+				define( 'AFFWP_AAT_PLUGIN_DIR', plugin_dir_path( $this->file ) );
 			}
 
 			// Plugin Folder URL
 			if ( ! defined( 'AFFWP_AAT_PLUGIN_URL' ) ) {
-				define( 'AFFWP_AAT_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
+				define( 'AFFWP_AAT_PLUGIN_URL', plugin_dir_url( $this->file ) );
 			}
 
 			// Plugin Root File
 			if ( ! defined( 'AFFWP_AAT_PLUGIN_FILE' ) ) {
-				define( 'AFFWP_AAT_PLUGIN_FILE', __FILE__ );
+				define( 'AFFWP_AAT_PLUGIN_FILE', $this->file );
 			}
 		}
 
@@ -163,7 +174,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		public function load_textdomain() {
 
 			// Set filter for plugin's languages directory
-			$lang_dir = dirname( plugin_basename( __FILE__ ) ) . '/languages/';
+			$lang_dir = dirname( plugin_basename( $this->file ) ) . '/languages/';
 			$lang_dir = apply_filters( 'affiliatewp_affiliate_area_tabs_languages_directory', $lang_dir );
 
 			// Traditional WordPress plugin locale filter
@@ -490,7 +501,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * @return      array $links The modified links array
 		 */
 		public function plugin_meta( $links, $file ) {
-		    if ( $file == plugin_basename( __FILE__ ) ) {
+		    if ( $file == plugin_basename( $this->file ) ) {
 		        $plugins_link = array(
 		            '<a title="' . __( 'Get more add-ons for AffiliateWP', 'affiliatewp-affiliate-area-tabs' ) . '" href="'. admin_url( 'admin.php?page=affiliate-wp-add-ons' ) . '">' . __( 'More add-ons', 'affiliatewp-affiliate-area-tabs' ) . '</a>'
 		        );
