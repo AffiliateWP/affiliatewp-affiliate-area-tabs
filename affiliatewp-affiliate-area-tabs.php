@@ -5,7 +5,7 @@
  * Description: Add and reorder tabs in the Affiliate Area
  * Author: Sandhills Development, LLC
  * Author URI: https://sandhillsdev.com
- * Version: 1.2.9
+ * Version: 1.3
  * Text Domain: affiliatewp-affiliate-area-tabs
  * Domain Path: languages
  *

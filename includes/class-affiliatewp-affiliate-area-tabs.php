@@ -41,7 +41,7 @@ if ( ! class_exists( 'AffiliateWP_Affiliate_Area_Tabs' ) ) {
 		 * @since 1.0
 		 * @var   string
 		 */
-		private $version = '1.2.9';
+		private $version = '1.3';
 
 		/**
 		 * Main plugin file.
