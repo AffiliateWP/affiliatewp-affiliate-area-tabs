@@ -1,10 +1,10 @@
 === AffiliateWP - Affiliate Area Tabs ===
 Contributors: sumobi, mordauk, ramiabraham, drewapicture
 Tags: AffiliateWP, affiliate, affiliates, Pippin Williamson, Andrew Munro, mordauk, pippinsplugins, sumobi, ecommerce, e-commerce, e commerce, selling, membership, referrals, marketing, affiliate marketing
-Requires at least: 3.9
-Tested up to: 5.5
-Requires PHP: 5.3
-Stable tag: 1.2.9
+Requires at least: 5.0
+Tested up to: 5.7
+Requires PHP: 5.6
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,13 @@ OR you can just install it with WordPress by going to Plugins >> Add New >> and 
 2. Viewing the custom tabs on the front-end website
 
 == Changelog ==
+
+= 1.3 =
+* New: Enforce minimum dependency requirements checking
+* New: Requires PHP 5.6 minimum
+* New: Requires WordPress 5.0 minimum
+* New: Requires AffiliateWP 2.6 minimum
+* Improved: Tested up to WordPress 5.7
 
 = 1.2.9 =
 * Fix: Unable to hide Coupons tab with AffiliateWP v2.6
